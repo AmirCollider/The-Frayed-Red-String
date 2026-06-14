@@ -5,6 +5,7 @@
 
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GlitchAudioEffect : MonoBehaviour
 {
@@ -26,6 +27,12 @@ public class GlitchAudioEffect : MonoBehaviour
 
     [Header("Volume Floor During Stutter")]
     [SerializeField][Range(0f, 0.5f)] private float volumeFloor = 0.08f;
+
+    // ==========================================
+    // Events
+    // ==========================================
+    [Header("Events")]
+    public UnityEvent OnGlitchComplete = new UnityEvent();
 
     // ==========================================
     // Private State
@@ -92,6 +99,7 @@ public class GlitchAudioEffect : MonoBehaviour
 
         Restore();
         _glitchCo = null;
+        OnGlitchComplete.Invoke();
     }
 
     // ==========================================
@@ -103,4 +111,9 @@ public class GlitchAudioEffect : MonoBehaviour
         targetSource.pitch = _originalPitch;
         targetSource.volume = _originalVolume;
     }
+
+    // ==========================================
+    // Accessors
+    // ==========================================
+    public float TotalGlitchDuration => totalGlitchDuration;
 }
