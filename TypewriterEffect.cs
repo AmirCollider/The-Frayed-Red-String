@@ -19,6 +19,18 @@ public class TypewriterEffect : MonoBehaviour
     [SerializeField] private float punctuationPauseMult = 3f;
 
     // ==========================================
+    // Inspector — Adaptive Font Sizing (R5)
+    //   Short lines render large; long lines shrink. Sizes scale with screen
+    //   height so 1440p/4K read identically to the 1080p baseline.
+    // ==========================================
+    [Header("Adaptive Font Size")]
+    [SerializeField] private bool enableAutoSize = true;
+    [SerializeField] private float minFontSize = 28f;
+    [SerializeField] private float maxFontSizeShort = 60f;
+    [SerializeField] private float maxFontSizeLong = 40f;
+    [SerializeField] private int longLineCharThreshold = 90;
+
+    // ==========================================
     // Inspector — Punctuation Set
     // ==========================================
     [Header("Punctuation Pause Characters")]
@@ -74,12 +86,31 @@ public class TypewriterEffect : MonoBehaviour
     public bool IsTyping => _isTyping;
 
     // ==========================================
+    // ApplyAdaptiveFontSize - Length + Screen-Scaled TMP Auto-Sizing (R5)
+    // ==========================================
+    private void ApplyAdaptiveFontSize(string fullText)
+    {
+        if (_label == null || !enableAutoSize) return;
+
+        int visibleLen = string.IsNullOrEmpty(fullText) ? 0 : fullText.Length;
+        float screenScale = (float)Screen.height / ConstantsConfig.BASE_HEIGHT;
+        screenScale = Mathf.Clamp(screenScale, 0.75f, 2f);
+
+        float maxForLine = visibleLen > longLineCharThreshold ? maxFontSizeLong : maxFontSizeShort;
+
+        _label.enableAutoSizing = true;
+        _label.fontSizeMin = minFontSize * screenScale;
+        _label.fontSizeMax = maxForLine * screenScale;
+    }
+
+    // ==========================================
     // TypeRoutine - Reveal Characters via TMP maxVisibleCharacters
     // ==========================================
     private IEnumerator TypeRoutine(string fullText, float cps)
     {
         _isTyping = true;
         _label.text = fullText;
+        ApplyAdaptiveFontSize(fullText);
         _label.ForceMeshUpdate();
 
         int total = _label.textInfo.characterCount;

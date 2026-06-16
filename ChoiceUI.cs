@@ -41,6 +41,16 @@ public class ChoiceUI : MonoBehaviour
     [SerializeField] private AudioEvent clickSfx;
 
     // ==========================================
+    // Inspector — Color Profiles (GDD §1.3 — Blue/Green/White)
+    // ==========================================
+    [Header("Color Profiles")]
+    [SerializeField] private Color greenButtonColor = new Color(0.18f, 0.55f, 0.32f, 0.96f);
+    [SerializeField] private Color blueButtonColor = new Color(0.20f, 0.42f, 0.70f, 0.96f);
+    [SerializeField] private Color whiteButtonColor = new Color(0.86f, 0.86f, 0.90f, 0.96f);
+    [SerializeField] private Color darkLabelColor = new Color(0.10f, 0.10f, 0.14f, 1f);
+    [SerializeField] private Color lightLabelColor = new Color(0.97f, 0.97f, 1f, 1f);
+
+    // ==========================================
     // Private State
     // ==========================================
     private readonly List<GameObject> _activeButtons = new List<GameObject>();
@@ -78,8 +88,21 @@ public class ChoiceUI : MonoBehaviour
             int capturedIdx = i;
             GameObject btn = Instantiate(choiceButtonPrefab, buttonContainer);
 
+            // ==========================================
+            // Label — Language-Appropriate Text + Color-Matched Foreground
+            // ==========================================
             TextMeshProUGUI lbl = btn.GetComponentInChildren<TextMeshProUGUI>();
-            if (lbl != null) lbl.text = choices[i].GetLabel();
+            if (lbl != null)
+            {
+                lbl.text = choices[i].GetLabel();
+                lbl.color = choices[i].color == ChoiceColor.White ? darkLabelColor : lightLabelColor;
+            }
+
+            // ==========================================
+            // Background — Tint by Choice Color Profile (GDD §1.3)
+            // ==========================================
+            Image bg = btn.GetComponent<Image>();
+            if (bg != null) bg.color = ColorForChoice(choices[i].color);
 
             Button b = btn.GetComponent<Button>();
             if (b != null)
@@ -87,8 +110,11 @@ public class ChoiceUI : MonoBehaviour
 
             _activeButtons.Add(btn);
 
-            if (i > 0)
-                StartCoroutine(StaggerButton(btn, i * staggerDelay, buttonSlideOffset));
+            // ==========================================
+            // Layout-Safe Reveal — Scale + Alpha only (never anchoredPosition),
+            // so the Vertical Layout Group keeps full control of placement (no overlap)
+            // ==========================================
+            StartCoroutine(RevealButton(btn, i * staggerDelay));
         }
 
         FadeTo(1f, fadeInDuration);
@@ -129,19 +155,19 @@ public class ChoiceUI : MonoBehaviour
     }
 
     // ==========================================
-    // StaggerButton - Delay Visibility and Slide Each Button Up
+    // RevealButton - Layout-Safe Stagger: CanvasGroup Alpha + Local Scale Pop
     // ==========================================
-    private IEnumerator StaggerButton(GameObject btn, float delay, float slideOffset)
+    private IEnumerator RevealButton(GameObject btn, float delay)
     {
         CanvasGroup cg = btn.GetComponent<CanvasGroup>();
         if (cg == null) cg = btn.AddComponent<CanvasGroup>();
         cg.alpha = 0f;
 
-        yield return new WaitForSeconds(delay);
-
         RectTransform rt = btn.GetComponent<RectTransform>();
-        Vector2 origin = rt != null ? rt.anchoredPosition : Vector2.zero;
-        if (rt != null) rt.anchoredPosition = origin - new Vector2(0f, slideOffset);
+        Vector3 fullScale = rt != null ? rt.localScale : Vector3.one;
+        if (rt != null) rt.localScale = fullScale * 0.92f;
+
+        if (delay > 0f) yield return new WaitForSeconds(delay);
 
         float dur = 0.16f;
         float t = 0f;
@@ -150,12 +176,25 @@ public class ChoiceUI : MonoBehaviour
             t += Time.deltaTime;
             float p = Mathf.SmoothStep(0f, 1f, t / dur);
             cg.alpha = p;
-            if (rt != null) rt.anchoredPosition = Vector2.Lerp(origin - new Vector2(0f, slideOffset), origin, p);
+            if (rt != null) rt.localScale = Vector3.Lerp(fullScale * 0.92f, fullScale, p);
             yield return null;
         }
 
         cg.alpha = 1f;
-        if (rt != null) rt.anchoredPosition = origin;
+        if (rt != null) rt.localScale = fullScale;
+    }
+
+    // ==========================================
+    // ColorForChoice - Map ChoiceColor Enum to Configured Button Background Color
+    // ==========================================
+    private Color ColorForChoice(ChoiceColor color)
+    {
+        switch (color)
+        {
+            case ChoiceColor.Green: return greenButtonColor;
+            case ChoiceColor.Blue: return blueButtonColor;
+            default: return whiteButtonColor;
+        }
     }
 
     // ==========================================

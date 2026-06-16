@@ -29,11 +29,22 @@ public class TextBeepSynthesizer : MonoBehaviour
     [SerializeField][Range(0f, 1f)] private float beepVolume = 0.35f;
 
     // ==========================================
-    // Inspector — Procedural Tone Settings
+    // Inspector — Procedural Tone Settings (shared defaults / system voice)
     // ==========================================
     [Header("Tone Generation")]
     [SerializeField] private float baseFrequency = 440f;
     [SerializeField] private float toneLength = 0.055f;
+
+    // ==========================================
+    // Inspector — Per-Voice Timbre (Haru baritone vs Yua soprano — distinct & softer)
+    // ==========================================
+    [Header("Voice Timbre — Haru")]
+    [SerializeField] private float haruBaseFrequency = 320f;
+    [SerializeField] private float haruToneLength = 0.062f;
+
+    [Header("Voice Timbre — Yua")]
+    [SerializeField] private float yuaBaseFrequency = 525f;
+    [SerializeField] private float yuaToneLength = 0.048f;
 
     // ==========================================
     // Private State — Generated Clips
@@ -42,6 +53,8 @@ public class TextBeepSynthesizer : MonoBehaviour
     private AudioClip _squareClip;
     private AudioClip _triangleClip;
     private AudioClip _crushedClip;
+    private AudioClip _haruClip;
+    private AudioClip _yuaClip;
 
     // ==========================================
     // Private State — Active Voice Profile
@@ -59,10 +72,14 @@ public class TextBeepSynthesizer : MonoBehaviour
     // ==========================================
     private void Awake()
     {
-        _sineClip = GenerateTone(Waveform.Sine, false);
-        _squareClip = GenerateTone(Waveform.Square, false);
-        _triangleClip = GenerateTone(Waveform.Triangle, false);
-        _crushedClip = GenerateTone(Waveform.Square, true);
+        _sineClip = GenerateTone(Waveform.Sine, false, baseFrequency, toneLength);
+        _squareClip = GenerateTone(Waveform.Square, false, baseFrequency, toneLength);
+        _triangleClip = GenerateTone(Waveform.Triangle, false, baseFrequency, toneLength);
+        _crushedClip = GenerateTone(Waveform.Square, true, baseFrequency, toneLength);
+
+        // ---- Distinct per-character voice clips (GDD §1.2) ----
+        _haruClip = GenerateTone(Waveform.Square, false, haruBaseFrequency, haruToneLength);
+        _yuaClip = GenerateTone(Waveform.Triangle, false, yuaBaseFrequency, yuaToneLength);
 
         _activeClip = _sineClip;
 
@@ -95,11 +112,11 @@ public class TextBeepSynthesizer : MonoBehaviour
         // ---- Base voice by speaker ----
         if (speakerId == ConstantsConfig.SPEAKER_HARU)
         {
-            _activeClip = _squareClip; _pitchMin = 0.85f; _pitchMax = 0.95f;
+            _activeClip = _haruClip; _pitchMin = 0.90f; _pitchMax = 0.98f;
         }
         else if (speakerId == ConstantsConfig.SPEAKER_YUA)
         {
-            _activeClip = _triangleClip; _pitchMin = 1.15f; _pitchMax = 1.25f;
+            _activeClip = _yuaClip; _pitchMin = 1.10f; _pitchMax = 1.20f;
         }
         else
         {
@@ -182,16 +199,16 @@ public class TextBeepSynthesizer : MonoBehaviour
     // ==========================================
     // GenerateTone - Build a Short Enveloped Waveform Clip (optionally bit-crushed)
     // ==========================================
-    private AudioClip GenerateTone(Waveform wave, bool crush)
+    private AudioClip GenerateTone(Waveform wave, bool crush, float freq, float length)
     {
         const int sampleRate = 44100;
-        int sampleCount = Mathf.Max(1, (int)(sampleRate * toneLength));
+        int sampleCount = Mathf.Max(1, (int)(sampleRate * length));
         float[] data = new float[sampleCount];
 
         for (int i = 0; i < sampleCount; i++)
         {
             float t = (float)i / sampleRate;
-            float phase = baseFrequency * t;
+            float phase = freq * t;
             float frac = phase - Mathf.Floor(phase);
 
             float s;

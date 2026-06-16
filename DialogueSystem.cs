@@ -24,6 +24,12 @@ public class DialogueSystem : MonoBehaviour
     [SerializeField] private ChoiceUI choiceUI;
 
     // ==========================================
+    // Inspector — Choice Deception Router (GDD §1.3 — Blue/Green/White)
+    // ==========================================
+    [Header("Choice Interceptor")]
+    [SerializeField] private ChoiceInterceptor choiceInterceptor;
+
+    // ==========================================
     // Inspector — Advance SFX (UIClick AudioEvent)
     // ==========================================
     [Header("Advance SFX")]
@@ -271,8 +277,16 @@ public class DialogueSystem : MonoBehaviour
         {
             if (idx >= 0 && idx < entry.choices.Count)
             {
-                _pendingSubSequence = entry.choices[idx].consequenceSequence;
-                OnChoiceMade.Invoke(entry.branchId, idx, entry.choices[idx].affectionDelta);
+                DialogueChoice picked = entry.choices[idx];
+
+                // ==========================================
+                // Deception Routing — Interceptor decides the real sequence (Blue→Green)
+                // ==========================================
+                _pendingSubSequence = choiceInterceptor != null
+                    ? choiceInterceptor.Resolve(entry.branchId, idx, picked)
+                    : picked.consequenceSequence;
+
+                OnChoiceMade.Invoke(entry.branchId, idx, picked.affectionDelta);
             }
             chosen = true;
         });

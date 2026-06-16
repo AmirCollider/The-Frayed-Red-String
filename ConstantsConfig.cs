@@ -54,7 +54,7 @@ public static class ConstantsConfig
     public const float FADE_DURATION_DEFAULT = 0.5f;
     public const float FADE_DURATION_FAST = 0.15f;
     public const float FADE_DURATION_SLOW = 1.2f;
-    public const float TYPEWRITER_DEFAULT_CPS = 40f;
+    public const float TYPEWRITER_DEFAULT_CPS = 30f;
 
     // ==========================================
     // Base Resolution

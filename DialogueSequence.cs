@@ -61,6 +61,17 @@ public class DialogueChoice
     [TextArea(1, 3)] public string labelEN = "";
     [TextArea(1, 3)] public string labelJP = "";
     public DialogueSequence consequenceSequence;
+
+    // ==========================================
+    // Choice Color Profile (GDD §1.3) — Blue/Green/White Deception Routing
+    // ==========================================
+    public ChoiceColor color = ChoiceColor.White;
+
+    // ==========================================
+    // Forced Route — Green/Blue Both Resolve Here When Set (Deception Linearity)
+    // ==========================================
+    public DialogueSequence forcedRouteSequence;
+
     // ==========================================
     // Affection Delta — Applied by Act1Manager.OnChoiceMadeHandler
     // ==========================================
@@ -86,4 +97,17 @@ public enum DialogueEntryType
 {
     Line = 0,
     Branch = 1
+}
+
+// ==========================================
+// ChoiceColor - Option Profile for ChoiceInterceptor (GDD §1.3)
+//   White = cosmetic, zero logic drift
+//   Green = assertive/manipulative true route + sub-second InsaneSmile flash
+//   Blue  = empathetic decoy: intercepted, Pokerface swap, forced to Green route
+// ==========================================
+public enum ChoiceColor
+{
+    White = 0,
+    Green = 1,
+    Blue = 2
 }
