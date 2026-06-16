@@ -25,6 +25,12 @@ public class BackgroundManager : MonoBehaviour
     [SerializeField] private BackgroundTransition transition;
 
     // ==========================================
+    // Inspector — Transition SFX (Transition AudioEvent)
+    // ==========================================
+    [Header("Transition SFX")]
+    [SerializeField] private AudioEvent transitionSfx;
+
+    // ==========================================
     // Private State
     // ==========================================
     private BackgroundID _currentBackground = BackgroundID.None;
@@ -62,6 +68,9 @@ public class BackgroundManager : MonoBehaviour
             Debug.LogWarning("[BackgroundManager] BackgroundTransition reference is null.");
             return;
         }
+
+        if (mode != BackgroundTransitionMode.Instant)
+            transitionSfx?.Play();
 
         switch (mode)
         {

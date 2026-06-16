@@ -29,6 +29,7 @@ public class TypewriterEffect : MonoBehaviour
     // ==========================================
     [Header("Events")]
     public UnityEvent OnTypingComplete = new UnityEvent();
+    public UnityEvent<char> OnCharacterRevealed = new UnityEvent<char>();
 
     // ==========================================
     // Private State
@@ -96,6 +97,8 @@ public class TypewriterEffect : MonoBehaviour
             char c = (i < _label.textInfo.characterInfo.Length)
                 ? _label.textInfo.characterInfo[i].character
                 : ' ';
+
+            OnCharacterRevealed.Invoke(c);
 
             float wait = (delay > 0f && pauseChars.IndexOf(c) >= 0)
                 ? delay * punctuationPauseMult

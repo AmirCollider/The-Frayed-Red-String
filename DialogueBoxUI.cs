@@ -29,6 +29,7 @@ public class DialogueBoxUI : MonoBehaviour
     // ==========================================
     [Header("Text")]
     [SerializeField] private TypewriterEffect typewriter;
+    [SerializeField] private TextBeepSynthesizer beepSynth;
 
     // ==========================================
     // Inspector — Continue Arrow
@@ -110,6 +111,9 @@ public class DialogueBoxUI : MonoBehaviour
         SetSpeakerLabel(line.speakerId);
         ApplyStyle(line.isFourthWall);
         SetArrow(false);
+
+        if (beepSynth != null)
+            beepSynth.ConfigureForLine(line.speakerId);
 
         if (typewriter == null) return;
 

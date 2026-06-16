@@ -25,6 +25,12 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] private LoadPanelController loadPanel;
 
     // ==========================================
+    // Inspector — Button SFX (UIClick AudioEvent)
+    // ==========================================
+    [Header("Button SFX")]
+    [SerializeField] private AudioEvent clickSfx;
+
+    // ==========================================
     // Start - Initialize Scene State
     // ==========================================
     private void Start()
@@ -71,6 +77,7 @@ public class MainMenuController : MonoBehaviour
     // ==========================================
     private void OnStartClicked()
     {
+        clickSfx?.Play();
         if (SceneController.Instance != null)
             SceneController.Instance.LoadAct(1);
     }
@@ -80,6 +87,7 @@ public class MainMenuController : MonoBehaviour
     // ==========================================
     private void OnLoadClicked()
     {
+        clickSfx?.Play();
         if (loadPanel != null)
             loadPanel.Open();
     }
@@ -89,6 +97,7 @@ public class MainMenuController : MonoBehaviour
     // ==========================================
     private void OnExitClicked()
     {
+        clickSfx?.Play();
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else

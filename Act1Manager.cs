@@ -21,6 +21,12 @@ public class Act1Manager : MonoBehaviour
     [SerializeField] private BackgroundTransitionMode openingTransition = BackgroundTransitionMode.Instant;
 
     // ==========================================
+    // Inspector — Background Music
+    // ==========================================
+    [Header("Background Music")]
+    [SerializeField] private BGMTrack actBGM = BGMTrack.Act1;
+
+    // ==========================================
     // Inspector — Haru Starting Configuration
     // ==========================================
     [Header("Haru Start")]
@@ -78,10 +84,20 @@ public class Act1Manager : MonoBehaviour
     // ==========================================
     private void Start()
     {
+        InitializeAudio();
         InitializeBackground();
         InitializeCharacters();
         InitializeFrame();
         StartAct1();
+    }
+
+    // ==========================================
+    // InitializeAudio - Start Act 1 Background Music
+    // ==========================================
+    private void InitializeAudio()
+    {
+        if (AudioManager.Instance == null) return;
+        AudioManager.Instance.PlayBGM(actBGM);
     }
 
     // ==========================================

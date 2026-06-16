@@ -29,19 +29,24 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private BGMTrackEntry[] bgmLibrary;
 
     // ==========================================
-    // Awake - Singleton Enforcement & Persistence
+    // Awake - Resolve Persistent BGM Source and Cache Default Playback State
     // ==========================================
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        ResolveTargetSource();
+        if (targetSource == null) return;
+        _originalPitch = targetSource.pitch;
+        _originalVolume = targetSource.volume;
+    }
 
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-        LoadVolumeSettings();
+    // ==========================================
+    // ResolveTargetSource - Fall Back to Persistent AudioManager BGM Source
+    // ==========================================
+    private void ResolveTargetSource()
+    {
+        if (targetSource != null) return;
+        if (AudioManager.Instance != null)
+            targetSource = AudioManager.Instance.BgmSource;
     }
 
     // ==========================================
@@ -242,6 +247,12 @@ public class AudioManager : MonoBehaviour
             if (entry.track == track) return entry.clip;
         return null;
     }
+
+    // ==========================================
+    // BgmSource - Public Accessor for the Persistent BGM AudioSource
+    // (used by GlitchAudioEffect to target the cross-scene DontDestroyOnLoad source)
+    // ==========================================
+    public AudioSource BgmSource => bgmSource;
 }
 
 // ==========================================

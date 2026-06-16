@@ -22,6 +22,12 @@ public class SceneController : MonoBehaviour
     [SerializeField] private Image fadeOverlay;
 
     // ==========================================
+    // Inspector — Transition SFX (Transition AudioEvent)
+    // ==========================================
+    [Header("Transition SFX")]
+    [SerializeField] private AudioEvent transitionSfx;
+
+    // ==========================================
     // Awake - Singleton Enforcement & Persistence
     // ==========================================
     private void Awake()
@@ -75,10 +81,46 @@ public class SceneController : MonoBehaviour
     }
 
     // ==========================================
+    // LoadActOrMenu - Load Act if Its Scene is Built, Else Return to Main Menu
+    // (prevents Act 3 climax dead-ending on a black screen when Act 4 is not yet built)
+    // ==========================================
+    public void LoadActOrMenu(int actNumber)
+    {
+        string scene = SceneNameForAct(actNumber);
+        if (!string.IsNullOrEmpty(scene) && IsSceneInBuild(scene))
+            LoadScene(scene);
+        else
+            LoadMainMenu();
+    }
+
+    // ==========================================
+    // SceneNameForAct - Map Act Number to Scene Name
+    // ==========================================
+    private string SceneNameForAct(int actNumber)
+    {
+        switch (actNumber)
+        {
+            case 1: return ConstantsConfig.SCENE_ACT_1;
+            case 2: return ConstantsConfig.SCENE_ACT_2;
+            case 3: return ConstantsConfig.SCENE_ACT_3;
+            case 4: return ConstantsConfig.SCENE_ACT_4;
+            case 5: return ConstantsConfig.SCENE_ACT_5;
+            default: return null;
+        }
+    }
+
+    // ==========================================
+    // IsSceneInBuild - Public Build-Settings Membership Check
+    // ==========================================
+    public bool IsSceneInBuild(string sceneName) => SceneExistsInBuild(sceneName);
+
+    // ==========================================
     // LoadSceneRoutine - Async Coroutine with Optional Fade
     // ==========================================
     private IEnumerator LoadSceneRoutine(string sceneName, float fadeDuration)
     {
+        transitionSfx?.Play();
+
         if (fadeOverlay != null)
             yield return StartCoroutine(Fade(0f, 1f, fadeDuration));
 

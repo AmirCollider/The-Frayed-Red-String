@@ -42,13 +42,24 @@ public class GlitchAudioEffect : MonoBehaviour
     private Coroutine _glitchCo;
 
     // ==========================================
-    // Awake - Cache Default Playback State
+    // Awake - Resolve Persistent BGM Source and Cache Default Playback State
     // ==========================================
     private void Awake()
     {
+        ResolveTargetSource();
         if (targetSource == null) return;
         _originalPitch = targetSource.pitch;
         _originalVolume = targetSource.volume;
+    }
+
+    // ==========================================
+    // ResolveTargetSource - Fall Back to Persistent AudioManager BGM Source
+    // ==========================================
+    private void ResolveTargetSource()
+    {
+        if (targetSource != null) return;
+        if (AudioManager.Instance != null)
+            targetSource = AudioManager.Instance.BgmSource;
     }
 
     // ==========================================
@@ -56,7 +67,14 @@ public class GlitchAudioEffect : MonoBehaviour
     // ==========================================
     public void TriggerGlitch()
     {
-        if (targetSource == null) return;
+        ResolveTargetSource();
+        if (targetSource == null)
+        {
+            OnGlitchComplete.Invoke();
+            return;
+        }
+        _originalPitch = targetSource.pitch;
+        _originalVolume = targetSource.volume;
         if (_glitchCo != null) StopCoroutine(_glitchCo);
         _glitchCo = StartCoroutine(GlitchRoutine());
     }

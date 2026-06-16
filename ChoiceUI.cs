@@ -35,6 +35,12 @@ public class ChoiceUI : MonoBehaviour
     [SerializeField] private float buttonSlideOffset = 18f;
 
     // ==========================================
+    // Inspector — Choice SFX (UIClick AudioEvent)
+    // ==========================================
+    [Header("Choice SFX")]
+    [SerializeField] private AudioEvent clickSfx;
+
+    // ==========================================
     // Private State
     // ==========================================
     private readonly List<GameObject> _activeButtons = new List<GameObject>();
@@ -93,6 +99,8 @@ public class ChoiceUI : MonoBehaviour
     // ==========================================
     private void OnChoiceSelected(string branchId, int index)
     {
+        clickSfx?.Play();
+
         if (BranchRecord.Instance != null)
             BranchRecord.Instance.Record(branchId, index);
 

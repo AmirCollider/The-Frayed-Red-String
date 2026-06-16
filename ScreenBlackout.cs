@@ -6,6 +6,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ScreenBlackout : MonoBehaviour
@@ -108,9 +109,51 @@ public class ScreenBlackout : MonoBehaviour
         OnHoldComplete.Invoke();
 
         if (autoLoadNextAct && SceneController.Instance != null)
-            SceneController.Instance.LoadAct(nextAct);
+        {
+            if (NextActSceneExists())
+            {
+                SceneController.Instance.LoadAct(nextAct);
+            }
+            else
+            {
+                Debug.LogWarning($"[ScreenBlackout] Act {nextAct} scene is not in Build Settings — returning to Main Menu (graceful end of current content).");
+                SceneController.Instance.LoadMainMenu();
+            }
+        }
 
         _routineCo = null;
+    }
+
+    // ==========================================
+    // NextActSceneExists - Guard: Is the Target Act Scene in Build Settings?
+    // ==========================================
+    private bool NextActSceneExists()
+    {
+        string target = ActSceneName(nextAct);
+        if (string.IsNullOrEmpty(target)) return false;
+
+        for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
+        {
+            string path = SceneUtility.GetScenePathByBuildIndex(i);
+            if (path.Contains(target)) return true;
+        }
+        return false;
+    }
+
+    // ==========================================
+    // ActSceneName - Map Act Number to Scene Name (mirrors SceneController.LoadAct)
+    // ==========================================
+    private string ActSceneName(int actNumber)
+    {
+        switch (actNumber)
+        {
+            case 1: return ConstantsConfig.SCENE_ACT_1;
+            case 2: return ConstantsConfig.SCENE_ACT_2;
+            case 3: return ConstantsConfig.SCENE_ACT_3;
+            case 4: return ConstantsConfig.SCENE_ACT_4;
+            case 5: return ConstantsConfig.SCENE_ACT_5;
+            default: return null;
+        }
     }
 
     // ==========================================

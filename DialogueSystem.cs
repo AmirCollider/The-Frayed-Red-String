@@ -24,6 +24,12 @@ public class DialogueSystem : MonoBehaviour
     [SerializeField] private ChoiceUI choiceUI;
 
     // ==========================================
+    // Inspector — Advance SFX (UIClick AudioEvent)
+    // ==========================================
+    [Header("Advance SFX")]
+    [SerializeField] private AudioEvent advanceSfx;
+
+    // ==========================================
     // Events
     // ==========================================
     [Header("Events")]
@@ -62,7 +68,11 @@ public class DialogueSystem : MonoBehaviour
     // ==========================================
     private void Update()
     {
-        if (!_waitingForInput) return;
+        // Poll input while typing (to skip) OR while waiting (to advance).
+        bool typing = (dialogueBox != null && dialogueBox.IsTyping)
+                   || (innerMonologue != null && innerMonologue.IsTyping);
+
+        if (!typing && !_waitingForInput) return;
 
         // Modern polling using the New Input System API with null checks
         bool advance = (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
@@ -128,6 +138,8 @@ public class DialogueSystem : MonoBehaviour
             innerMonologue.Skip();
             return;
         }
+
+        advanceSfx?.Play();
         _waitingForInput = false;
     }
 
