@@ -41,12 +41,6 @@ public class Act2Manager : MonoBehaviour
     [SerializeField] private DialogueSequence act2MainSequence;
 
     // ==========================================
-    // Inspector — Red String Visual
-    // ==========================================
-    [Header("Red String")]
-    [SerializeField] private RedStringVisual redString;
-
-    // ==========================================
     // Inspector — Fourth-Wall Sequence Controller
     // ==========================================
     [Header("Fourth-Wall Sequence")]
@@ -78,7 +72,6 @@ public class Act2Manager : MonoBehaviour
     {
         InitializeBackground();
         InitializeCharacters();
-        InitializeRedString();
         InitializeFrame();
         StartAct2();
     }
@@ -104,15 +97,6 @@ public class Act2Manager : MonoBehaviour
 
         CharacterRegistry.Instance.SetState(ConstantsConfig.SPEAKER_YUA, yuaStartState, true);
         CharacterRegistry.Instance.SetPosition(ConstantsConfig.SPEAKER_YUA, yuaStartPosition, true);
-    }
-
-    // ==========================================
-    // InitializeRedString - Keep String Visible Following Act 1 Reveal
-    // ==========================================
-    private void InitializeRedString()
-    {
-        if (redString == null) return;
-        redString.Show();
     }
 
     // ==========================================

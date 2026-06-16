@@ -41,12 +41,6 @@ public class Act1Manager : MonoBehaviour
     [SerializeField] private DialogueSequence act1MainSequence;
 
     // ==========================================
-    // Inspector — Red String Visual
-    // ==========================================
-    [Header("Red String")]
-    [SerializeField] private RedStringVisual redString;
-
-    // ==========================================
     // Inspector — Affection Tracking
     // ==========================================
     [Header("Affection Metric")]
@@ -86,7 +80,6 @@ public class Act1Manager : MonoBehaviour
     {
         InitializeBackground();
         InitializeCharacters();
-        InitializeRedString();
         InitializeFrame();
         StartAct1();
     }
@@ -112,15 +105,6 @@ public class Act1Manager : MonoBehaviour
 
         CharacterRegistry.Instance.SetState(ConstantsConfig.SPEAKER_YUA, yuaStartState, true);
         CharacterRegistry.Instance.SetPosition(ConstantsConfig.SPEAKER_YUA, yuaStartPosition, true);
-    }
-
-    // ==========================================
-    // InitializeRedString - Force Hidden Until a Story Beat Calls Show
-    // ==========================================
-    private void InitializeRedString()
-    {
-        if (redString == null) return;
-        redString.ForceHide();
     }
 
     // ==========================================
@@ -151,7 +135,6 @@ public class Act1Manager : MonoBehaviour
 
         DialogueSystem.Instance.OnSequenceComplete.AddListener(OnMainSequenceComplete);
         DialogueSystem.Instance.OnChoiceMade.AddListener(OnChoiceMadeHandler);
-        DialogueSystem.Instance.OnGameEventTriggered.AddListener(OnGameEventTriggeredHandler);
         DialogueSystem.Instance.Play(act1MainSequence);
     }
 
@@ -164,7 +147,6 @@ public class Act1Manager : MonoBehaviour
         {
             DialogueSystem.Instance.OnSequenceComplete.RemoveListener(OnMainSequenceComplete);
             DialogueSystem.Instance.OnChoiceMade.RemoveListener(OnChoiceMadeHandler);
-            DialogueSystem.Instance.OnGameEventTriggered.RemoveListener(OnGameEventTriggeredHandler);
         }
 
         CommitAffectionScore();
@@ -195,39 +177,11 @@ public class Act1Manager : MonoBehaviour
     }
 
     // ==========================================
-    // ShowRedString - Reveal String Visual from Story Beat
-    // ==========================================
-    public void ShowRedString()
-    {
-        redString?.Show();
-    }
-
-    // ==========================================
-    // HideRedString - Conceal String Visual from Story Beat
-    // ==========================================
-    public void HideRedString()
-    {
-        redString?.Hide();
-    }
-
-    // ==========================================
     // OnChoiceMadeHandler - Route Affection Delta from Player Choices to Score
     // ==========================================
     private void OnChoiceMadeHandler(string branchId, int index, int affectionDelta)
     {
         ModifyAffection(affectionDelta);
-    }
-
-    // ==========================================
-    // OnGameEventTriggeredHandler - Dispatch Named Gameplay Events from Dialogue Lines
-    // ==========================================
-    private void OnGameEventTriggeredHandler(string eventId)
-    {
-        switch (eventId)
-        {
-            case "ShowRedString": ShowRedString(); break;
-            case "HideRedString": HideRedString(); break;
-        }
     }
 
     // ==========================================

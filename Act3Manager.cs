@@ -41,12 +41,6 @@ public class Act3Manager : MonoBehaviour
     [SerializeField] private DialogueSequence act3MainSequence;
 
     // ==========================================
-    // Inspector — Red String Visual
-    // ==========================================
-    [Header("Red String")]
-    [SerializeField] private RedStringVisual redString;
-
-    // ==========================================
     // Inspector — Fourth-Wall Breaker (Direct Player Address)
     // ==========================================
     [Header("Fourth-Wall Breaker")]
@@ -90,7 +84,6 @@ public class Act3Manager : MonoBehaviour
     {
         InitializeBackground();
         InitializeCharacters();
-        InitializeRedString();
         InitializeFrame();
         StartAct3();
     }
@@ -116,15 +109,6 @@ public class Act3Manager : MonoBehaviour
 
         CharacterRegistry.Instance.SetState(ConstantsConfig.SPEAKER_YUA, yuaStartState, true);
         CharacterRegistry.Instance.SetPosition(ConstantsConfig.SPEAKER_YUA, yuaStartPosition, true);
-    }
-
-    // ==========================================
-    // InitializeRedString - Keep String Visible Following Act 2 Reveal
-    // ==========================================
-    private void InitializeRedString()
-    {
-        if (redString == null) return;
-        redString.Show();
     }
 
     // ==========================================
@@ -179,10 +163,6 @@ public class Act3Manager : MonoBehaviour
     {
         switch (eventId)
         {
-            case "HideRedString":
-                redString?.Hide();
-                break;
-
             case "TriggerColdPalette":
                 ColorGrader.Instance?.SetPalette(ColorPalette.Cold);
                 break;
