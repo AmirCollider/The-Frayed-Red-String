@@ -15,10 +15,12 @@ public class ChoiceInterceptor : MonoBehaviour
     [SerializeField] private string manipulatorSpeakerId = ConstantsConfig.SPEAKER_YUA;
 
     // ==========================================
-    // Inspector — Green Assertive Flash (sub-second InsaneSmile)
+    // Inspector — Glitch Flash (sub-0.2s manipulator sprite blip)
+    //   Green flashes InsaneSmile, Blue flashes Pokerface — both held under
+    //   0.2 seconds, like one corrupted frame, before the forced route plays.
     // ==========================================
-    [Header("Green — Assertive Flash")]
-    [SerializeField] private float insaneSmileFlashDuration = 0.45f;
+    [Header("Glitch Flash (sub-0.2s)")]
+    [SerializeField] private float glitchFlashDuration = 0.15f;
 
     // ==========================================
     // Inspector — Logging
@@ -39,17 +41,16 @@ public class ChoiceInterceptor : MonoBehaviour
         if (choice == null) return null;
 
         switch (choice.color)
+
         {
             case ChoiceColor.Green:
-                FlashInsaneSmile();
+                FlashGlitch(CharacterState.InsaneSmile);
                 LogForced(branchId, chosenIndex);
                 return PickRoute(choice);
-
             case ChoiceColor.Blue:
-                ForcePokerface();
+                FlashGlitch(CharacterState.Pokerface);
                 LogForced(branchId, chosenIndex);
                 return PickRoute(choice);
-
             default:
                 return choice.consequenceSequence;
         }
@@ -60,7 +61,6 @@ public class ChoiceInterceptor : MonoBehaviour
     // ==========================================
     private DialogueSequence PickRoute(DialogueChoice choice)
         => choice.forcedRouteSequence != null ? choice.forcedRouteSequence : choice.consequenceSequence;
-
     // ==========================================
     // LogForced - Persist the True (Forced) Outcome to BranchRecord
     // ==========================================
@@ -69,33 +69,27 @@ public class ChoiceInterceptor : MonoBehaviour
         if (!recordForcedOutcome || BranchRecord.Instance == null || string.IsNullOrEmpty(branchId)) return;
         BranchRecord.Instance.Record(branchId + forcedOutcomeKeySuffix, chosenIndex);
     }
-
     // ==========================================
-    // FlashInsaneSmile - Sub-Second Manipulator Sprite Flash (Green)
+    // FlashGlitch - Sub-0.2s Manipulator Sprite Blip
+    //   Green = InsaneSmile, Blue = Pokerface. Both colors glitch the girl for
+    //   a single beat, then the forced (green) route proceeds.
     // ==========================================
-    private void FlashInsaneSmile()
+    private void FlashGlitch(CharacterState flashState)
     {
         CharacterSpriteController c = CharacterRegistry.Instance?.Get(manipulatorSpeakerId);
         if (c == null) return;
-        StartCoroutine(FlashRoutine(c, CharacterState.InsaneSmile, insaneSmileFlashDuration));
+        StartCoroutine(FlashRoutine(c, flashState, glitchFlashDuration));
     }
-
     // ==========================================
-    // ForcePokerface - Instant Manipulator Pokerface Swap (Blue Deception)
-    // ==========================================
-    private void ForcePokerface()
-    {
-        CharacterRegistry.Instance?.Get(manipulatorSpeakerId)?.SetState(CharacterState.Pokerface, true);
-    }
-
-    // ==========================================
-    // FlashRoutine - Swap to State, Hold, Restore Previous State
+    // FlashRoutine - Instant Swap to Glitch State, Hold < 0.2s, Instant Restore
+    //   Instant in + instant out (no crossfade) so it reads as a hard glitch.
     // ==========================================
     private IEnumerator FlashRoutine(CharacterSpriteController c, CharacterState flashState, float hold)
     {
         CharacterState previous = c.CurrentState;
+        if (previous == flashState) yield break;
         c.SetState(flashState, true);
         yield return new WaitForSeconds(hold);
-        c.SetState(previous, false);
+        c.SetState(previous, true);
     }
 }

@@ -51,6 +51,22 @@ public class ChoiceUI : MonoBehaviour
     [SerializeField] private Color lightLabelColor = new Color(0.97f, 0.97f, 1f, 1f);
 
     // ==========================================
+    // Inspector — Button Background Art (GDD §1.3 — Green/Blue sprite skins)
+    //   Assign BackGrundGreenButton.png and BackGrundBloueButton.png. When a
+    //   sprite is set it replaces the flat color; flat color is only a fallback.
+    // ==========================================
+    [Header("Button Background Sprites")]
+    [SerializeField] private Sprite greenButtonSprite;
+    [SerializeField] private Sprite blueButtonSprite;
+    [SerializeField] private Sprite whiteButtonSprite;
+
+    // ==========================================
+    // Inspector — Design Rule Guard (every branch should be exactly 2 options)
+    // ==========================================
+    [Header("Validation")]
+    [SerializeField] private bool warnIfNotTwoOptions = true;
+
+    // ==========================================
     // Private State
     // ==========================================
     private readonly List<GameObject> _activeButtons = new List<GameObject>();
@@ -72,6 +88,11 @@ public class ChoiceUI : MonoBehaviour
     {
         if (choices == null || choices.Count == 0) { onChosen?.Invoke(-1); return; }
 
+        // ==========================================
+        // Design Rule — Branches must present exactly two options (Green + Blue)
+        // ==========================================
+        if (warnIfNotTwoOptions && choices.Count != 2)
+            Debug.LogWarning($"[ChoiceUI] Branch '{branchId}' has {choices.Count} options. Design rule: exactly 2 (one Green, one Blue).");
         _onChosen = onChosen;
         ClearButtons();
         gameObject.SetActive(true);
@@ -97,14 +118,35 @@ public class ChoiceUI : MonoBehaviour
             {
                 lbl.text = choices[i].GetLabel();
                 lbl.color = choices[i].color == ChoiceColor.White ? darkLabelColor : lightLabelColor;
+
+                // ==========================================
+                // Phase Font — Pull the language-correct TMP font so choice
+                // labels match the active act (handled here because buttons
+                // are instantiated at runtime, after LocalizedFontController)
+                // ==========================================
+                if (LocalizedFontController.Instance != null && LocalizedFontController.Instance.CurrentFont != null)
+                    lbl.font = LocalizedFontController.Instance.CurrentFont;
             }
 
             // ==========================================
-            // Background — Guarantee an Image, then Tint by Choice Color (GDD §1.3)
+            // Background — Guarantee an Image, then apply the color-coded button
+            // art sprite (BackGrundGreenButton / BackGrundBloueButton). Flat color
+            // is only a fallback when no sprite is assigned (GDD §1.3)
             // ==========================================
             Image bg = btn.GetComponent<Image>();
             if (bg == null) bg = btn.AddComponent<Image>();
-            bg.color = ColorForChoice(choices[i].color);
+            Sprite bgSprite = SpriteForChoice(choices[i].color);
+            if (bgSprite != null)
+            {
+                bg.sprite = bgSprite;
+                bg.type = Image.Type.Sliced;
+                bg.color = Color.white;
+            }
+            else
+            {
+                bg.sprite = null;
+                bg.color = ColorForChoice(choices[i].color);
+            }
             bg.raycastTarget = true;
             // ==========================================
             // Per-Button Box — force a real row so the Vertical Layout Group
@@ -215,6 +257,19 @@ public class ChoiceUI : MonoBehaviour
         }
 
     }
+    // ==========================================
+    // SpriteForChoice - Map ChoiceColor Enum to the Configured Button Art Sprite
+    // ==========================================
+    private Sprite SpriteForChoice(ChoiceColor color)
+    {
+        switch (color)
+        {
+            case ChoiceColor.Green: return greenButtonSprite;
+            case ChoiceColor.Blue: return blueButtonSprite;
+            default: return whiteButtonSprite;
+        }
+    }
+
     // ==========================================
     // EnsureContainerLayout - Force a Vertical Layout Group + Content Size Fitter
     // on the button container so options stack centered with no overlap (Batch 2)
