@@ -21,6 +21,12 @@ public class Act3Manager : MonoBehaviour
     [SerializeField] private BackgroundTransitionMode openingTransition = BackgroundTransitionMode.Instant;
 
     // ==========================================
+    // Inspector — Background Music
+    // ==========================================
+    [Header("Background Music")]
+    [SerializeField] private BGMTrack actBGM = BGMTrack.Act3_PreGlitch;
+
+    // ==========================================
     // Inspector — Haru Starting Configuration
     // ==========================================
     [Header("Haru Start")]
@@ -82,10 +88,20 @@ public class Act3Manager : MonoBehaviour
     // ==========================================
     private void Start()
     {
+        InitializeAudio();
         InitializeBackground();
         InitializeCharacters();
         InitializeFrame();
         StartAct3();
+    }
+
+    // ==========================================
+    // InitializeAudio - Start Act 3 Pre-Glitch Background Music
+    // ==========================================
+    private void InitializeAudio()
+    {
+        if (AudioManager.Instance == null) return;
+        AudioManager.Instance.PlayBGM(actBGM);
     }
 
     // ==========================================
@@ -189,6 +205,10 @@ public class Act3Manager : MonoBehaviour
 
             case "TriggerBlackout":
                 ScreenBlackout.Instance?.TriggerBlackout();
+                break;
+
+            case "TriggerFilterStrip":
+                SubliminalFilterController.Instance?.StripInstant();
                 break;
         }
     }
