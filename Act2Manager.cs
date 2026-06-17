@@ -77,6 +77,18 @@ public class Act2Manager : MonoBehaviour
     private void Start()
     {
         InitializeAudio();
+
+        // ==========================================
+        // Resume Branch — Restore Snapshot and Resume Mid-Sequence if a Save Is Loading
+        // ==========================================
+        SaveData pending = SaveSystem.Instance != null ? SaveSystem.Instance.ConsumePendingLoad(2) : null;
+        if (pending != null)
+        {
+            ApplySnapshot(pending);
+            ResumeAct2(pending.entryIndex);
+            return;
+        }
+
         InitializeBackground();
         InitializeCharacters();
         InitializeFrame();
@@ -184,6 +196,35 @@ public class Act2Manager : MonoBehaviour
         }
     }
 
+    // ==========================================
+    // ApplySnapshot - Restore Saved Visual + Choice State Before Resuming
+    // ==========================================
+    private void ApplySnapshot(SaveData data)
+    {
+        if (BranchRecord.Instance != null && !string.IsNullOrEmpty(data.branchRecordJson))
+            BranchRecord.Instance.ImportJson(data.branchRecordJson); if (BackgroundManager.Instance != null)
+            BackgroundManager.Instance.ForceBackground((BackgroundID)data.backgroundId, BackgroundTransitionMode.Instant); if (FrameController.Instance != null)
+            FrameController.Instance.SetState((FrameState)data.frameState); if (ColorGrader.Instance != null)
+            ColorGrader.Instance.SetPaletteInstant((ColorPalette)data.colorPalette); if (CharacterRegistry.Instance != null)
+
+        {
+            CharacterRegistry.Instance.SetState(ConstantsConfig.SPEAKER_HARU, (CharacterState)data.haruState, true);
+            CharacterRegistry.Instance.SetPosition(ConstantsConfig.SPEAKER_HARU, (CharacterPosition)data.haruPosition, true);
+            CharacterRegistry.Instance.SetState(ConstantsConfig.SPEAKER_YUA, (CharacterState)data.yuaState, true);
+            CharacterRegistry.Instance.SetPosition(ConstantsConfig.SPEAKER_YUA, (CharacterPosition)data.yuaPosition, true);
+        }
+
+    }
+    // ==========================================
+    // ResumeAct2 - Register Listeners and Resume the Main Sequence at a Saved Index
+    // ==========================================
+    private void ResumeAct2(int entryIndex)
+
+    {
+        if (act2MainSequence == null || DialogueSystem.Instance == null) return; DialogueSystem.Instance.OnSequenceComplete.AddListener(OnMainSequenceComplete);
+        DialogueSystem.Instance.OnGameEventTriggered.AddListener(OnGameEventTriggeredHandler);
+        DialogueSystem.Instance.Play(act2MainSequence, entryIndex);
+    } 
     // ==========================================
     // TransitionToAct3 - Load Act 3 Scene via SceneController
     // ==========================================

@@ -70,6 +70,30 @@ public class BranchRecord : MonoBehaviour
     }
 
     // ==========================================
+    // ExportJson - Serialize Current Choices (read by SaveSystem.CaptureCurrent)
+    // ==========================================
+    public string ExportJson()
+    {
+        return JsonUtility.ToJson(new BranchRecordData(_choices));
+    }
+
+    // ==========================================
+    // ImportJson - Replace Choices from a Save Blob (called by Act managers on resume)
+    // ==========================================
+    public void ImportJson(string json)
+    {
+        _choices.Clear();
+        if (!string.IsNullOrEmpty(json))
+        {
+            BranchRecordData data = JsonUtility.FromJson<BranchRecordData>(json);
+            if (data != null)
+                for (int i = 0; i < data.keys.Count && i < data.values.Count; i++)
+                    _choices[data.keys[i]] = data.values[i];
+        }
+        Save();
+    }
+
+    // ==========================================
     // Save - Serialize Choice Dictionary to PlayerPrefs via JSON
     // ==========================================
     private void Save()

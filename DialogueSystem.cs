@@ -57,6 +57,14 @@ public class DialogueSystem : MonoBehaviour
     private Coroutine _sequenceCo;
 
     // ==========================================
+    // Save/Resume Cursor — Master Sequence Position (MetaFileSystem Save Support)
+    // ==========================================
+    private DialogueSequence _currentSequence;
+    private int _currentIndex;
+    private bool _atSaveableWait;
+    private bool _suppressSideEffectsOnce;
+
+    // ==========================================
     // Awake - Singleton Enforcement
     // ==========================================
     private void Awake()
@@ -74,6 +82,11 @@ public class DialogueSystem : MonoBehaviour
     // ==========================================
     private void Update()
     {
+        // ==========================================
+        // Pause Gate — Ignore Advance Input While the Stop Menu Holds the Game
+        // ==========================================
+        if (PauseMenuController.IsPaused) return;
+
         // Poll input while typing (to skip) OR while waiting (to advance).
         bool typing = (dialogueBox != null && dialogueBox.IsTyping)
                    || (innerMonologue != null && innerMonologue.IsTyping);
@@ -94,6 +107,14 @@ public class DialogueSystem : MonoBehaviour
     // ==========================================
     public void Play(DialogueSequence sequence)
     {
+        Play(sequence, 0);
+    }
+
+    // ==========================================
+    // Play (Resume Overload) - Begin or Resume a Sequence at a Specific Entry Index
+    // ==========================================
+    public void Play(DialogueSequence sequence, int startIndex)
+    {
         if (_isRunning)
         {
             Debug.LogWarning("[DialogueSystem] Play called while sequence already running. Ignored.");
@@ -105,9 +126,12 @@ public class DialogueSystem : MonoBehaviour
             return;
         }
 
+        _currentSequence = sequence;
+        _currentIndex = Mathf.Clamp(startIndex, 0, sequence.Count - 1);
+        _suppressSideEffectsOnce = _currentIndex > 0;
         _isRunning = true;
         if (_sequenceCo != null) StopCoroutine(_sequenceCo);
-        _sequenceCo = StartCoroutine(RunSequence(sequence));
+        _sequenceCo = StartCoroutine(RunSequence(sequence, _currentIndex));
         OnSequenceStarted.Invoke();
     }
 
@@ -120,6 +144,9 @@ public class DialogueSystem : MonoBehaviour
         if (_sequenceCo != null) { StopCoroutine(_sequenceCo); _sequenceCo = null; }
         _isRunning = false;
         _waitingForInput = false;
+        _atSaveableWait = false;
+        _suppressSideEffectsOnce = false;
+        _currentSequence = null;
         dialogueBox?.Hide();
         innerMonologue?.Hide();
     }
@@ -128,6 +155,13 @@ public class DialogueSystem : MonoBehaviour
     // IsRunning - Returns True While a Sequence is Active
     // ==========================================
     public bool IsRunning => _isRunning;
+
+    // ==========================================
+    // Save/Resume Accessors — Read by SaveSystem and PauseMenuController
+    // ==========================================
+    public DialogueSequence CurrentSequence => _currentSequence;
+    public int CurrentIndex => _currentIndex;
+    public bool CanSaveNow => _isRunning && _atSaveableWait && !_suppressSideEffectsOnce;
 
     // ==========================================
     // Advance - Handle Player Input: Skip Typewriter or Proceed to Next Line
@@ -152,18 +186,19 @@ public class DialogueSystem : MonoBehaviour
     // ==========================================
     // RunSequence - Coroutine: Iterate and Dispatch Each Entry
     // ==========================================
-    private IEnumerator RunSequence(DialogueSequence sequence)
+    private IEnumerator RunSequence(DialogueSequence sequence, int startIndex)
     {
         dialogueBox?.Show();
 
-        for (int i = 0; i < sequence.Count; i++)
+        for (int i = startIndex; i < sequence.Count; i++)
         {
+            _currentIndex = i;
             DialogueEntry entry = sequence.GetEntry(i);
             if (entry == null) continue;
 
             if (entry.type == DialogueEntryType.Line)
             {
-                yield return StartCoroutine(ProcessLine(entry.line));
+                yield return StartCoroutine(ProcessLine(entry.line, true));
             }
             else if (entry.type == DialogueEntryType.Branch)
             {
@@ -182,6 +217,7 @@ public class DialogueSystem : MonoBehaviour
         dialogueBox?.Hide();
         _isRunning = false;
         _sequenceCo = null;
+        _currentSequence = null;
         OnSequenceComplete.Invoke();
     }
 
@@ -196,28 +232,38 @@ public class DialogueSystem : MonoBehaviour
             if (entry == null) continue;
 
             if (entry.type == DialogueEntryType.Line)
-                yield return StartCoroutine(ProcessLine(entry.line));
+                yield return StartCoroutine(ProcessLine(entry.line, false));
         }
     }
 
     // ==========================================
     // ProcessLine - Show Single Line, Wait for Typewriter, Then Wait for Input
     // ==========================================
-    private IEnumerator ProcessLine(DialogueLine line)
+    private IEnumerator ProcessLine(DialogueLine line, bool topLevel)
     {
         if (line == null) yield break;
 
         // ==========================================
-        // Background Change — Trigger Before Text Display
+        // Resume Guard — On the First Resumed Line the SaveSystem Already Restored
+        // the Visual Snapshot, So Re-Apply Nothing and Re-Fire No Game Events
         // ==========================================
-        if (line.backgroundId != BackgroundID.None && BackgroundManager.Instance != null)
-            BackgroundManager.Instance.SetBackground(line.backgroundId, line.backgroundTransition);
+        bool suppress = _suppressSideEffectsOnce;
+        _suppressSideEffectsOnce = false;
 
-        // ==========================================
-        // Character State Override — Apply Before Line Render
-        // ==========================================
-        if (!string.IsNullOrEmpty(line.characterStateOverride) && CharacterRegistry.Instance != null)
-            CharacterRegistry.Instance.Get(line.speakerId)?.SetStateByName(line.characterStateOverride);
+        if (!suppress)
+        {
+            // ==========================================
+            // Background Change — Trigger Before Text Display
+            // ==========================================
+            if (line.backgroundId != BackgroundID.None && BackgroundManager.Instance != null)
+                BackgroundManager.Instance.SetBackground(line.backgroundId, line.backgroundTransition);
+
+            // ==========================================
+            // Character State Override — Apply Before Line Render
+            // ==========================================
+            if (!string.IsNullOrEmpty(line.characterStateOverride) && CharacterRegistry.Instance != null)
+                CharacterRegistry.Instance.Get(line.speakerId)?.SetStateByName(line.characterStateOverride);
+        }
 
         if (line.isInnerMonologue)
         {
@@ -233,9 +279,9 @@ public class DialogueSystem : MonoBehaviour
         OnLineDisplayed.Invoke(line);
 
         // ==========================================
-        // Gameplay Event Hook — Fire Per-Line Game Event if Set
+        // Gameplay Event Hook — Fire Per-Line Game Event if Set (skipped on resume)
         // ==========================================
-        if (!string.IsNullOrEmpty(line.gameEventId))
+        if (!suppress && !string.IsNullOrEmpty(line.gameEventId))
             OnGameEventTriggered.Invoke(line.gameEventId);
 
         // ==========================================
@@ -256,8 +302,10 @@ public class DialogueSystem : MonoBehaviour
         }
         else
         {
+            _atSaveableWait = topLevel && !line.isInnerMonologue && string.IsNullOrEmpty(line.gameEventId);
             _waitingForInput = true;
             yield return new WaitUntil(() => !_waitingForInput);
+            _atSaveableWait = false;
         }
 
         dialogueBox?.SetArrow(false);
