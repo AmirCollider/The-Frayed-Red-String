@@ -86,21 +86,28 @@ public class TypewriterEffect : MonoBehaviour
     public bool IsTyping => _isTyping;
 
     // ==========================================
-    // ApplyAdaptiveFontSize - Length + Screen-Scaled TMP Auto-Sizing (R5)
+    // ApplyAdaptiveFontSize - Length + Screen-Scaled Explicit Sizing (R5, Batch 2)
+    // Auto-sizing OFF so TMP can never collapse the line to the minimum.
+    // Short lines render large; long lines shrink smoothly; floored at min;
+    // the whole curve scales with screen height (1440p/4K match 1080p).
     // ==========================================
     private void ApplyAdaptiveFontSize(string fullText)
+
     {
         if (_label == null || !enableAutoSize) return;
+        int len = string.IsNullOrEmpty(fullText) ? 0 : fullText.Length;
 
-        int visibleLen = string.IsNullOrEmpty(fullText) ? 0 : fullText.Length;
         float screenScale = (float)Screen.height / ConstantsConfig.BASE_HEIGHT;
-        screenScale = Mathf.Clamp(screenScale, 0.75f, 2f);
-
-        float maxForLine = visibleLen > longLineCharThreshold ? maxFontSizeLong : maxFontSizeShort;
-
-        _label.enableAutoSizing = true;
-        _label.fontSizeMin = minFontSize * screenScale;
-        _label.fontSizeMax = maxForLine * screenScale;
+        screenScale = Mathf.Clamp(screenScale, 0.85f, 2.2f);
+        float lengthT = longLineCharThreshold > 0
+            ? Mathf.Clamp01((float)len / longLineCharThreshold)
+            : 0f;
+        float lengthSize = Mathf.Lerp(maxFontSizeShort, maxFontSizeLong, lengthT);
+        float target = Mathf.Max(lengthSize, minFontSize) * screenScale;
+        _label.enableAutoSizing = false;
+        _label.fontSize = target;
+        _label.textWrappingMode = TMPro.TextWrappingModes.Normal;
+        _label.overflowMode = TextOverflowModes.Overflow;
     }
 
     // ==========================================

@@ -77,10 +77,11 @@ public class TextBeepSynthesizer : MonoBehaviour
         _triangleClip = GenerateTone(Waveform.Triangle, false, baseFrequency, toneLength);
         _crushedClip = GenerateTone(Waveform.Square, true, baseFrequency, toneLength);
 
-        // ---- Distinct per-character voice clips (GDD §1.2) ----
-        _haruClip = GenerateTone(Waveform.Square, false, haruBaseFrequency, haruToneLength);
-        _yuaClip = GenerateTone(Waveform.Triangle, false, yuaBaseFrequency, yuaToneLength);
-
+        // ---- Distinct, warmer per-character voice clips (GDD §1.2, Batch 2) ----
+        //   Haru : soft sine body + faint triangle overtone  -> warm baritone
+        //   Yua  : bright triangle body + faint sine overtone -> crisp soprano
+        _haruClip = GenerateVoiceTone(Waveform.Sine, Waveform.Triangle, 0.22f, false, haruBaseFrequency, haruToneLength);
+        _yuaClip = GenerateVoiceTone(Waveform.Triangle, Waveform.Sine, 0.18f, false, yuaBaseFrequency, yuaToneLength);
         _activeClip = _sineClip;
 
         if (beepSource == null)
@@ -228,6 +229,47 @@ public class TextBeepSynthesizer : MonoBehaviour
         }
 
         AudioClip clip = AudioClip.Create($"beep_{wave}{(crush ? "_crush" : "")}", sampleCount, 1, sampleRate, false);
+
+        clip.SetData(data, 0);
+
+        return clip;
+
+    }
+    // ==========================================
+    // Oscillator - Single Waveform Sample at Phase (shared by voice synthesis)
+    // ==========================================
+    private float Oscillator(Waveform wave, float freq, float t)
+    {
+        float phase = freq * t;
+        float frac = phase - Mathf.Floor(phase);
+        switch (wave)
+        {
+            case Waveform.Square: return frac < 0.5f ? 1f : -1f;
+            case Waveform.Triangle: return 4f * Mathf.Abs(frac - 0.5f) - 1f;
+            default: return Mathf.Sin(phase * 2f * Mathf.PI);
+        }
+    }
+
+    // ==========================================
+    // GenerateVoiceTone - Two-Partial Blended Voice Clip (warm/bright per character)
+    // ==========================================
+    private AudioClip GenerateVoiceTone(Waveform primary, Waveform overtone, float overtoneMix, bool crush, float freq, float length)
+    {
+        const int sampleRate = 44100;
+        int sampleCount = Mathf.Max(1, (int)(sampleRate * length));
+        float[] data = new float[sampleCount];
+        for (int i = 0; i < sampleCount; i++)
+        {
+            float t = (float)i / sampleRate;
+            float baseSample = Oscillator(primary, freq, t);
+            float overSample = Oscillator(overtone, freq * 2f, t) * overtoneMix;
+            float s = (baseSample + overSample) / (1f + overtoneMix);
+            float env = Mathf.Exp(-5f * (float)i / sampleCount);   // softer decay for clarity
+            s *= env;
+            if (crush) s = Mathf.Round(s * 3f) / 3f;
+            data[i] = Mathf.Clamp(s, -1f, 1f) * 0.5f;
+        }
+        AudioClip clip = AudioClip.Create($"voice_{primary}_{overtone}", sampleCount, 1, sampleRate, false, null);
         clip.SetData(data, 0);
         return clip;
     }

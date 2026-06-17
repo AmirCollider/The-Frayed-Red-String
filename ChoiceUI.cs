@@ -75,6 +75,7 @@ public class ChoiceUI : MonoBehaviour
         _onChosen = onChosen;
         ClearButtons();
         gameObject.SetActive(true);
+        EnsureContainerLayout();
 
         if (panelGroup != null)
         {
@@ -99,10 +100,17 @@ public class ChoiceUI : MonoBehaviour
             }
 
             // ==========================================
-            // Background — Tint by Choice Color Profile (GDD §1.3)
+            // Background — Guarantee an Image, then Tint by Choice Color (GDD §1.3)
             // ==========================================
             Image bg = btn.GetComponent<Image>();
-            if (bg != null) bg.color = ColorForChoice(choices[i].color);
+            if (bg == null) bg = btn.AddComponent<Image>();
+            bg.color = ColorForChoice(choices[i].color);
+            bg.raycastTarget = true;
+            // ==========================================
+            // Per-Button Box — force a real row so the Vertical Layout Group
+            // places distinct colored buttons (never a centered dry-text stack)
+            // ==========================================
+            EnsureButtonLayout(btn, lbl);
 
             Button b = btn.GetComponent<Button>();
             if (b != null)
@@ -185,15 +193,73 @@ public class ChoiceUI : MonoBehaviour
     }
 
     // ==========================================
+
     // ColorForChoice - Map ChoiceColor Enum to Configured Button Background Color
+
     // ==========================================
+
     private Color ColorForChoice(ChoiceColor color)
+
     {
+
         switch (color)
+
         {
+
             case ChoiceColor.Green: return greenButtonColor;
+
             case ChoiceColor.Blue: return blueButtonColor;
+
             default: return whiteButtonColor;
+
+        }
+
+    }
+    // ==========================================
+    // EnsureContainerLayout - Force a Vertical Layout Group + Content Size Fitter
+    // on the button container so options stack centered with no overlap (Batch 2)
+    // ==========================================
+    private void EnsureContainerLayout()
+    {
+        if (buttonContainer == null) return;
+
+        VerticalLayoutGroup vlg = buttonContainer.GetComponent<VerticalLayoutGroup>();
+        if (vlg == null) vlg = buttonContainer.gameObject.AddComponent<VerticalLayoutGroup>();
+        vlg.spacing = 12f;
+        vlg.childAlignment = TextAnchor.UpperCenter;
+        vlg.childControlWidth = true;
+        vlg.childControlHeight = true;
+        vlg.childForceExpandWidth = false;
+        vlg.childForceExpandHeight = false;
+        vlg.padding = new RectOffset(8, 8, 8, 8);
+
+        ContentSizeFitter csf = buttonContainer.GetComponent<ContentSizeFitter>();
+        if (csf == null) csf = buttonContainer.gameObject.AddComponent<ContentSizeFitter>();
+        csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+        csf.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+    }
+
+    // ==========================================
+    // EnsureButtonLayout - Force a sized button box + centered label per option (Batch 2)
+    // ==========================================
+    private void EnsureButtonLayout(GameObject btn, TextMeshProUGUI lbl)
+    {
+        LayoutElement le = btn.GetComponent<LayoutElement>();
+        if (le == null) le = btn.AddComponent<LayoutElement>();
+        le.minHeight = 54f;
+        le.preferredHeight = 64f;
+        le.preferredWidth = 700f;
+        le.flexibleWidth = 0f;
+
+        if (lbl != null)
+        {
+            lbl.enableAutoSizing = false;
+            lbl.fontSize = 30f;
+            lbl.alignment = TextAlignmentOptions.Center;
+            lbl.textWrappingMode = TMPro.TextWrappingModes.Normal;
+            lbl.overflowMode = TextOverflowModes.Ellipsis;
+            lbl.margin = new Vector4(18f, 6f, 18f, 6f);
+            lbl.raycastTarget = false;
         }
     }
 
