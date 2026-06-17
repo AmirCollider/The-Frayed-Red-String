@@ -29,6 +29,13 @@ public class LocalizedFontController : MonoBehaviour
     [SerializeField] private List<TMP_Text> targets = new List<TMP_Text>();
 
     // ==========================================
+    // Inspector — Auto-Collect (find every TMP text in the scene automatically)
+    // ==========================================
+    [Header("Auto-Collect")]
+    [SerializeField] private bool autoCollectTargets = true;
+    [SerializeField] private bool includeInactive = true;
+
+    // ==========================================
     // CurrentFont - Language-Correct Font for This Phase (EN fallback)
     // ==========================================
     public TMP_FontAsset CurrentFont
@@ -53,6 +60,7 @@ public class LocalizedFontController : MonoBehaviour
             return;
         }
         Instance = this;
+        CollectTargets();
     }
 
     // ==========================================
@@ -96,6 +104,26 @@ public class LocalizedFontController : MonoBehaviour
     private void OnLanguageChanged(string languageCode)
     {
         ApplyFont();
+    }
+
+    // ==========================================
+    // CollectTargets - Auto-Discover Every TMP Text in the Loaded Scene
+    //   Includes inactive objects (the dialogue box deactivates itself in Awake)
+    //   and merges with any targets assigned by hand in the Inspector. Runtime
+    //   choice-button labels do not exist yet at Awake, so they are not captured.
+    // ==========================================
+    public void CollectTargets()
+    {
+        if (!autoCollectTargets) return;
+        if (targets == null) targets = new List<TMP_Text>();
+
+        FindObjectsInactive inactiveMode = includeInactive
+            ? FindObjectsInactive.Include
+            : FindObjectsInactive.Exclude;
+
+        TMP_Text[] found = FindObjectsByType<TMP_Text>(inactiveMode);
+        foreach (TMP_Text t in found)
+            if (t != null && !targets.Contains(t)) targets.Add(t);
     }
 
     // ==========================================

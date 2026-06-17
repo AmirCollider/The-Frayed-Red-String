@@ -32,7 +32,6 @@ public class ChoiceUI : MonoBehaviour
     [SerializeField] private float fadeInDuration = 0.20f;
     [SerializeField] private float fadeOutDuration = 0.15f;
     [SerializeField] private float staggerDelay = 0.06f;
-    [SerializeField] private float buttonSlideOffset = 18f;
 
     // ==========================================
     // Inspector — Choice SFX (UIClick AudioEvent)
@@ -295,25 +294,40 @@ public class ChoiceUI : MonoBehaviour
     }
 
     // ==========================================
-    // EnsureButtonLayout - Force a sized button box + centered label per option (Batch 2)
+    // EnsureButtonLayout - Size the Button to the 700x140 Art + Auto-Fit Label
+    //   Button matches the BackGrund*Button.png art (700x140) so it is never
+    //   over-wide; the label is stretched to fill the button, inset on all four
+    //   sides for the frame, and auto-sized so text always fits inside.
     // ==========================================
     private void EnsureButtonLayout(GameObject btn, TextMeshProUGUI lbl)
     {
         LayoutElement le = btn.GetComponent<LayoutElement>();
         if (le == null) le = btn.AddComponent<LayoutElement>();
-        le.minHeight = 54f;
-        le.preferredHeight = 64f;
+        le.minWidth = 700f;
         le.preferredWidth = 700f;
+        le.minHeight = 140f;
+        le.preferredHeight = 140f;
         le.flexibleWidth = 0f;
-
+        le.flexibleHeight = 0f;
         if (lbl != null)
         {
-            lbl.enableAutoSizing = false;
-            lbl.fontSize = 30f;
+            // ==========================================
+            // Stretch the label to fill the button so auto-sizing has the full
+            // box to work with, then inset it for the button frame border
+            // ==========================================
+            RectTransform lblRt = lbl.rectTransform;
+            lblRt.anchorMin = Vector2.zero;
+            lblRt.anchorMax = Vector2.one;
+            lblRt.offsetMin = Vector2.zero;
+            lblRt.offsetMax = Vector2.zero;
+
+            lbl.enableAutoSizing = true;
+            lbl.fontSizeMin = 16f;
+            lbl.fontSizeMax = 40f;
             lbl.alignment = TextAlignmentOptions.Center;
             lbl.textWrappingMode = TMPro.TextWrappingModes.Normal;
             lbl.overflowMode = TextOverflowModes.Ellipsis;
-            lbl.margin = new Vector4(18f, 6f, 18f, 6f);
+            lbl.margin = new Vector4(40f, 22f, 40f, 22f);
             lbl.raycastTarget = false;
         }
     }
