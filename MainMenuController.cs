@@ -78,6 +78,7 @@ public class MainMenuController : MonoBehaviour
     private void OnStartClicked()
     {
         clickSfx?.Play();
+        SaveSystem.Instance?.BeginNewGameClock();
         if (SceneController.Instance != null)
             SceneController.Instance.LoadAct(1);
     }
@@ -89,7 +90,7 @@ public class MainMenuController : MonoBehaviour
     {
         clickSfx?.Play();
         if (loadPanel != null)
-            loadPanel.Open();
+            loadPanel.Open(LoadPanelMode.Load, 0);
     }
 
     // ==========================================
