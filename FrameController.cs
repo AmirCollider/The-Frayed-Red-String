@@ -66,23 +66,19 @@ public class FrameController : MonoBehaviour
     }
 
     // ==========================================
-    // Hide - Collapse the Border to Zero (used by the Main Menu; no gameplay frame)
+    // Hide - Route to the Hidden State (all-zero profile; Main Menu has no frame)
     // ==========================================
     public void Hide()
     {
-        CurrentState = FrameState.Normal;
-        SetAllBarsToZero();
-        OnFrameStateChanged.Invoke(FrameState.Normal);
+        SetState(FrameState.Hidden);
     }
 
     // ==========================================
-    // ShowNormal - Reset to the Normal Gameplay Border (used by Act scenes on load)
+    // ShowNormal - Reset to the Normal Gameplay Border (Act scenes on load)
     // ==========================================
     public void ShowNormal()
     {
-        CurrentState = FrameState.Normal;
-        SetAllBarsToZero();
-        OnFrameStateChanged.Invoke(FrameState.Normal);
+        SetState(FrameState.Normal);
     }
 
     // ==========================================

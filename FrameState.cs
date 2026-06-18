@@ -8,5 +8,6 @@ public enum FrameState
     Normal = 0,
     Tightening = 1,
     Broken = 2,
-    PhotorealisticBreak = 3
+    PhotorealisticBreak = 3,
+    Hidden = 4
 }
