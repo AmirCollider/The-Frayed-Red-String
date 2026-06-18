@@ -38,6 +38,16 @@ public class MainMenuController : MonoBehaviour
         SetButtonsInteractable(true);
         WireButtons();
         ApplyMenuVariant();
+        ResetFrameForMenu();
+    }
+
+    // ==========================================
+    // ResetFrameForMenu - Ensure No Gameplay Border Bleeds Into the Main Menu
+    // ==========================================
+    private void ResetFrameForMenu()
+    {
+        if (FrameController.Instance != null)
+            FrameController.Instance.SetState(FrameState.Normal);
     }
 
     // ==========================================
