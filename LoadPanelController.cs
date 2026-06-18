@@ -1,9 +1,10 @@
 // ==========================================
-// LoadPanelController - All-Slots Save/Load Browser (MetaFileSystem-Aware)
+// LoadPanelController - Auto-Built Save/Load Browser (rows generated at runtime)
 // AmirCollider Games - The Frayed Red String
 // ==========================================
 
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,21 +42,14 @@ public class LoadPanelController : MonoBehaviour
     [SerializeField] private Button backButton;
 
     // ==========================================
-    // Inspector — Save Slot Cards (size = 3, all shown at once)
+    // Inspector — Row Generation (ONE prefab + ONE container; rows are auto-built)
     // ==========================================
-    [Header("Save Slots (size = 3)")]
-    [SerializeField] private SaveSlotUI[] slots;
+    [Header("Row Generation")]
+    [SerializeField] private RectTransform slotsContainer;     // parent with a Vertical Layout Group
+    [SerializeField] private SaveSlotRow rowPrefab;            // the prefab below; one is spawned per slot
 
     // ==========================================
-    // Inspector — Corruption Decoys (optional MetaFileSystem flavor)
-    // ==========================================
-    [Header("Corruption Decoys (optional)")]
-    [SerializeField] private RectTransform corruptedContainer;
-    [SerializeField] private RectTransform corruptedSlotTemplate;
-    [SerializeField] private int maxDecoysShown = 6;
-
-    // ==========================================
-    // Inspector — Animation (UNSCALED — also runs while paused at Time.timeScale = 0)
+    // Inspector — Animation (UNSCALED — runs while paused at Time.timeScale = 0)
     // ==========================================
     [Header("Animation (unscaled time)")]
     [SerializeField] private float openDuration = 0.18f;
@@ -69,6 +63,8 @@ public class LoadPanelController : MonoBehaviour
     private LoadPanelMode _mode = LoadPanelMode.Load;
     private int _actNumber;
     private Coroutine _animCo;
+    private readonly List<SaveSlotRow> _spawnedRows = new List<SaveSlotRow>();
+    private bool _rowsBuilt;
 
     // ==========================================
     // IsOpen - Public Query (used by PauseMenuController for Escape routing)
@@ -76,25 +72,17 @@ public class LoadPanelController : MonoBehaviour
     public bool IsOpen => _isOpen;
 
     // ==========================================
-    // Awake - Force Hidden and Wire Buttons
+    // Awake - Force Hidden and Wire the Static Buttons
     // ==========================================
     private void Awake()
     {
         ForceClosed();
-
         if (overlayCloseButton != null) overlayCloseButton.onClick.AddListener(Close);
         if (backButton != null) backButton.onClick.AddListener(Close);
-
-        for (int i = 0; i < slots.Length; i++)
-        {
-            int idx = i;
-            if (slots[i].loadButton != null) slots[i].loadButton.onClick.AddListener(() => OnSlotAction(idx));
-            if (slots[i].deleteButton != null) slots[i].deleteButton.onClick.AddListener(() => OnDeleteSlot(idx));
-        }
     }
 
     // ==========================================
-    // Open - Enter Load or Save Mode, Refresh All Cards, Animate In
+    // Open - Enter a Mode, Build/Refresh Rows, Animate In
     // ==========================================
     public void Open(LoadPanelMode mode, int actNumber)
     {
@@ -109,6 +97,7 @@ public class LoadPanelController : MonoBehaviour
 
         _isOpen = true;
         gameObject.SetActive(true);
+        BuildRowsIfNeeded();
         RefreshAll();
         KillAnim();
         _animCo = StartCoroutine(Anim(true));
@@ -126,62 +115,77 @@ public class LoadPanelController : MonoBehaviour
     }
 
     // ==========================================
-    // RefreshAll - Title, Every Slot Card, and the Anomaly Row
+    // BuildRowsIfNeeded - Instantiate Exactly SLOT_COUNT Rows From the Prefab Once
+    // ==========================================
+    private void BuildRowsIfNeeded()
+    {
+        if (_rowsBuilt) return;
+        if (slotsContainer == null || rowPrefab == null)
+        {
+            Debug.LogError("[LoadPanelController] slotsContainer or rowPrefab is not assigned.");
+            return;
+        }
+
+        // The prefab may live inside the container as a hidden template — never show it.
+        rowPrefab.gameObject.SetActive(false);
+
+        int count = SaveSystem.Instance != null ? SaveSystem.SLOT_COUNT : 3;
+        for (int i = 0; i < count; i++)
+        {
+            SaveSlotRow row = Instantiate(rowPrefab, slotsContainer);
+            row.gameObject.SetActive(true);
+            int idx = i;
+            row.Bind(idx, () => OnSlotAction(idx), () => OnDeleteSlot(idx));
+            _spawnedRows.Add(row);
+        }
+
+        _rowsBuilt = true;
+    }
+
+    // ==========================================
+    // RefreshAll - Title, Every Row, and the Anomaly Row
     // ==========================================
     private void RefreshAll()
     {
         if (titleText != null)
             titleText.text = _mode == LoadPanelMode.Save ? "SAVE" : "LOAD";
 
-        for (int i = 0; i < slots.Length; i++)
-            RefreshSlot(i);
+        for (int i = 0; i < _spawnedRows.Count; i++)
+            RefreshRow(i);
 
         RefreshAnomalies();
     }
 
     // ==========================================
-    // RefreshSlot - Populate a Single Card from SaveSystem and the Active Mode
+    // RefreshRow - Populate a Single Spawned Row From SaveSystem and the Active Mode
     // ==========================================
-    private void RefreshSlot(int i)
+    private void RefreshRow(int i)
     {
-        if (i < 0 || i >= slots.Length) return;
+        if (i < 0 || i >= _spawnedRows.Count) return;
 
-        SaveSlotUI ui = slots[i];
+        SaveSlotRow row = _spawnedRows[i];
         bool has = SaveSystem.Instance != null && SaveSystem.Instance.HasSlot(i);
 
-        if (ui.slotRect != null) ui.slotRect.gameObject.SetActive(true);
-        if (ui.slotNumberText != null) ui.slotNumberText.text = $"SLOT  {i + 1}";
-        if (ui.screenshotImage != null) ui.screenshotImage.gameObject.SetActive(false);
+        string chapter = has ? SaveSystem.Instance.SlotChapter(i) : "";
+        string stamp = has
+            ? $"{FmtTime(SaveSystem.Instance.SlotMinutes(i))}   ·   {SaveSystem.Instance.SlotDate(i)}"
+            : "";
 
-        if (has)
+        string action;
+        bool actionInteractable;
+        if (_mode == LoadPanelMode.Save)
         {
-            if (ui.chapterText != null) ui.chapterText.text = SaveSystem.Instance.SlotChapter(i);
-            if (ui.timestampText != null)
-                ui.timestampText.text = $"{FmtTime(SaveSystem.Instance.SlotMinutes(i))}   ·   {SaveSystem.Instance.SlotDate(i)}";
-            if (ui.emptyOverlay != null) ui.emptyOverlay.SetActive(false);
-            if (ui.deleteButton != null) ui.deleteButton.gameObject.SetActive(true);
+            action = has ? "OVERWRITE" : "SAVE HERE";
+            actionInteractable = true;
         }
         else
         {
-            if (ui.chapterText != null) ui.chapterText.text = "";
-            if (ui.timestampText != null) ui.timestampText.text = "";
-            if (ui.emptyOverlay != null) ui.emptyOverlay.SetActive(_mode == LoadPanelMode.Load);
-            if (ui.deleteButton != null) ui.deleteButton.gameObject.SetActive(false);
+            action = has ? "LOAD" : "EMPTY";
+            actionInteractable = has;
         }
 
-        if (ui.loadButton != null)
-        {
-            ui.loadButton.gameObject.SetActive(true);
-            ui.loadButton.interactable = _mode == LoadPanelMode.Save || has;
-        }
-
-        if (ui.actionLabelText != null)
-        {
-            if (_mode == LoadPanelMode.Save)
-                ui.actionLabelText.text = has ? "OVERWRITE" : "SAVE HERE";
-            else
-                ui.actionLabelText.text = has ? "LOAD" : "EMPTY";
-        }
+        bool showEmptyOverlay = !has && _mode == LoadPanelMode.Load;
+        row.SetData(i, has, chapter, stamp, action, actionInteractable, showEmptyOverlay);
     }
 
     // ==========================================
@@ -194,7 +198,7 @@ public class LoadPanelController : MonoBehaviour
         if (_mode == LoadPanelMode.Save)
         {
             SaveSystem.Instance.SaveToSlot(i, _actNumber);
-            RefreshSlot(i);
+            RefreshRow(i);
             RefreshAnomalies();
         }
         else
@@ -206,44 +210,23 @@ public class LoadPanelController : MonoBehaviour
     }
 
     // ==========================================
-    // OnDeleteSlot - Erase a Slot and Refresh the Card
+    // OnDeleteSlot - Erase a Slot and Refresh Its Row
     // ==========================================
     private void OnDeleteSlot(int i)
     {
         if (SaveSystem.Instance == null) return;
         SaveSystem.Instance.DeleteSlot(i);
-        RefreshSlot(i);
+        RefreshRow(i);
     }
 
     // ==========================================
-    // RefreshAnomalies - Show the Per-Save Corruption Count and Optional Decoy Slots
+    // RefreshAnomalies - Show the Per-Save Corruption Count
     // ==========================================
     private void RefreshAnomalies()
     {
         int n = MetaFileSystem.Instance != null ? MetaFileSystem.Instance.CorruptionCount : 0;
-
         if (anomalyText != null)
             anomalyText.text = n > 0 ? $"⚠  FILE ANOMALIES DETECTED: {n}" : "";
-
-        if (corruptedContainer == null || corruptedSlotTemplate == null) return;
-
-        for (int c = corruptedContainer.childCount - 1; c >= 0; c--)
-        {
-            Transform child = corruptedContainer.GetChild(c);
-            if (child == corruptedSlotTemplate.transform) continue;
-            Destroy(child.gameObject);
-        }
-        corruptedSlotTemplate.gameObject.SetActive(false);
-
-        int show = Mathf.Min(n, maxDecoysShown);
-        for (int k = 0; k < show; k++)
-        {
-            RectTransform decoy = Instantiate(corruptedSlotTemplate, corruptedContainer);
-            decoy.gameObject.SetActive(true);
-            TextMeshProUGUI label = decoy.GetComponentInChildren<TextMeshProUGUI>(true);
-            if (label != null)
-                label.text = $"SLOT ?? · 0x{(0xC0FFEE + k * 0x1F3D):X6} · CORRUPTED";
-        }
     }
 
     // ==========================================
@@ -307,21 +290,4 @@ public class LoadPanelController : MonoBehaviour
         int m = totalMinutes % 60;
         return h > 0 ? $"{h}:{m:D2}" : $"0:{m:D2}";
     }
-}
-
-// ==========================================
-// SaveSlotUI - Serializable Inspector Binding for a Single Slot Card
-// ==========================================
-[System.Serializable]
-public class SaveSlotUI
-{
-    public RectTransform slotRect;
-    public TextMeshProUGUI slotNumberText;
-    public TextMeshProUGUI chapterText;
-    public TextMeshProUGUI timestampText;
-    public TextMeshProUGUI actionLabelText;
-    public Button loadButton;
-    public Button deleteButton;
-    public GameObject emptyOverlay;
-    public Image screenshotImage;
 }
