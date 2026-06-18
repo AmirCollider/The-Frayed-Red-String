@@ -161,7 +161,7 @@ public class DialogueSystem : MonoBehaviour
     // ==========================================
     public DialogueSequence CurrentSequence => _currentSequence;
     public int CurrentIndex => _currentIndex;
-    public bool CanSaveNow => _isRunning && _atSaveableWait && !_suppressSideEffectsOnce;
+    public bool CanSaveNow => _isRunning && !_suppressSideEffectsOnce;
 
     // ==========================================
     // Advance - Handle Player Input: Skip Typewriter or Proceed to Next Line

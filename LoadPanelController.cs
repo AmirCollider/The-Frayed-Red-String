@@ -32,7 +32,6 @@ public class LoadPanelController : MonoBehaviour
     // ==========================================
     [Header("Header")]
     [SerializeField] private TextMeshProUGUI titleText;
-    [SerializeField] private TextMeshProUGUI anomalyText;
 
     // ==========================================
     // Inspector — Overlay / Back
@@ -166,10 +165,7 @@ public class LoadPanelController : MonoBehaviour
         SaveSlotRow row = _spawnedRows[i];
         bool has = SaveSystem.Instance != null && SaveSystem.Instance.HasSlot(i);
 
-        string chapter = has ? SaveSystem.Instance.SlotChapter(i) : "";
-        string stamp = has
-            ? $"{FmtTime(SaveSystem.Instance.SlotMinutes(i))}   ·   {SaveSystem.Instance.SlotDate(i)}"
-            : "";
+        string chapter = has ? ShortChapter(SaveSystem.Instance.SlotAct(i)) : "";
 
         string action;
         bool actionInteractable;
@@ -185,7 +181,7 @@ public class LoadPanelController : MonoBehaviour
         }
 
         bool showEmptyOverlay = !has && _mode == LoadPanelMode.Load;
-        row.SetData(i, has, chapter, stamp, action, actionInteractable, showEmptyOverlay);
+        row.SetData(i, has, chapter, action, actionInteractable, showEmptyOverlay);
     }
 
     // ==========================================
@@ -220,13 +216,25 @@ public class LoadPanelController : MonoBehaviour
     }
 
     // ==========================================
-    // RefreshAnomalies - Show the Per-Save Corruption Count
+    // RefreshAnomalies - Anomaly Count Is Tracked Silently (no on-panel label)
     // ==========================================
     private void RefreshAnomalies()
     {
-        int n = MetaFileSystem.Instance != null ? MetaFileSystem.Instance.CorruptionCount : 0;
-        if (anomalyText != null)
-            anomalyText.text = n > 0 ? $"⚠  FILE ANOMALIES DETECTED: {n}" : "";
+        // MetaFileSystem still increments per save; the label was removed by design.
+    }
+
+    // ==========================================
+    // ShortChapter - Compact Act Tag for the Slot Card
+    // ==========================================
+    private static string ShortChapter(int act)
+    {
+        switch (act)
+        {
+            case 1: return "ACT I";
+            case 2: return "ACT II";
+            case 3: return "ACT III";
+            default: return "ACT " + act;
+        }
     }
 
     // ==========================================
@@ -279,15 +287,5 @@ public class LoadPanelController : MonoBehaviour
     private void KillAnim()
     {
         if (_animCo != null) { StopCoroutine(_animCo); _animCo = null; }
-    }
-
-    // ==========================================
-    // FmtTime - Total Minutes to H:MM Display String
-    // ==========================================
-    private static string FmtTime(int totalMinutes)
-    {
-        int h = totalMinutes / 60;
-        int m = totalMinutes % 60;
-        return h > 0 ? $"{h}:{m:D2}" : $"0:{m:D2}";
     }
 }
