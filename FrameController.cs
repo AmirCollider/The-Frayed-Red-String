@@ -50,10 +50,13 @@ public class FrameController : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
 
+        DontDestroyOnLoad(gameObject);
         if (startHidden)
+        {
+            CurrentState = FrameState.Hidden;
             SetAllBarsToZero();
+        }
     }
 
     // ==========================================
@@ -71,6 +74,17 @@ public class FrameController : MonoBehaviour
     public void Hide()
     {
         SetState(FrameState.Hidden);
+    }
+    // ==========================================
+    // HideInstant - Collapse the Border Immediately (no tween, no profile dependency)
+    // AmirCollider Games - The Frayed Red String
+    // Used on the very first Main Menu load so the frame can never flash on boot.
+    // ==========================================
+    public void HideInstant()
+    {
+        CurrentState = FrameState.Hidden;
+        SetAllBarsToZero();
+        OnFrameStateChanged.Invoke(FrameState.Hidden);
     }
 
     // ==========================================

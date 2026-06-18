@@ -42,12 +42,39 @@ public class MainMenuController : MonoBehaviour
     }
 
     // ==========================================
+    // First-Menu Guard - Snap the Frame Closed on the Very First Boot, Fade on Return
+    // ==========================================
+    private static bool _menuShownThisSession = false;
+
+    // ==========================================
     // ResetFrameForMenu - Ensure No Gameplay Border Bleeds Into the Main Menu
     // ==========================================
     private void ResetFrameForMenu()
     {
-        if (FrameController.Instance != null)
-            FrameController.Instance.SetState(FrameState.Normal);
+        StartCoroutine(ResetFrameForMenuRoutine());
+    }
+
+    // ==========================================
+    // ResetFrameForMenuRoutine - Wait for the Persistent Frame, Then Hide It
+    // First boot: collapse instantly (kills the boot-time frame). Returning from an
+    // Act: animate, preserving the fade-out.
+    // ==========================================
+    private System.Collections.IEnumerator ResetFrameForMenuRoutine()
+    {
+        while (FrameController.Instance == null)
+            yield return null;
+
+        if (!_menuShownThisSession)
+        {
+            FrameController.Instance.HideInstant();
+            yield return null;
+            FrameController.Instance.HideInstant();
+            _menuShownThisSession = true;
+        }
+        else
+        {
+            FrameController.Instance.Hide();
+        }
     }
 
     // ==========================================
