@@ -148,8 +148,19 @@ public class SaveSystem : MonoBehaviour
         if (MetaFileSystem.Instance != null)
             MetaFileSystem.Instance.RegisterSaveAnomaly();
 
+        // ==========================================
+        // Auto-Screenshot — capture the current scene (dialogue box hidden) for the card
+        // ==========================================
+        if (SaveScreenshot.Instance != null)
+            SaveScreenshot.Instance.Capture(slot);
+
         return true;
     }
+
+    // ==========================================
+    // SlotScreenshotPath - Persistent PNG Path for a Slot (used by the saved-row prefab)
+    // ==========================================
+    public string SlotScreenshotPath(int i) => SaveScreenshot.PathForSlot(i);
 
     // ==========================================
     // DeleteSlot - Erase All Keys for a Slot

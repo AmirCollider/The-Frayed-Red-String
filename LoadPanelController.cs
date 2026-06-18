@@ -1,5 +1,5 @@
 // ==========================================
-// LoadPanelController - Auto-Built Save/Load Browser (rows generated at runtime)
+// LoadPanelController - Auto-Built Save/Load Browser (empty vs saved row prefabs)
 // AmirCollider Games - The Frayed Red String
 // ==========================================
 
@@ -41,11 +41,12 @@ public class LoadPanelController : MonoBehaviour
     [SerializeField] private Button backButton;
 
     // ==========================================
-    // Inspector — Row Generation (ONE prefab + ONE container; rows are auto-built)
+    // Inspector — Row Generation (TWO prefabs: empty slot vs saved slot)
     // ==========================================
     [Header("Row Generation")]
-    [SerializeField] private RectTransform slotsContainer;     // parent with a Vertical Layout Group
-    [SerializeField] private SaveSlotRow rowPrefab;            // the prefab below; one is spawned per slot
+    [SerializeField] private RectTransform slotsContainer;
+    [SerializeField] private SaveSlotRow emptyRowPrefab;
+    [SerializeField] private SaveSlotRow savedRowPrefab;
 
     // ==========================================
     // Inspector — Animation (UNSCALED — runs while paused at Time.timeScale = 0)
@@ -62,8 +63,7 @@ public class LoadPanelController : MonoBehaviour
     private LoadPanelMode _mode = LoadPanelMode.Load;
     private int _actNumber;
     private Coroutine _animCo;
-    private readonly List<SaveSlotRow> _spawnedRows = new List<SaveSlotRow>();
-    private bool _rowsBuilt;
+    private readonly List<GameObject> _spawned = new List<GameObject>();
 
     // ==========================================
     // IsOpen - Public Query (used by PauseMenuController for Escape routing)
@@ -71,7 +71,7 @@ public class LoadPanelController : MonoBehaviour
     public bool IsOpen => _isOpen;
 
     // ==========================================
-    // Awake - Force Hidden and Wire the Static Buttons
+    // Awake - Force Hidden and Wire Static Buttons
     // ==========================================
     private void Awake()
     {
@@ -81,23 +81,18 @@ public class LoadPanelController : MonoBehaviour
     }
 
     // ==========================================
-    // Open - Enter a Mode, Build/Refresh Rows, Animate In
+    // Open - Enter a Mode, Rebuild Rows, Animate In
     // ==========================================
     public void Open(LoadPanelMode mode, int actNumber)
     {
         _mode = mode;
         _actNumber = actNumber;
 
-        if (_isOpen)
-        {
-            RefreshAll();
-            return;
-        }
-
-        _isOpen = true;
         gameObject.SetActive(true);
-        BuildRowsIfNeeded();
-        RefreshAll();
+        Rebuild();
+
+        if (_isOpen) return;
+        _isOpen = true;
         KillAnim();
         _animCo = StartCoroutine(Anim(true));
     }
@@ -114,88 +109,64 @@ public class LoadPanelController : MonoBehaviour
     }
 
     // ==========================================
-    // BuildRowsIfNeeded - Instantiate Exactly SLOT_COUNT Rows From the Prefab Once
+    // Rebuild - Destroy Old Rows, Spawn the Correct Prefab per Slot
     // ==========================================
-    private void BuildRowsIfNeeded()
-    {
-        if (_rowsBuilt) return;
-        if (slotsContainer == null || rowPrefab == null)
-        {
-            Debug.LogError("[LoadPanelController] slotsContainer or rowPrefab is not assigned.");
-            return;
-        }
-
-        // The prefab may live inside the container as a hidden template — never show it.
-        rowPrefab.gameObject.SetActive(false);
-
-        int count = SaveSystem.Instance != null ? SaveSystem.SLOT_COUNT : 3;
-        for (int i = 0; i < count; i++)
-        {
-            SaveSlotRow row = Instantiate(rowPrefab, slotsContainer);
-            row.gameObject.SetActive(true);
-            int idx = i;
-            row.Bind(idx, () => OnSlotAction(idx), () => OnDeleteSlot(idx));
-            _spawnedRows.Add(row);
-        }
-
-        _rowsBuilt = true;
-    }
-
-    // ==========================================
-    // RefreshAll - Title, Every Row, and the Anomaly Row
-    // ==========================================
-    private void RefreshAll()
+    private void Rebuild()
     {
         if (titleText != null)
             titleText.text = _mode == LoadPanelMode.Save ? "SAVE" : "LOAD";
 
-        for (int i = 0; i < _spawnedRows.Count; i++)
-            RefreshRow(i);
+        for (int k = 0; k < _spawned.Count; k++)
+            if (_spawned[k] != null) Destroy(_spawned[k]);
+        _spawned.Clear();
 
-        RefreshAnomalies();
+        if (slotsContainer == null || emptyRowPrefab == null || savedRowPrefab == null)
+        {
+            Debug.LogError("[LoadPanelController] slotsContainer / emptyRowPrefab / savedRowPrefab not assigned.");
+            return;
+        }
+
+        emptyRowPrefab.gameObject.SetActive(false);
+        savedRowPrefab.gameObject.SetActive(false);
+
+        int count = SaveSystem.Instance != null ? SaveSystem.SLOT_COUNT : 3;
+        for (int i = 0; i < count; i++)
+        {
+            bool has = SaveSystem.Instance != null && SaveSystem.Instance.HasSlot(i);
+            int idx = i;
+
+            if (has)
+            {
+                SaveSlotRow row = Instantiate(savedRowPrefab, slotsContainer);
+                row.gameObject.SetActive(true);
+                row.Bind(idx, () => OnLoadOrSave(idx), () => OnDelete(idx));
+                row.SetLoadInteractable(true);
+                row.ApplyScreenshot(SaveSystem.Instance.SlotScreenshotPath(idx));
+                _spawned.Add(row.gameObject);
+            }
+            else
+            {
+                SaveSlotRow row = Instantiate(emptyRowPrefab, slotsContainer);
+                row.gameObject.SetActive(true);
+                // In SAVE mode an empty slot must be clickable (to save into it); in LOAD mode it stays dead.
+                row.Bind(idx, () => OnLoadOrSave(idx), null);
+                row.SetLoadInteractable(_mode == LoadPanelMode.Save);
+                _spawned.Add(row.gameObject);
+            }
+        }
     }
 
     // ==========================================
-    // RefreshRow - Populate a Single Spawned Row From SaveSystem and the Active Mode
+    // OnLoadOrSave - Save Into the Slot (Save mode) or Load It (Load mode)
     // ==========================================
-    private void RefreshRow(int i)
-    {
-        if (i < 0 || i >= _spawnedRows.Count) return;
-
-        SaveSlotRow row = _spawnedRows[i];
-        bool has = SaveSystem.Instance != null && SaveSystem.Instance.HasSlot(i);
-
-        string chapter = has ? ShortChapter(SaveSystem.Instance.SlotAct(i)) : "";
-
-        string action;
-        bool actionInteractable;
-        if (_mode == LoadPanelMode.Save)
-        {
-            action = has ? "OVERWRITE" : "SAVE HERE";
-            actionInteractable = true;
-        }
-        else
-        {
-            action = has ? "LOAD" : "EMPTY";
-            actionInteractable = has;
-        }
-
-        bool showEmptyOverlay = !has && _mode == LoadPanelMode.Load;
-        row.SetData(i, has, chapter, action, actionInteractable, showEmptyOverlay);
-    }
-
-    // ==========================================
-    // OnSlotAction - Save Into / Load From the Tapped Slot
-    // ==========================================
-    private void OnSlotAction(int i)
+    private void OnLoadOrSave(int i)
     {
         if (SaveSystem.Instance == null) return;
 
         if (_mode == LoadPanelMode.Save)
         {
             SaveSystem.Instance.SaveToSlot(i, _actNumber);
-            RefreshRow(i);
-            RefreshAnomalies();
+            Rebuild();
         }
         else
         {
@@ -206,35 +177,13 @@ public class LoadPanelController : MonoBehaviour
     }
 
     // ==========================================
-    // OnDeleteSlot - Erase a Slot and Refresh Its Row
+    // OnDelete - Erase a Slot and Rebuild the List
     // ==========================================
-    private void OnDeleteSlot(int i)
+    private void OnDelete(int i)
     {
         if (SaveSystem.Instance == null) return;
         SaveSystem.Instance.DeleteSlot(i);
-        RefreshRow(i);
-    }
-
-    // ==========================================
-    // RefreshAnomalies - Anomaly Count Is Tracked Silently (no on-panel label)
-    // ==========================================
-    private void RefreshAnomalies()
-    {
-        // MetaFileSystem still increments per save; the label was removed by design.
-    }
-
-    // ==========================================
-    // ShortChapter - Compact Act Tag for the Slot Card
-    // ==========================================
-    private static string ShortChapter(int act)
-    {
-        switch (act)
-        {
-            case 1: return "ACT I";
-            case 2: return "ACT II";
-            case 3: return "ACT III";
-            default: return "ACT " + act;
-        }
+        Rebuild();
     }
 
     // ==========================================

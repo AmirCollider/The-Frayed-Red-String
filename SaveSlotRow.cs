@@ -1,9 +1,10 @@
 // ==========================================
-// SaveSlotRow - One Save Slot Card (auto-instantiated; minimal, clean layout)
+// SaveSlotRow - One Save Slot Card (empty-state or saved-state prefab variant)
 // AmirCollider Games - The Frayed Red String
 // ==========================================
 
 using System;
+using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,29 +12,35 @@ using UnityEngine.UI;
 public class SaveSlotRow : MonoBehaviour
 {
     // ==========================================
-    // Inspector — Widgets on This Row
+    // Inspector — Buttons (Load present on both; Delete only on the saved prefab)
     // ==========================================
-    [Header("Texts")]
-    [SerializeField] private TextMeshProUGUI slotNumberText;
-    [SerializeField] private TextMeshProUGUI chapterText;
-    [SerializeField] private TextMeshProUGUI actionLabelText;
-
     [Header("Buttons")]
-    [SerializeField] private Button actionButton;
+    [SerializeField] private Button loadButton;
     [SerializeField] private Button deleteButton;
 
-    [Header("Empty State")]
-    [SerializeField] private GameObject emptyOverlay;
+    // ==========================================
+    // Inspector — Screenshot (only on the saved prefab)
+    // ==========================================
+    [Header("Screenshot (saved prefab only)")]
+    [SerializeField] private Image screenshotImage;
 
     // ==========================================
-    // Bind - Hook the Action/Delete Buttons to the Panel's Callbacks (once)
+    // Inspector — Optional Label
     // ==========================================
-    public void Bind(int index, Action onAction, Action onDelete)
+    [Header("Optional Label")]
+    [SerializeField] private TextMeshProUGUI slotNumberText;
+
+    // ==========================================
+    // Bind - Hook Buttons to the Panel Callbacks (once, at instantiation)
+    // ==========================================
+    public void Bind(int index, Action onLoad, Action onDelete)
     {
-        if (actionButton != null)
+        if (slotNumberText != null) slotNumberText.text = $"SLOT {index + 1}";
+
+        if (loadButton != null)
         {
-            actionButton.onClick.RemoveAllListeners();
-            actionButton.onClick.AddListener(() => onAction?.Invoke());
+            loadButton.onClick.RemoveAllListeners();
+            loadButton.onClick.AddListener(() => onLoad?.Invoke());
         }
         if (deleteButton != null)
         {
@@ -43,17 +50,33 @@ public class SaveSlotRow : MonoBehaviour
     }
 
     // ==========================================
-    // SetData - Push the Current Slot State Into This Row's Widgets
+    // SetLoadInteractable - Empty Prefab Keeps Its Load Button Disabled
     // ==========================================
-    public void SetData(int index, bool hasData, string chapter,
-                        string actionLabel, bool actionInteractable, bool showEmptyOverlay)
+    public void SetLoadInteractable(bool interactable)
     {
-        if (slotNumberText != null) slotNumberText.text = $"SLOT {index + 1}";
-        if (chapterText != null) chapterText.text = hasData ? chapter : "— EMPTY —";
-        if (actionLabelText != null) actionLabelText.text = actionLabel;
+        if (loadButton != null) loadButton.interactable = interactable;
+    }
 
-        if (actionButton != null) actionButton.interactable = actionInteractable;
-        if (deleteButton != null) deleteButton.gameObject.SetActive(hasData);
-        if (emptyOverlay != null) emptyOverlay.SetActive(showEmptyOverlay);
+    // ==========================================
+    // ApplyScreenshot - Load a PNG From Disk Into the Saved Row's Image
+    // ==========================================
+    public void ApplyScreenshot(string path)
+    {
+        if (screenshotImage == null) return;
+
+        if (!string.IsNullOrEmpty(path) && File.Exists(path))
+        {
+            byte[] bytes = File.ReadAllBytes(path);
+            Texture2D tex = new Texture2D(2, 2, TextureFormat.RGB24, false);
+            tex.LoadImage(bytes);
+            screenshotImage.sprite = Sprite.Create(
+                tex, new Rect(0f, 0f, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+            screenshotImage.enabled = true;
+        }
+        else
+        {
+            // no screenshot on disk — leave whatever placeholder the prefab carries
+            screenshotImage.enabled = screenshotImage.sprite != null;
+        }
     }
 }
