@@ -49,8 +49,11 @@ public class FrameAnimator : MonoBehaviour
     private void OnStateChanged(FrameState newState)
     {
         FrameStateProfile profile = GetProfile(newState);
+        // Hidden uses an implicit all-zero profile when none is authored in the
+        // Inspector, so Hide() always collapses the border (e.g. on the Main Menu).
+        if (profile == null && newState == FrameState.Hidden)
+            profile = HiddenFallbackProfile();
         if (profile == null) return;
-
         if (_tweenCo != null) StopCoroutine(_tweenCo);
         _tweenCo = StartCoroutine(TweenToProfile(profile));
     }
@@ -64,6 +67,23 @@ public class FrameAnimator : MonoBehaviour
         foreach (FrameStateProfile p in profiles)
             if (p.state == state) return p;
         return null;
+    }
+
+    // ==========================================
+    // HiddenFallbackProfile - جمع شدن تمام‌صفرِ ضمنی برای حالت Hidden
+    // بازی‌های امیرکلایدر - ریسمان سرخ فرسوده (The Frayed Red String)
+    // ==========================================
+    private static FrameStateProfile HiddenFallbackProfile()
+    {
+        return new FrameStateProfile
+        {
+            state = FrameState.Hidden,
+            topBarHeight = 0f,
+            bottomBarHeight = 0f,
+            leftBarWidth = 0f,
+            rightBarWidth = 0f,
+            transitionDuration = 0.25f
+        };
     }
 
     // ==========================================
