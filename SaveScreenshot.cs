@@ -18,8 +18,8 @@ public class SaveScreenshot : MonoBehaviour
     // Inspector — Capture Size (downscaled thumbnail)
     // ==========================================
     [Header("Thumbnail Size")]
-    [SerializeField] private int captureWidth = 480;
-    [SerializeField] private int captureHeight = 270;
+    [SerializeField] private int captureWidth = 1245;
+    [SerializeField] private int captureHeight = 120;
 
     // ==========================================
     // Awake - Singleton Enforcement and Persistence
