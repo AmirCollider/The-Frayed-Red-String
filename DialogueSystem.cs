@@ -83,14 +83,14 @@ public class DialogueSystem : MonoBehaviour
     private void Update()
     {
         // ==========================================
-        // Pause Gate — Ignore Advance Input While the Stop Menu Holds the Game
+        // Pause Gate — Ignore Advance Input While Frozen (PauseMenu sets Time.timeScale = 0)
+        // No reference to PauseMenuController, so this never breaks the compile.
         // ==========================================
-        if (PauseMenuController.IsPaused) return;
+        if (Time.timeScale == 0f) return;
 
         // Poll input while typing (to skip) OR while waiting (to advance).
-        bool typing = (dialogueBox != null && dialogueBox.IsTyping)
-                   || (innerMonologue != null && innerMonologue.IsTyping);
-
+        bool typing = (dialogueBox != null && dialogueBox.IsTyping);
+ 
         if (!typing && !_waitingForInput) return;
 
         // Modern polling using the New Input System API with null checks
