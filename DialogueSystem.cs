@@ -149,6 +149,7 @@ public class DialogueSystem : MonoBehaviour
         _currentSequence = null;
         dialogueBox?.Hide();
         innerMonologue?.Hide();
+        CharacterRegistry.Instance?.ExitMonologueStaging();
         CharacterRegistry.Instance?.ClearAllFocus();
     }
 
@@ -266,9 +267,18 @@ public class DialogueSystem : MonoBehaviour
                 CharacterRegistry.Instance.Get(line.speakerId)?.SetStateByName(line.characterStateOverride);
 
             // ==========================================
-            // Speaker Position — Slide / Place the Speaking Character (dialogue-driven)
+            // Monologue Staging Restore — if the previous line was an inner thought,
+            // bring the exited character back and undo the center framing before placing.
             // ==========================================
-            if (!string.IsNullOrEmpty(line.speakerId) && CharacterRegistry.Instance != null)
+            if (!line.isInnerMonologue && CharacterRegistry.Instance != null)
+                CharacterRegistry.Instance.ExitMonologueStaging();
+
+            // ==========================================
+            // Speaker Position — Slide / Place the Speaking Character (dialogue-driven).
+            // Inner-thought lines are framed by EnterMonologueStaging instead (thinker
+            // centered, everyone else off-screen), so skip normal placement for them.
+            // ==========================================
+            if (!line.isInnerMonologue && !string.IsNullOrEmpty(line.speakerId) && CharacterRegistry.Instance != null)
             {
                 CharacterSpriteController speaker = CharacterRegistry.Instance.Get(line.speakerId);
                 if (speaker != null && speaker.CurrentPosition != line.speakerPosition)
@@ -285,8 +295,10 @@ public class DialogueSystem : MonoBehaviour
 
         if (line.isInnerMonologue)
         {
-            // Inner thought — hide the bottom box so it never sits behind the
-            // centered thought panel, and pass the speaker so the panel is named.
+            // Inner thought — pull the thinker to center and push everyone else off,
+            // hide the bottom box, and pass the speaker so the panel is named.
+            if (CharacterRegistry.Instance != null)
+                CharacterRegistry.Instance.EnterMonologueStaging(line.speakerId);
             dialogueBox?.Hide();
             innerMonologue?.Show(line.speakerId, line.GetActiveText());
         }

@@ -26,6 +26,14 @@ public class CharacterRegistry : MonoBehaviour
         = new Dictionary<string, CharacterSpriteController>();
 
     // ==========================================
+    // Monologue Staging State — remembers where everyone stood before an inner-thought
+    // block so the layout can be restored when normal dialogue resumes.
+    // ==========================================
+    private bool _inMonologueStaging;
+    private readonly Dictionary<string, CharacterPosition> _stagingSnapshot
+        = new Dictionary<string, CharacterPosition>();
+
+    // ==========================================
     // Awake - Singleton Enforcement and Initial Registration
     // ==========================================
     private void Awake()
@@ -123,5 +131,51 @@ public class CharacterRegistry : MonoBehaviour
     {
         foreach (CharacterSpriteController c in _registry.Values)
             c?.SetFocusRole(SpeakerFocusRole.Neutral);
+    }
+
+    // ==========================================
+    // EnterMonologueStaging - Frame an Inner Thought: Thinker to Center, Everyone Else Off
+    // (snapshots the pre-thought layout once so it can be restored later)
+    // ==========================================
+    public void EnterMonologueStaging(string speakerId)
+    {
+        // A thought needs a real owner; a blank speaker would push EVERY character
+        // off-screen and leave the thought floating. Leave the stage untouched instead.
+        if (string.IsNullOrEmpty(speakerId)) return;
+
+        if (!_inMonologueStaging)
+        {
+            _stagingSnapshot.Clear();
+            foreach (CharacterSpriteController c in _registry.Values)
+                if (c != null) _stagingSnapshot[c.CharacterId] = c.CurrentPosition;
+            _inMonologueStaging = true;
+        }
+
+        foreach (CharacterSpriteController c in _registry.Values)
+        {
+            if (c == null) continue;
+            if (c.CharacterId == speakerId)
+                c.SetPosition(CharacterPosition.Center);
+            else
+                c.SetPosition(CharacterPosition.OffScreen);
+        }
+    }
+
+    // ==========================================
+    // ExitMonologueStaging - Restore the Layout Captured Before the Inner Thought Began
+    // ==========================================
+    public void ExitMonologueStaging()
+    {
+        if (!_inMonologueStaging) return;
+
+        foreach (CharacterSpriteController c in _registry.Values)
+        {
+            if (c == null) continue;
+            if (_stagingSnapshot.TryGetValue(c.CharacterId, out CharacterPosition pos))
+                c.SetPosition(pos);
+        }
+
+        _stagingSnapshot.Clear();
+        _inMonologueStaging = false;
     }
 }
