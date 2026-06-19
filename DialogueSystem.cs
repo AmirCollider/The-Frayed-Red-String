@@ -293,25 +293,20 @@ public class DialogueSystem : MonoBehaviour
         if (CharacterRegistry.Instance != null)
             CharacterRegistry.Instance.FocusSpeaker(line.speakerId, line.isInnerMonologue);
 
-        if (line.isInnerMonologue)
-        {
-            // Inner thought — pull the thinker to center and push everyone else off,
-            // hide the bottom box, and pass the speaker so the panel is named.
-            if (CharacterRegistry.Instance != null)
-                CharacterRegistry.Instance.EnterMonologueStaging(line.speakerId);
-            dialogueBox?.Hide();
-            innerMonologue?.Show(line.speakerId, line.GetActiveText());
-        }
-        else
-        {
-            // Spoken line — clear any leftover thought panel and make sure the box
-            // is shown again (it is hidden during choices, see ProcessBranch).
-            innerMonologue?.Hide();
-            dialogueBox?.Show();
-            dialogueBox?.DisplayLine(line);
-            line.voiceEvent?.Play();
-            line.sfxEvent?.Play();
-        }
+        // ==========================================
+        // Inner thought — the OTHER character leaves the frame (EnterMonologueStaging);
+        // the thinker holds position. The dedicated InnerMonologuePanel is deferred until
+        // GirlRoom and was leaving the thought un-shown, so the thought is rendered in the
+        // always-wired dialogue box instead — named (speaker = Yua) and italicised.
+        // ==========================================
+        if (line.isInnerMonologue && CharacterRegistry.Instance != null)
+            CharacterRegistry.Instance.EnterMonologueStaging(line.speakerId);
+
+        innerMonologue?.Hide();
+        dialogueBox?.Show();
+        dialogueBox?.DisplayLine(line);
+        line.voiceEvent?.Play();
+        line.sfxEvent?.Play();
 
         OnLineDisplayed.Invoke(line);
 
@@ -359,10 +354,11 @@ public class DialogueSystem : MonoBehaviour
         bool chosen = false;
 
         // ==========================================
-        // Clear the already-read line so the choice buttons never overlap text.
-        // The dialogue/thought was shown once before the branch; it is redundant now.
-        // The box is restored automatically by the next line in ProcessLine.
+        // If the previous line was an inner thought, bring the character who left the
+        // frame back before showing the choice, then clear the already-read line so the
+        // buttons never overlap text (the box is restored by the next line in ProcessLine).
         // ==========================================
+        CharacterRegistry.Instance?.ExitMonologueStaging();
         dialogueBox?.Hide();
         innerMonologue?.Hide();
 

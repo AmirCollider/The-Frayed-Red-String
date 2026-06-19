@@ -119,6 +119,8 @@ public class DialogueBoxUI : MonoBehaviour
 
         if (_addressStyle != null)
             typewriter.Play(_addressStyle.WrapAddressText(line.GetActiveText()), _addressStyle.AddressTypewriterCPS);
+        else if (line.isInnerMonologue)
+            typewriter.Play($"<i>{line.GetActiveText()}</i>");
         else
             typewriter.Play(line.GetActiveText());
     }
