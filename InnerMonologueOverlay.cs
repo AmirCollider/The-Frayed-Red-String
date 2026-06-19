@@ -23,7 +23,6 @@ public class InnerMonologueOverlay : MonoBehaviour
     [Header("Text")]
     [SerializeField] private TypewriterEffect typewriter;
     [SerializeField] private TextMeshProUGUI labelText;
-    [SerializeField] private TextMeshProUGUI speakerNameLabel;
 
     // ==========================================
     // Inspector — Fade
@@ -55,7 +54,7 @@ public class InnerMonologueOverlay : MonoBehaviour
     // ==========================================
     // Show - Activate Panel and Begin Typewriter Reveal
     // ==========================================
-    public void Show(string speakerName, string text)
+    public void Show(string text)
     {
         gameObject.SetActive(true);
         _isVisible = true;
@@ -66,8 +65,6 @@ public class InnerMonologueOverlay : MonoBehaviour
             overlayGroup.blocksRaycasts = false;
         }
 
-        SetSpeakerName(speakerName);
-
         string display = autoItalic ? $"<i>{text}</i>" : text;
 
         if (typewriter != null)
@@ -76,17 +73,6 @@ public class InnerMonologueOverlay : MonoBehaviour
             labelText.text = display;
 
         FadeTo(1f, fadeInDuration);
-    }
-
-    // ==========================================
-    // SetSpeakerName - Name the Thinker on the Thought Panel (hidden when blank/system)
-    // ==========================================
-    private void SetSpeakerName(string speakerName)
-    {
-        if (speakerNameLabel == null) return;
-        bool show = !string.IsNullOrEmpty(speakerName);
-        speakerNameLabel.text = show ? speakerName : "";
-        speakerNameLabel.gameObject.SetActive(show);
     }
 
     // ==========================================
