@@ -36,16 +36,14 @@ public class CharacterSpriteController : MonoBehaviour
     [SerializeField] private float slideInDuration = 0.22f;
 
     // ==========================================
-    // Inspector — Speaker Focus (active-speaker spotlight / listener dim / monologue self)
+    // Inspector — Speaker Focus (active-speaker spotlight / listener dim)
     // ==========================================
     [Header("Speaker Focus")]
     [SerializeField] private float focusLerpDuration = 0.18f;
     [SerializeField] private float activeSpeakerScale = 1.06f;
     [SerializeField] private float backgroundScale = 0.92f;
-    [SerializeField] private float monologueSelfScale = 1.0f;
     [SerializeField] private Color activeSpeakerTint = Color.white;
     [SerializeField] private Color backgroundTint = new Color(0.55f, 0.55f, 0.62f, 1f);
-    [SerializeField] private Color monologueSelfTint = new Color(0.78f, 0.82f, 0.95f, 1f);
 
     // ==========================================
     // Inspector — Transition Animator Reference
@@ -200,18 +198,19 @@ public class CharacterSpriteController : MonoBehaviour
 
         float spk = activeSpeakerScale > 0f ? activeSpeakerScale : 1.06f;
         float bg = backgroundScale > 0f ? backgroundScale : 0.92f;
-        float mono = monologueSelfScale > 0f ? monologueSelfScale : 1.0f;
         Color spkTint = activeSpeakerTint.a > 0f ? activeSpeakerTint : Color.white;
         Color bgTint = backgroundTint.a > 0f ? backgroundTint : new Color(0.55f, 0.55f, 0.62f, 1f);
-        Color monoTint = monologueSelfTint.a > 0f ? monologueSelfTint : new Color(0.78f, 0.82f, 0.95f, 1f);
 
         float targetScale;
         Color targetTint;
         switch (role)
         {
+            // The thinker stays bright and emphasized (so it is unmistakably them);
+            // "this is a private thought" is carried by the centered italic overlay and
+            // its named attribution, NOT by dimming the speaker.
             case SpeakerFocusRole.ActiveSpeaker: targetScale = spk; targetTint = spkTint; break;
+            case SpeakerFocusRole.InnerMonologueSelf: targetScale = spk; targetTint = spkTint; break;
             case SpeakerFocusRole.Background: targetScale = bg; targetTint = bgTint; break;
-            case SpeakerFocusRole.InnerMonologueSelf: targetScale = mono; targetTint = monoTint; break;
             default: targetScale = 1f; targetTint = Color.white; break;
         }
 

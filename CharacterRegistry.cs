@@ -92,10 +92,21 @@ public class CharacterRegistry : MonoBehaviour
     // ==========================================
     public void FocusSpeaker(string speakerId, bool isInnerMonologue = false)
     {
+        // ==========================================
+        // Narration / system lines have an empty speakerId (ConstantsConfig.SPEAKER_SYSTEM).
+        // Do not dim anyone on those — just clear focus so no character is left
+        // spotlighted or darkened, which is what made Yua look faded during narration.
+        // ==========================================
+        if (string.IsNullOrEmpty(speakerId))
+        {
+            ClearAllFocus();
+            return;
+        }
+
         foreach (CharacterSpriteController c in _registry.Values)
         {
             if (c == null) continue;
-            bool isSpeaker = !string.IsNullOrEmpty(speakerId) && c.CharacterId == speakerId;
+            bool isSpeaker = c.CharacterId == speakerId;
             if (isSpeaker)
                 c.SetFocusRole(isInnerMonologue
                     ? SpeakerFocusRole.InnerMonologueSelf

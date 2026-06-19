@@ -285,10 +285,17 @@ public class DialogueSystem : MonoBehaviour
 
         if (line.isInnerMonologue)
         {
-            innerMonologue?.Show(line.GetActiveText());
+            // Inner thought — hide the bottom box so it never sits behind the
+            // centered thought panel, and pass the speaker so the panel is named.
+            dialogueBox?.Hide();
+            innerMonologue?.Show(line.speakerId, line.GetActiveText());
         }
         else
         {
+            // Spoken line — clear any leftover thought panel and make sure the box
+            // is shown again (it is hidden during choices, see ProcessBranch).
+            innerMonologue?.Hide();
+            dialogueBox?.Show();
             dialogueBox?.DisplayLine(line);
             line.voiceEvent?.Play();
             line.sfxEvent?.Play();
@@ -338,6 +345,14 @@ public class DialogueSystem : MonoBehaviour
     private IEnumerator ProcessBranch(DialogueEntry entry)
     {
         bool chosen = false;
+
+        // ==========================================
+        // Clear the already-read line so the choice buttons never overlap text.
+        // The dialogue/thought was shown once before the branch; it is redundant now.
+        // The box is restored automatically by the next line in ProcessLine.
+        // ==========================================
+        dialogueBox?.Hide();
+        innerMonologue?.Hide();
 
         choiceUI?.Present(entry.choices, entry.branchId, (idx) =>
         {
