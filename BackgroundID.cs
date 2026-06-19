@@ -15,10 +15,11 @@ public enum BackgroundID
     SchoolRooftopDay = 7,
     SunnyClassroomDay = 8,
     TrainPlatformSunset = 9,
+    CherryBlossomAlley = 10,
+
     // ==========================================
     // Future environments (art assets pending)
     // ==========================================
-    CherryBlossomAlley = 10,
     Motorkhane = 11,
     ElementarySchoolFlashback = 12
 }
