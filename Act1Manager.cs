@@ -118,6 +118,7 @@ public class Act1Manager : MonoBehaviour
     private void InitializeBackground()
     {
         if (BackgroundManager.Instance == null) return;
+        if (openingBackground == BackgroundID.None) return;   // None = let the dialogue's first line own the background
         BackgroundManager.Instance.ForceBackground(openingBackground, openingTransition);
     }
 

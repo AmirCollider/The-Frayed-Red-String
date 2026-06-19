@@ -263,6 +263,16 @@ public class DialogueSystem : MonoBehaviour
             // ==========================================
             if (!string.IsNullOrEmpty(line.characterStateOverride) && CharacterRegistry.Instance != null)
                 CharacterRegistry.Instance.Get(line.speakerId)?.SetStateByName(line.characterStateOverride);
+
+            // ==========================================
+            // Speaker Position — Slide / Place the Speaking Character (dialogue-driven)
+            // ==========================================
+            if (!string.IsNullOrEmpty(line.speakerId) && CharacterRegistry.Instance != null)
+            {
+                CharacterSpriteController speaker = CharacterRegistry.Instance.Get(line.speakerId);
+                if (speaker != null && speaker.CurrentPosition != line.speakerPosition)
+                    speaker.SetPosition(line.speakerPosition);
+            }
         }
 
         if (line.isInnerMonologue)
