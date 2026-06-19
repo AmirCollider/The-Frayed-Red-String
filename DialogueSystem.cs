@@ -149,6 +149,7 @@ public class DialogueSystem : MonoBehaviour
         _currentSequence = null;
         dialogueBox?.Hide();
         innerMonologue?.Hide();
+        CharacterRegistry.Instance?.ClearAllFocus();
     }
 
     // ==========================================
@@ -274,6 +275,13 @@ public class DialogueSystem : MonoBehaviour
                     speaker.SetPosition(line.speakerPosition);
             }
         }
+
+        // ==========================================
+        // Speaker Focus — Spotlight the Active Speaker, Dim Listeners (visual only;
+        // applied outside the resume guard so a restored snapshot also reads correctly)
+        // ==========================================
+        if (CharacterRegistry.Instance != null)
+            CharacterRegistry.Instance.FocusSpeaker(line.speakerId, line.isInnerMonologue);
 
         if (line.isInnerMonologue)
         {

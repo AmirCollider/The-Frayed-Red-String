@@ -36,6 +36,18 @@ public class CharacterSpriteController : MonoBehaviour
     [SerializeField] private float slideInDuration = 0.22f;
 
     // ==========================================
+    // Inspector — Speaker Focus (active-speaker spotlight / listener dim / monologue self)
+    // ==========================================
+    [Header("Speaker Focus")]
+    [SerializeField] private float focusLerpDuration = 0.18f;
+    [SerializeField] private float activeSpeakerScale = 1.06f;
+    [SerializeField] private float backgroundScale = 0.92f;
+    [SerializeField] private float monologueSelfScale = 1.0f;
+    [SerializeField] private Color activeSpeakerTint = Color.white;
+    [SerializeField] private Color backgroundTint = new Color(0.55f, 0.55f, 0.62f, 1f);
+    [SerializeField] private Color monologueSelfTint = new Color(0.78f, 0.82f, 0.95f, 1f);
+
+    // ==========================================
     // Inspector — Transition Animator Reference
     // ==========================================
     [Header("Transition Animator")]
@@ -47,6 +59,9 @@ public class CharacterSpriteController : MonoBehaviour
     private CharacterState _currentState = CharacterState.WaitingToTalk;
     private CharacterPosition _currentPosition = CharacterPosition.OffScreen;
     private Coroutine _slideCo;
+    private Coroutine _focusCo;
+    private Vector3 _baseScale = Vector3.one;
+    private SpeakerFocusRole _focusRole = SpeakerFocusRole.Neutral;
 
     // ==========================================
     // Awake - Place at OffScreen Anchor
@@ -54,6 +69,7 @@ public class CharacterSpriteController : MonoBehaviour
     private void Awake()
     {
         transform.position = positionOffScreen;
+        _baseScale = transform.localScale;
     }
 
     // ==========================================
@@ -176,6 +192,58 @@ public class CharacterSpriteController : MonoBehaviour
     }
 
     // ==========================================
+    // SetFocusRole - Apply Speaker Spotlight / Listener Dim / Monologue Self / Neutral
+    // ==========================================
+    public void SetFocusRole(SpeakerFocusRole role)
+    {
+        _focusRole = role;
+
+        float spk = activeSpeakerScale > 0f ? activeSpeakerScale : 1.06f;
+        float bg = backgroundScale > 0f ? backgroundScale : 0.92f;
+        float mono = monologueSelfScale > 0f ? monologueSelfScale : 1.0f;
+        Color spkTint = activeSpeakerTint.a > 0f ? activeSpeakerTint : Color.white;
+        Color bgTint = backgroundTint.a > 0f ? backgroundTint : new Color(0.55f, 0.55f, 0.62f, 1f);
+        Color monoTint = monologueSelfTint.a > 0f ? monologueSelfTint : new Color(0.78f, 0.82f, 0.95f, 1f);
+
+        float targetScale;
+        Color targetTint;
+        switch (role)
+        {
+            case SpeakerFocusRole.ActiveSpeaker: targetScale = spk; targetTint = spkTint; break;
+            case SpeakerFocusRole.Background: targetScale = bg; targetTint = bgTint; break;
+            case SpeakerFocusRole.InnerMonologueSelf: targetScale = mono; targetTint = monoTint; break;
+            default: targetScale = 1f; targetTint = Color.white; break;
+        }
+
+        float dur = focusLerpDuration > 0f ? focusLerpDuration : 0.18f;
+        transitionAnimator?.SetFocusTint(targetTint, dur);
+
+        if (_focusCo != null) StopCoroutine(_focusCo);
+        Vector3 to = _baseScale * targetScale;
+        if (!gameObject.activeInHierarchy)
+            transform.localScale = to;
+        else
+            _focusCo = StartCoroutine(FocusScaleRoutine(to, dur));
+    }
+
+    // ==========================================
+    // FocusScaleRoutine - SmoothStep localScale Toward the Focus Target
+    // ==========================================
+    private IEnumerator FocusScaleRoutine(Vector3 target, float duration)
+    {
+        Vector3 from = transform.localScale;
+        float t = 0f;
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            transform.localScale = Vector3.Lerp(from, target, Mathf.SmoothStep(0f, 1f, t / duration));
+            yield return null;
+        }
+        transform.localScale = target;
+        _focusCo = null;
+    }
+
+    // ==========================================
     // Accessors
     // ==========================================
     public string CharacterId => characterId;
@@ -183,12 +251,20 @@ public class CharacterSpriteController : MonoBehaviour
     public CharacterPosition CurrentPosition => _currentPosition;
 }
 
-// ==========================================
-// CharacterStateSpriteEntry - Serializable State-to-Sprite Binding
-// ==========================================
 [System.Serializable]
 public class CharacterStateSpriteEntry
 {
     public CharacterState state;
     public Sprite sprite;
+}
+
+// ==========================================
+// SpeakerFocusRole - Per-Character Spotlight Role Driven by the Dialogue System
+// ==========================================
+public enum SpeakerFocusRole
+{
+    Neutral = 0,
+    ActiveSpeaker = 1,
+    Background = 2,
+    InnerMonologueSelf = 3
 }

@@ -86,4 +86,31 @@ public class CharacterRegistry : MonoBehaviour
         foreach (CharacterSpriteController c in _registry.Values)
             c?.Hide(instant);
     }
+
+    // ==========================================
+    // FocusSpeaker - Spotlight the Active Speaker, Dim Everyone Else (talking-to-self aware)
+    // ==========================================
+    public void FocusSpeaker(string speakerId, bool isInnerMonologue = false)
+    {
+        foreach (CharacterSpriteController c in _registry.Values)
+        {
+            if (c == null) continue;
+            bool isSpeaker = !string.IsNullOrEmpty(speakerId) && c.CharacterId == speakerId;
+            if (isSpeaker)
+                c.SetFocusRole(isInnerMonologue
+                    ? SpeakerFocusRole.InnerMonologueSelf
+                    : SpeakerFocusRole.ActiveSpeaker);
+            else
+                c.SetFocusRole(SpeakerFocusRole.Background);
+        }
+    }
+
+    // ==========================================
+    // ClearAllFocus - Reset Every Character to the Neutral (Un-Spotlighted) Profile
+    // ==========================================
+    public void ClearAllFocus()
+    {
+        foreach (CharacterSpriteController c in _registry.Values)
+            c?.SetFocusRole(SpeakerFocusRole.Neutral);
+    }
 }
