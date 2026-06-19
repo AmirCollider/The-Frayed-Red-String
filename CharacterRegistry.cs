@@ -134,7 +134,7 @@ public class CharacterRegistry : MonoBehaviour
     }
 
     // ==========================================
-    // EnterMonologueStaging - Frame an Inner Thought: Thinker to Center, Everyone Else Off
+    // EnterMonologueStaging - Frame an Inner Thought: Thinker Stays Put, Everyone Else Off
     // (snapshots the pre-thought layout once so it can be restored later)
     // ==========================================
     public void EnterMonologueStaging(string speakerId)
@@ -154,9 +154,8 @@ public class CharacterRegistry : MonoBehaviour
         foreach (CharacterSpriteController c in _registry.Values)
         {
             if (c == null) continue;
-            if (c.CharacterId == speakerId)
-                c.SetPosition(CharacterPosition.Center);
-            else
+            // The thinker holds their exact position; only the others clear the frame.
+            if (c.CharacterId != speakerId)
                 c.SetPosition(CharacterPosition.OffScreen);
         }
     }
