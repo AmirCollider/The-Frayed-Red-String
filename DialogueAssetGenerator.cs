@@ -212,6 +212,9 @@ public static class DialogueAssetGenerator
                 line.autoAdvance = def.autoAdvance;
                 line.autoAdvanceDelay = def.autoAdvanceDelay;
                 line.gameEventId = def.gameEventId;
+                line.isTitleCard = def.isTitleCard;
+                line.titleCardHeadingEN = def.titleHeadingEN;
+                line.titleCardHeadingJP = def.titleHeadingJP;
                 EditorUtility.SetDirty(line);
 
                 sequence.entries.Add(new DialogueEntry { type = DialogueEntryType.Line, line = line });
