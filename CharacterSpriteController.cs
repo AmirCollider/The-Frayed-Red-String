@@ -28,6 +28,7 @@ public class CharacterSpriteController : MonoBehaviour
     [SerializeField] private Vector3 positionCenter = new Vector3(0f, -1.5f, 0f);
     [SerializeField] private Vector3 positionRight = new Vector3(4.5f, -1.5f, 0f);
     [SerializeField] private Vector3 positionOffScreen = new Vector3(-14f, -1.5f, 0f);
+    [SerializeField] private Vector3 positionOffScreenRight = new Vector3(14f, -1.5f, 0f);
 
     // ==========================================
     // Inspector — Slide Animation
@@ -112,8 +113,27 @@ public class CharacterSpriteController : MonoBehaviour
     // ==========================================
     public void SetPosition(CharacterPosition position, bool instant = false)
     {
+        // ==========================================
+        // تشخیص جهت خروج: کاراکتر به سمت لبه‌ی خودش خارج می‌شود
+        // تا بازیگری که در سمت راست است، هرگز از جلوی کاراکتر دیگر رد نشود.
+        // ==========================================
+        Vector3 target = (position == CharacterPosition.OffScreen)
+            ? GetOffScreenExit(_currentPosition)
+            : GetWorldPosition(position);
+
+        // ==========================================
+        // ورود از خارج از صفحه: کاراکتر ابتدا فوراً به لنگر خارج از صفحه
+        // در همان سمتِ مقصد منتقل می‌شود تا از نزدیک‌ترین لبه به داخل سر بخورد.
+        // ==========================================
+        if (!instant
+            && _currentPosition == CharacterPosition.OffScreen
+            && position != CharacterPosition.OffScreen)
+        {
+            if (_slideCo != null) { StopCoroutine(_slideCo); _slideCo = null; }
+            transform.position = GetOffScreenExit(position);
+        }
+
         _currentPosition = position;
-        Vector3 target = GetWorldPosition(position);
 
         if (instant)
         {
@@ -187,6 +207,15 @@ public class CharacterSpriteController : MonoBehaviour
             case CharacterPosition.OffScreen: return positionOffScreen;
             default: return positionOffScreen;
         }
+    }
+
+    // ==========================================
+    // GetOffScreenExit - انتخاب لنگر خارج از صفحه بر اساس سمت خود کاراکتر
+    // (سمت راست از لبه راست وارد/خارج می‌شود؛ چپ و وسط به صورت پیش‌فرض از چپ)
+    // ==========================================
+    private Vector3 GetOffScreenExit(CharacterPosition side)
+    {
+        return side == CharacterPosition.Right ? positionOffScreenRight : positionOffScreen;
     }
 
     // ==========================================

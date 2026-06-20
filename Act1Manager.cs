@@ -30,7 +30,7 @@ public class Act1Manager : MonoBehaviour
     // Inspector — Haru Starting Configuration
     // ==========================================
     [Header("Haru Start")]
-    [SerializeField] private CharacterPosition haruStartPosition = CharacterPosition.Right;
+    [SerializeField] private CharacterPosition haruStartPosition = CharacterPosition.OffScreen;
     [SerializeField] private CharacterState haruStartState = CharacterState.WaitingToTalk;
 
     // ==========================================
