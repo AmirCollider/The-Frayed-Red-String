@@ -30,6 +30,15 @@ public class TitleCardController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI bodyText;
 
     // ==========================================
+    // Inspector — Intro Cover
+    //   ON for any scene whose FIRST sequence line is an intro title card.
+    //   Raises the black card at scene load so the act opens on the card,
+    //   not on a glimpse of the scene revealed by the SceneController fade.
+    // ==========================================
+    [Header("Intro Cover (ON if this scene opens on a title card)")]
+    [SerializeField] private bool startBlack = false;
+
+    // ==========================================
     // Inspector — Colors
     // ==========================================
     [Header("Colors")]
@@ -60,7 +69,8 @@ public class TitleCardController : MonoBehaviour
             return;
         }
         Instance = this;
-        ForceHidden();
+        if (startBlack) RaiseBlack();
+        else ForceHidden();
     }
 
     // ==========================================
@@ -86,8 +96,16 @@ public class TitleCardController : MonoBehaviour
             group.blocksRaycasts = true;
         }
 
+        // ==========================================
+        // Fade In — Skip the tween if the card is already black (intro cover),
+        // so the act opens directly on the card with no scene flash.
+        // ==========================================
+        float startAlpha = group != null ? group.alpha : 0f;
         if (_fadeCo != null) StopCoroutine(_fadeCo);
-        yield return _fadeCo = StartCoroutine(FadeRoutine(0f, 1f, fadeInDuration));
+        if (startAlpha < 0.99f)
+            yield return _fadeCo = StartCoroutine(FadeRoutine(startAlpha, 1f, fadeInDuration));
+        else if (group != null)
+            group.alpha = 1f;
 
         if (textRevealDelay > 0f)
             yield return new WaitForSeconds(textRevealDelay);
@@ -161,5 +179,21 @@ public class TitleCardController : MonoBehaviour
             group.interactable = false;
             group.blocksRaycasts = false;
         }
+    }
+
+    // ==========================================
+    // RaiseBlack - Snap to Opaque Black With No Text (intro cover at scene load)
+    // ==========================================
+    private void RaiseBlack()
+    {
+        if (blackBackground != null) blackBackground.color = backgroundColor;
+        if (group != null)
+        {
+            group.alpha = 1f;
+            group.interactable = false;
+            group.blocksRaycasts = true;
+        }
+        if (headingText != null) headingText.gameObject.SetActive(false);
+        if (bodyText != null) bodyText.gameObject.SetActive(false);
     }
 }
