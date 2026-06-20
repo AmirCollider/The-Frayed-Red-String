@@ -16,6 +16,7 @@ public enum BackgroundID
     SunnyClassroomDay = 8,
     TrainPlatformSunset = 9,
     CherryBlossomAlley = 10,
+    PastelStreetVendingNight = 13,   // نسخه شب PastelStreetVending (=5)
 
     // ==========================================
     // Future environments (art assets pending)
