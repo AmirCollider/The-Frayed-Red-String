@@ -30,12 +30,6 @@ public class TitleCardController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI bodyText;
 
     // ==========================================
-    // Inspector — Per-Act Font Override (assign THIS act's font here)
-    // ==========================================
-    [Header("Act Font (optional — overrides heading + body font)")]
-    [SerializeField] private TMP_FontAsset actFont;
-
-    // ==========================================
     // Inspector — Colors
     // ==========================================
     [Header("Colors")]
@@ -110,7 +104,7 @@ public class TitleCardController : MonoBehaviour
     }
 
     // ==========================================
-    // ApplyText - Set String, Color, Optional Act Font; Hide Element if Empty
+    // ApplyText - Set String, Color, Auto Font (LocalizedFontController); Hide if Empty
     // ==========================================
     private void ApplyText(TextMeshProUGUI target, string value)
     {
@@ -120,7 +114,14 @@ public class TitleCardController : MonoBehaviour
         target.gameObject.SetActive(has);
         if (!has) return;
 
-        if (actFont != null) target.font = actFont;
+        // ==========================================
+        // Font — Auto-Resolved by the Scene's LocalizedFontController
+        // (this act's EN/JP pair + active language). Falls back to the TMP
+        // object's existing font if no controller is present in the scene.
+        // ==========================================
+        if (LocalizedFontController.Instance != null && LocalizedFontController.Instance.CurrentFont != null)
+            target.font = LocalizedFontController.Instance.CurrentFont;
+
         target.color = textColor;
         target.text = value;
     }
