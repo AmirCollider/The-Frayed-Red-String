@@ -326,7 +326,11 @@ public class DialogueSystem : MonoBehaviour
                 yield return new WaitUntil(() => !_waitingForInput);
             }
 
-            if (TitleCardController.Instance != null)
+            bool holdBlackForHandoff = topLevel
+                 && _currentSequence != null
+                 && _currentIndex >= _currentSequence.Count - 1;
+
+            if (!holdBlackForHandoff && TitleCardController.Instance != null)
                 yield return StartCoroutine(TitleCardController.Instance.FadeOut());
 
             yield break;
