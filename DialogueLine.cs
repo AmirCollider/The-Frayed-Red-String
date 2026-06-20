@@ -52,6 +52,15 @@ public class DialogueLine : ScriptableObject
     public float autoAdvanceDelay = 1.5f;
 
     // ==========================================
+    // Title Card — Fullscreen Black Act Intro/Outro Card
+    // (textEN/textJP above are reused as the card BODY; heading is the big act/image name)
+    // ==========================================
+    [Header("Title Card (fullscreen black card — body uses Text above)")]
+    public bool isTitleCard = false;
+    [TextArea(1, 3)] public string titleCardHeadingEN = "";
+    [TextArea(1, 3)] public string titleCardHeadingJP = "";
+
+    // ==========================================
     // Gameplay Event Hook (fires DialogueSystem.OnGameEventTriggered when line displays)
     // ==========================================
     [Header("Gameplay Event")]
@@ -67,5 +76,17 @@ public class DialogueLine : ScriptableObject
             && !string.IsNullOrEmpty(textJP))
             return textJP;
         return textEN;
+    }
+
+    // ==========================================
+    // GetActiveHeading - Returns Language-Appropriate Title Card Heading
+    // ==========================================
+    public string GetActiveHeading()
+    {
+        if (GameManager.Instance == null) return titleCardHeadingEN;
+        if (GameManager.Instance.CurrentLanguage == ConstantsConfig.LANG_JAPANESE
+            && !string.IsNullOrEmpty(titleCardHeadingJP))
+            return titleCardHeadingJP;
+        return titleCardHeadingEN;
     }
 }

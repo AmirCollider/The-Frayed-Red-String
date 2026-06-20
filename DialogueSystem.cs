@@ -299,6 +299,39 @@ public class DialogueSystem : MonoBehaviour
         // GirlRoom and was leaving the thought un-shown, so the thought is rendered in the
         // always-wired dialogue box instead — named (speaker = Yua) and italicised.
         // ==========================================
+        // ==========================================
+        // Title Card — Fullscreen Black Act Intro/Outro Card (bypasses the dialogue box)
+        // ==========================================
+        if (line.isTitleCard)
+        {
+            dialogueBox?.Hide();
+            innerMonologue?.Hide();
+
+            OnLineDisplayed.Invoke(line);
+            if (!suppress && !string.IsNullOrEmpty(line.gameEventId))
+                OnGameEventTriggered.Invoke(line.gameEventId);
+
+            if (TitleCardController.Instance != null)
+                yield return StartCoroutine(
+                    TitleCardController.Instance.FadeIn(line.GetActiveHeading(), line.GetActiveText()));
+
+            if (line.autoAdvance)
+            {
+                yield return new WaitForSeconds(line.autoAdvanceDelay);
+            }
+            else
+            {
+                _atSaveableWait = false;
+                _waitingForInput = true;
+                yield return new WaitUntil(() => !_waitingForInput);
+            }
+
+            if (TitleCardController.Instance != null)
+                yield return StartCoroutine(TitleCardController.Instance.FadeOut());
+
+            yield break;
+        }
+
         if (line.isInnerMonologue && CharacterRegistry.Instance != null)
             CharacterRegistry.Instance.EnterMonologueStaging(line.speakerId);
 

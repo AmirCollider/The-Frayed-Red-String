@@ -25,6 +25,9 @@ public static class DialogueAssetGenerator
         public bool autoAdvance;
         public float autoAdvanceDelay;
         public string gameEventId;
+        public bool isTitleCard;
+        public string titleHeadingEN;
+        public string titleHeadingJP;
 
         // ==========================================
         // Constructor - Positional Core Fields with Named-Optional Extras
@@ -47,6 +50,26 @@ public static class DialogueAssetGenerator
             autoAdvance = autoAdv;
             autoAdvanceDelay = autoAdvDelay;
             gameEventId = gameEvent;
+            isTitleCard = false;
+            titleHeadingEN = "";
+            titleHeadingJP = "";
+        }
+
+        // ==========================================
+        // TitleCard - Authoring Factory for a Fullscreen Black Act Intro/Outro Card
+        // (heading = big act/image name; body = the line shown beneath it)
+        // ==========================================
+        public static LineDef TitleCard(string headingEN, string bodyEN,
+            string headingJP = "", string bodyJP = "",
+            bool autoAdv = false, float autoAdvDelay = 2.5f)
+        {
+            LineDef def = new LineDef(ConstantsConfig.SPEAKER_SYSTEM, CharacterPosition.Center, bodyEN, bodyJP);
+            def.isTitleCard = true;
+            def.titleHeadingEN = headingEN;
+            def.titleHeadingJP = headingJP;
+            def.autoAdvance = autoAdv;
+            def.autoAdvanceDelay = autoAdvDelay;
+            return def;
         }
     }
 
@@ -80,6 +103,9 @@ public static class DialogueAssetGenerator
             line.autoAdvance = def.autoAdvance;
             line.autoAdvanceDelay = def.autoAdvanceDelay;
             line.gameEventId = def.gameEventId;
+            line.isTitleCard = def.isTitleCard;
+            line.titleCardHeadingEN = def.titleHeadingEN;
+            line.titleCardHeadingJP = def.titleHeadingJP;
             EditorUtility.SetDirty(line);
 
             sequence.entries.Add(new DialogueEntry
