@@ -31,6 +31,12 @@ public class TypewriterEffect : MonoBehaviour
     [SerializeField] private int longLineCharThreshold = 90;
 
     // ==========================================
+    // Arrow / Edge Clearance (left, top, right, bottom) in TMP local units.
+    // Extra right + bottom keep the last line clear of the blinking ▼ arrow.
+    // ==========================================
+    [SerializeField] private Vector4 textMargin = new Vector4(28f, 18f, 60f, 44f);
+
+    // ==========================================
     // Inspector — Punctuation Set
     // ==========================================
     [Header("Punctuation Pause Characters")]
@@ -86,10 +92,14 @@ public class TypewriterEffect : MonoBehaviour
     public bool IsTyping => _isTyping;
 
     // ==========================================
-    // ApplyAdaptiveFontSize - Length + Screen-Scaled Explicit Sizing (R5, Batch 2)
-    // Auto-sizing OFF so TMP can never collapse the line to the minimum.
-    // Short lines render large; long lines shrink smoothly; floored at min;
-    // the whole curve scales with screen height (1440p/4K match 1080p).
+    // ApplyAdaptiveFontSize - Length + Screen-Scaled Ceiling, Auto-Shrink to Fit (R5, Batch 2)
+    // The length/screen curve is now the UPPER bound (fontSizeMax): short lines
+    // still render large, long lines start smaller. TMP auto-sizing shrinks the
+    // line toward minFontSize ONLY when it would otherwise exceed the real
+    // DialogueText rect, so text can never spill past the panel or under the ▼
+    // arrow on small windows / narrow aspect ratios. textMargin reserves the
+    // arrow corner; layout is computed for the full string (maxVisibleCharacters
+    // does not affect auto-size), so the box does not jitter during the reveal.
     // ==========================================
     private void ApplyAdaptiveFontSize(string fullText)
 
@@ -103,11 +113,15 @@ public class TypewriterEffect : MonoBehaviour
             ? Mathf.Clamp01((float)len / longLineCharThreshold)
             : 0f;
         float lengthSize = Mathf.Lerp(maxFontSizeShort, maxFontSizeLong, lengthT);
-        float target = Mathf.Max(lengthSize, minFontSize) * screenScale;
-        _label.enableAutoSizing = false;
-        _label.fontSize = target;
+        float ceiling = Mathf.Max(lengthSize, minFontSize) * screenScale;
+        float floor = Mathf.Min(minFontSize, ceiling);
+
         _label.textWrappingMode = TMPro.TextWrappingModes.Normal;
-        _label.overflowMode = TextOverflowModes.Overflow;
+        _label.overflowMode = TextOverflowModes.Truncate;
+        _label.margin = textMargin;
+        _label.enableAutoSizing = true;
+        _label.fontSizeMin = floor;
+        _label.fontSizeMax = ceiling;
     }
 
     // ==========================================
