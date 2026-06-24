@@ -19,6 +19,13 @@ public enum BackgroundID
     PastelStreetVendingNight = 13,   // نسخه شب PastelStreetVending (=5)
 
     // ==========================================
+    // BATCH 6 - Weather / Time-of-day Variants (live assets)
+    // ==========================================
+    SunnyClassroomOvercast = 14,     // overcast variant of SunnyClassroomDay (=8)
+    DuskAlleyWay = 15,               // dusk alley; fills the GDD Act 2 "Alleyway"
+    CozyCafeDimRainy = 16,           // dim/rainy variant of CozyCafe (=2)
+
+    // ==========================================
     // Future environments (art assets pending)
     // ==========================================
     Motorkhane = 11,
