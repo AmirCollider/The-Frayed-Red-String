@@ -1,9 +1,10 @@
 // ==========================================
-// SaveScreenshot - Captures a Dialogue-Box-Free Frame for the Save Card
+// SaveScreenshot - Captures a Clean Scene Frame (no dialogue box, no menu overlays)
 // AmirCollider Games - The Frayed Red String
 // ==========================================
 
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -15,11 +16,19 @@ public class SaveScreenshot : MonoBehaviour
     public static SaveScreenshot Instance { get; private set; }
 
     // ==========================================
-    // Inspector — Capture Size (downscaled thumbnail)
+    // Inspector — Thumbnail Size
     // ==========================================
     [Header("Thumbnail Size")]
     [SerializeField] private int captureWidth = 1245;
     [SerializeField] private int captureHeight = 120;
+
+    // ==========================================
+    // Inspector — Overlay Cull Threshold
+    // Any Canvas with sortingOrder >= this is hidden for the capture frame
+    // (dialogue box = 3, pause/load = 15, fade = 20). Scene art (0..2) stays.
+    // ==========================================
+    [Header("Overlay Cull Threshold (hide UI at/above this sort order)")]
+    [SerializeField] private int overlaySortThreshold = 5;
 
     // ==========================================
     // Awake - Singleton Enforcement and Persistence
@@ -38,7 +47,7 @@ public class SaveScreenshot : MonoBehaviour
         => Path.Combine(Application.persistentDataPath, $"save_shot_{slot}.png");
 
     // ==========================================
-    // Capture - Hide the Dialogue Box, Grab the Frame, Restore, Write PNG
+    // Capture - Hide Dialogue Box + UI Overlays, Grab the Frame, Restore, Write PNG
     // ==========================================
     public void Capture(int slot)
     {
@@ -46,23 +55,50 @@ public class SaveScreenshot : MonoBehaviour
     }
 
     // ==========================================
-    // CaptureRoutine - End-of-Frame Capture With the Dialogue UI Hidden for Cleanliness
+    // CaptureRoutine - End-of-Frame Capture of Pure Scene Art
     // ==========================================
     private IEnumerator CaptureRoutine(int slot)
     {
-        // Hide the dialogue box so the screenshot is pure scene art
+        // ==========================================
+        // 1) Hide the dialogue box (sort 3 — kept out of the shot for cleanliness)
+        // ==========================================
         DialogueBoxUI box = FindAnyObjectByType<DialogueBoxUI>(FindObjectsInactive.Include);
         bool boxWasActive = box != null && box.gameObject.activeSelf;
         if (box != null) box.gameObject.SetActive(false);
 
+        // ==========================================
+        // 2) Hide every overlay Canvas at/above the threshold (pause menu, load panel, fade)
+        // ==========================================
+        List<Canvas> hidden = new List<Canvas>();
+        Canvas[] all = FindObjectsByType<Canvas>(FindObjectsInactive.Exclude);
+        for (int i = 0; i < all.Length; i++)
+        {
+            Canvas c = all[i];
+            if (c == null || !c.isRootCanvas) continue;
+            if (c.sortingOrder >= overlaySortThreshold && c.enabled)
+            {
+                c.enabled = false;
+                hidden.Add(c);
+            }
+        }
+
+        // ==========================================
+        // 3) Wait for the frame to render WITHOUT those overlays, then capture
+        // ==========================================
         yield return new WaitForEndOfFrame();
 
         Texture2D full = ScreenCapture.CaptureScreenshotAsTexture();
 
-        // Restore the dialogue box immediately
+        // ==========================================
+        // 4) Restore everything immediately
+        // ==========================================
+        for (int i = 0; i < hidden.Count; i++)
+            if (hidden[i] != null) hidden[i].enabled = true;
         if (box != null) box.gameObject.SetActive(boxWasActive);
 
-        // Downscale to a thumbnail
+        // ==========================================
+        // 5) Downscale to a thumbnail and write the PNG
+        // ==========================================
         Texture2D thumb = ScaleTexture(full, captureWidth, captureHeight);
         byte[] png = thumb.EncodeToPNG();
         File.WriteAllBytes(PathForSlot(slot), png);
@@ -72,11 +108,11 @@ public class SaveScreenshot : MonoBehaviour
     }
 
     // ==========================================
-    // ScaleTexture - Simple Bilinear Downscale to Thumbnail Dimensions
+    // ScaleTexture - Bilinear Downscale to Thumbnail Dimensions
     // ==========================================
     private static Texture2D ScaleTexture(Texture2D src, int w, int h)
     {
-        RenderTexture rt = RenderTexture.GetTemporary(w, h);
+        RenderTexture rt = RenderTexture.GetTemporary(w, h, 0, RenderTextureFormat.Default, RenderTextureReadWrite.Linear);
         Graphics.Blit(src, rt);
 
         RenderTexture prev = RenderTexture.active;

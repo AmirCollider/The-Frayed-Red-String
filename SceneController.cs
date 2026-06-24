@@ -119,6 +119,12 @@ public class SceneController : MonoBehaviour
     // ==========================================
     private IEnumerator LoadSceneRoutine(string sceneName, float fadeDuration)
     {
+        // ==========================================
+        // Unfreeze Before Transition - A Load Can Fire From the Paused Stop Menu
+        // (Time.timeScale == 0); a time-scaled fade would stall and stick on black.
+        // ==========================================
+        Time.timeScale = 1f;
+
         transitionSfx?.Play();
 
         if (fadeOverlay != null)
@@ -142,7 +148,7 @@ public class SceneController : MonoBehaviour
 
         while (elapsed < duration)
         {
-            elapsed += Time.deltaTime;
+            elapsed += Time.unscaledDeltaTime;
             c.a = Mathf.Lerp(from, to, elapsed / duration);
             fadeOverlay.color = c;
             yield return null;
