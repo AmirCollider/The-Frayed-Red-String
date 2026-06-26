@@ -9,7 +9,7 @@ using UnityEngine.Events;
 public class Act1Manager : MonoBehaviour
 {
     // ==========================================
-    // Singleton Instance (per-scene — no DontDestroyOnLoad)
+    // Singleton Instance (per-scene — no DontDestroyOnLoad) 
     // ==========================================
     public static Act1Manager Instance { get; private set; }
 
