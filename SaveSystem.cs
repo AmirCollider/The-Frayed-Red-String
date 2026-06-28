@@ -98,7 +98,7 @@ public class SaveSystem : MonoBehaviour
     public SaveData CaptureCurrent(int actNumber)
     {
         SaveData d = new SaveData();
-        d.actNumber = actNumber;
+        d.actNumber = ResolveLiveAct(actNumber);
         d.entryIndex = DialogueSystem.Instance != null ? DialogueSystem.Instance.CurrentIndex : 0;
         d.language = GameManager.Instance != null ? GameManager.Instance.CurrentLanguage : ConstantsConfig.LANG_ENGLISH;
 
@@ -206,6 +206,19 @@ public class SaveSystem : MonoBehaviour
         _pendingLoad = null;
         _pendingLoadAct = -1;
         return d;
+    }
+
+    // ==========================================
+    // ResolveLiveAct - Derive the True Current Act from the Live Act Manager Singleton
+    // AmirCollider Games - The Frayed Red String
+    // (overrides a mis-wired PauseMenuController.actNumber so saves never mis-tag the act)
+    // ==========================================
+    private int ResolveLiveAct(int fallbackAct)
+    {
+        if (Act1Manager.Instance != null) return 1;
+        if (Act2Manager.Instance != null) return 2;
+        if (Act3Manager.Instance != null) return 3;
+        return fallbackAct;
     }
 
     // ==========================================
