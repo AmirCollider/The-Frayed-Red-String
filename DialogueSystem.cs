@@ -129,6 +129,15 @@ public class DialogueSystem : MonoBehaviour
         _currentSequence = sequence;
         _currentIndex = Mathf.Clamp(startIndex, 0, sequence.Count - 1);
         _suppressSideEffectsOnce = _currentIndex > 0;
+        // ==========================================
+        // Resume Intro-Cover Drop — On a Save Resume (index > 0) the Engine Skips the
+        // Intro Title-Card Line That Would Normally Lower the Black Cover RaiseBlack()
+        // Raised in TitleCardController.Awake(); snap it hidden so Load does not stick
+        // on a black screen. New-Game Starts (index == 0) Are Untouched.
+        // ==========================================
+        if (_currentIndex > 0 && TitleCardController.Instance != null)
+            TitleCardController.Instance.SnapHidden();
+
         _isRunning = true;
         if (_sequenceCo != null) StopCoroutine(_sequenceCo);
         _sequenceCo = StartCoroutine(RunSequence(sequence, _currentIndex));

@@ -182,6 +182,18 @@ public class TitleCardController : MonoBehaviour
     }
 
     // ==========================================
+    // SnapHidden - Public Snap to Fully Hidden (called on save-resume to drop the
+    // intro cover RaiseBlack() raised in Awake that no skipped title-card line will lower)
+    // ==========================================
+    public void SnapHidden()
+    {
+        if (_fadeCo != null) { StopCoroutine(_fadeCo); _fadeCo = null; }
+        if (headingText != null) headingText.gameObject.SetActive(false);
+        if (bodyText != null) bodyText.gameObject.SetActive(false);
+        ForceHidden();
+    }
+
+    // ==========================================
     // RaiseBlack - Snap to Opaque Black With No Text (intro cover at scene load)
     // ==========================================
     private void RaiseBlack()
