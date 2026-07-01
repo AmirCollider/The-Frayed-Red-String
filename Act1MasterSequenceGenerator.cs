@@ -2,7 +2,7 @@
 // Act1MasterSequenceGenerator - Assembles Scenes A-D into Act1Sequence Master Asset
 // AmirCollider Games - The Frayed Red String
 // ==========================================
- 
+
 using UnityEditor;
 using UnityEngine;
  
