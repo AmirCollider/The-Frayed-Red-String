@@ -2,7 +2,7 @@
 // Act1SceneDGenerator - Act 1 Scene D Content (Night Walk)
 // AmirCollider Games - The Frayed Red String
 // ==========================================
- 
+
 using UnityEditor;
 using UnityEngine;
 
