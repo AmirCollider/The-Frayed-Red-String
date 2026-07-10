@@ -5,7 +5,7 @@
 
 using UnityEditor;
 using UnityEngine;
-
+ 
 public static class Act1SceneCGenerator
 {
     // ==========================================
