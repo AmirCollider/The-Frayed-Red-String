@@ -669,6 +669,9 @@ StorySession.LineIndex
 StorySession.PlaySeconds
 StorySession.KindChoices / CruelChoices
 StorySession.IsPureKindRun    // ← شرط پایان مخفی
+StorySession.PatientMoments   // ← چند بار بازیکن پنج دقیقه صبر کرده
+StorySession.HasBeenPatient
+StorySession.ActiveSlot       // ← فقط یادداشت؛ هیچ چیزی خودکار روی آن نمینویسد
 StorySession.BackgroundName
 StorySession.WriteTo(slot);
 StorySession.BeginAt(act, beat);   // ← همان چیزی که Play from here استفاده میکند
@@ -690,6 +693,68 @@ SceneTransitionService.LoadScene("Act04", new Color(0.10f, 0.04f, 0.09f, 1f));
 ScreenFader.FadeOut(1.2f, () => { … });
 ```
 
+### دو فیلد Beat که پرده دوم اضافه کرد
+
+```csharp
+beat.MeasurePatience = true;      // روی یک Line: پنج دقیقه صبر یک بار ثبت میشود
+
+beat.YuaOverridesKindness = true; // روی یک Choice: آبی رد میشود
+beat.OverrideLine = new LocalizedLine("No. I did not say that.", "……ううん。", "نه. من این رو نگفتم.");
+```
+
+`StoryDirector` گزینه را **قبل از** رد کردن ثبت میکند، پس `IsPureKindRun` همچنان درست میماند. مسیر داستان شاخه نمیخورد — Beat های بعد از انتخاب را به شکل مسیر سبز بنویس.
+
+بعد از رد کردن، صورت یوآ روی `DeadEyes` میماند و عمدا آنجا رها میشود؛ Beat بعدی باید `Portrait` بدهد.
+
+### ساختن یک پرده با یک اسکریپت — الگوی واقعی پروژه
+
+`Editor/ActScriptWriter.cs` پایه است، و `Act02Builder.cs` و `Act03Builder.cs` دو پرده‌ی کامل روی آن.
+
+یک پرده جدید سه چیز است:
+
+```csharp
+public sealed class Act04Builder : ActScriptWriter
+{
+    protected override int ActNumber => 4;
+    protected override string AssetName => "Act04";
+    protected override LocalizedLine Title => L("To Deepen", "深まる", "عمیق شدن");
+
+    [MenuItem("The Frayed Red String/Build Act 04 From The Story Document")]
+    public static void Build() { new Act04Builder().BuildAsset(); }
+
+    protected override void Write()
+    {
+        Place(Backgrounds.CafeRainy, "The café", "喫茶店", "کافه");
+        Hold(2f);
+        Enter(Speaker.Yua, Portrait.Neutral);
+        Say(Speaker.Yua, Portrait.Joyful, "You came.", "来てくれたんだ。", "آمدی.");
+    }
+}
+```
+
+`BuildAsset()` بقیه‌اش را انجام میدهد: asset را مینویسد (اگر از قبل باشد **همان** را استفاده میکند تا GUID عوض نشود و هیچ ارجاعی نشکند)، اگر Beat داشته باشد اول میپرسد، و آخرش `Rebuild Act Library` را صدا میزند.
+
+**فعل‌ها** — همه داخل `ActScriptWriter`، هر کدام یک Beat:
+
+| فعل | Beat |
+|---|---|
+| `Place(bg, en, ja, fa)` | Background + اسم مکان |
+| `Say(who, face, en, ja, fa)` | Line |
+| `SayWithSound(who, face, sfx, vol, en, ja, fa)` | Line + صدا روی همان فریم |
+| `Narrate(en, ja, fa)` | Line با گوینده Narrator |
+| `Listen(en, ja, fa)` | Narrate + `MeasurePatience` |
+| `Hold(seconds)` | Beat سکوت |
+| `Enter(who, face)` / `Exit(who)` / `ClearStage()` | صحنه |
+| `Cue(sfx, vol)` | Sound تنها |
+| `StopMusic()` | Music خالی |
+| `Decide(blue×3, green×3, refusal×3)` | Choice با اورراید یوآ |
+| `DecideIdly(a×3, b×3)` | Choice سفید، بی‌وزن و شمرده‌نشده |
+| `Maybe(LegAche, 0.3f)` | Interlude تصادفی |
+
+`LegAche` و `MachineRoom` خودشان از `Assets/Story/Acts` لود میشوند؛ نبودنشان فقط یک Warning است.
+
+> `Maybe(...)` را همیشه **درست قبل از عوض شدن صحنه** بگذار. Interlude یک Act است و میتواند بک‌گراند و کاراکتر خودش را بگذارد؛ هر چه جا بگذارد، Beat های بعدی جایگزینش میکنند.
+
 ### ابزارهای ادیتور که خودت میتوانی صدا بزنی
 
 ```csharp
@@ -698,6 +763,9 @@ StageSpriteLibraryBuilder.Rebuild();
 AudioLibraryBuilder.Rebuild();
 BuildSettingsAutoConfigurator.Repair();
 StoryPlaytest.PlayFrom(act, beat);
+ActSceneSetup.ResetCharacterPlacement();
+Act02Builder.Build();
+Act03Builder.Build();
 ActSceneSetup.AdoptSceneCharacters();
 SfxWavExporter.ExportAll();
 ```
@@ -716,6 +784,8 @@ CharacterFadeDuration  = 0.50f;
 CaptionHoldDuration    = 2.40f;
 TitleCardHoldDuration  = 2.60f;
 FrameOpenDuration      = 2.40f;
+ChoiceOverrideHoldDuration = 1.40f;
+PatienceSeconds        = 300f;   // پنج دقیقه
 SceneFadeOutDuration   = 1.25f;
 SceneFadeInDuration    = 1.50f;
 
@@ -731,3 +801,27 @@ DefaultMusicVolume = 0.45f;
 ```
 
 اندازه‌ی باکس دیالوگ داخل `UI/DialogueBoxView.cs` بالای فایل، و اندازه‌ی قاب داخل تب Stage.
+
+---
+
+## پیوست ۲ — جای ایستادن کاراکترها
+
+عددهای مرجع، داخل `Narrative/StageSettings.cs` (`Placement`):
+
+```csharp
+YuaAnchorX  = -4.55f;   // موقعیت world کاراکتر داخل Scene
+HaruAnchorX =  4.70f;
+AnchorY     = -1.50f;   // برای هر دو
+```
+
+اینها **مختصات world** هستند، نه canvas. بقیه از رویشان حساب میشود (`CanvasPerWorld = 108`، دوربین Orthographic با `size = 5`). قبلا برعکس بود — عددهای canvas دستی نوشته شده بودند و از Scene فاصله گرفته بودند، که هر دو کاراکتر را در هر پرده‌ای که Marker نداشت دو سوم واحد بالاتر مینشاند.
+
+سه جا میتوانند جای کاراکتر را تعیین کنند:
+
+1. `Placement.Default()` داخل کد — وقتی هیچ چیز دیگری نباشد
+2. `Assets/Resources/TFRS/StageSettings.asset` — چیزی که همه‌ی پرده‌ها میخوانند
+3. Marker های Scene (یک `Yua…` یا `Haru…` با SpriteRenderer) — فقط برای همان Scene، و بر بقیه غالب
+
+`The Frayed Red String ▸ Reset Character Placement` هر سه را یکی میکند: Marker های Scene باز را روی Anchor میگذارد (و `localScale` را به ۱ برمیگرداند)، بعد اندازه‌گیریشان میکند و همان را — با ارتفاع واقعی خودِ Sprite — داخل asset مینویسد. Scene بدون Marker فقط عددهای پیش‌فرض را میگیرد.
+
+همان دکمه بالای تب Stage هم هست: **Reset to the anchors**.
