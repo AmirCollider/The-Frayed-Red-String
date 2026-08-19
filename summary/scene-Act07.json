@@ -1,0 +1,14 @@
+{
+  "kind": "scene-summary",
+  "generatedBy": "Unity DocSnap v1.0.3",
+  "scene": "Act07",
+  "path": "Assets/Scenes/Act07.unity",
+  "unityVersion": "6000.4.9f1",
+  "exportedUtc": "2026-08-19T21:32:14Z",
+  "totals": { "gameObjects": 1, "components": 2, "customScripts": 0, "texts": 0, "missingScripts": 0 },
+  "hierarchy": [
+    { "name": "Main Camera", "tag": "MainCamera", "components": "Camera, AudioListener" }
+  ],
+  "texts": [],
+  "scripts": []
+}
