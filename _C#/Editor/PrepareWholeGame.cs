@@ -92,40 +92,79 @@ namespace TheFrayedRedString.EditorTools
         /// </returns>
         private static ActScriptWriter.RebuildPolicy AskAboutExistingScripts()
         {
-            int written = 0;
+            int edited = 0;
 
             for (int i = 0; i < ScriptedActs.Length; i++)
             {
                 ActAsset act = ActLibrary.Find(ScriptedActs[i]);
 
-                if (act != null && act.Count > 0)
+                if (act != null && act.Count > 0 && !ActScriptWriter.IsUntouchedSinceGenerated(act))
                 {
-                    written++;
+                    edited++;
                 }
             }
 
-            if (written == 0)
+            // Nothing has been touched by hand, so there is no destructive
+            // decision to put to anybody: rebuild everything that is merely
+            // older than its builder, which is the whole point of the command.
+            if (edited == 0)
             {
-                return ActScriptWriter.RebuildPolicy.OnlyIfEmpty;
+                return ActScriptWriter.RebuildPolicy.IfUnedited;
             }
 
             int choice = EditorUtility.DisplayDialogComplex(
                 "Prepare the whole game",
-                $"{written} act(s) already have a script in them.\n\n" +
-                "Rewriting replaces every line with the version from the design document, which is what " +
-                "you want on a fresh checkout and NOT what you want if you have been editing dialogue in " +
-                "the Story Editor.\n\n" +
+                $"{edited} act(s) have been edited since they were last generated.\n\n" +
+                "Rewriting replaces every line in them with the version from the design document. " +
+                "Acts you have not touched are rebuilt either way, so the game always matches the " +
+                "current script.\n\n" +
                 "Everything else — libraries, placement, scenes, Build Settings — is repaired either way.",
-                "Keep what I have written",
+                "Keep my edits",
                 "Cancel",
                 "Rewrite every act from the document");
 
             switch (choice)
             {
-                case 0: return ActScriptWriter.RebuildPolicy.OnlyIfEmpty;
+                case 0: return ActScriptWriter.RebuildPolicy.IfUnedited;
                 case 2: return ActScriptWriter.RebuildPolicy.Always;
                 default: return ActScriptWriter.RebuildPolicy.Ask;
             }
+        }
+
+        /// <summary>
+        /// Rewrites every code-written act from its builder, with no questions.
+        /// </summary>
+        /// <remarks>
+        /// The remedy for the state this whole mechanism exists to prevent:
+        /// assets on disk that were built from an older version of the script,
+        /// so changes made to the builders never reach the game. Act one is not
+        /// touched because it has no builder.
+        /// </remarks>
+        [MenuItem("The Frayed Red String/Rebuild Every Act From The Story Document", priority = -199)]
+        public static void RebuildEveryAct()
+        {
+            if (!EditorUtility.DisplayDialog(
+                    "Rebuild every act",
+                    "Every act from two onwards, and both endings, is replaced with the script from the " +
+                    "design document. Anything edited in the Story Editor since the last build is lost.\n\n" +
+                    "Act one has no builder and is left alone.",
+                    "Rewrite them",
+                    "Cancel"))
+            {
+                return;
+            }
+
+            StringBuilder log = new StringBuilder();
+
+            BuildScripts(ActScriptWriter.RebuildPolicy.Always, log);
+            StoryAssetBuilder.Rebuild();
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            Debug.Log("[Story] Every act was rebuilt from the story document.\n" + log);
+
+            ChildVoiceReport.Report();
         }
 
         private static void Step(StringBuilder log, int number, string title, System.Action work)

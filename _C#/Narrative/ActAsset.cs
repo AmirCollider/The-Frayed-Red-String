@@ -281,6 +281,33 @@ namespace TheFrayedRedString.Narrative
         [Header("Script")]
         public List<BeatData> Beats = new List<BeatData>();
 
+        /// <summary>
+        /// A fingerprint of the script as it was last written by a builder.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The one thing this project could not tell apart, and it cost a whole
+        /// playthrough: an act whose script has been edited by hand in the
+        /// Story Editor, and an act that is simply older than the code that
+        /// generates it. Both look like "an act with beats in it", so the
+        /// one-press setup asked about them and defaulted to leaving them alone
+        /// — which quietly meant a game built from last week's script while its
+        /// builder had been rewritten.
+        /// </para>
+        /// <para>
+        /// Written by the builder alongside the beats. Compare it against a
+        /// fingerprint of the beats actually on disk and the answer is exact: if
+        /// they match, nobody has touched this since it was generated and it is
+        /// safe to regenerate; if they differ, somebody has, and it is not.
+        /// </para>
+        /// <para>
+        /// Empty on an act that no builder has ever written — act one, and
+        /// anything written from scratch in the Story Editor. Those are always
+        /// treated as hand-written.
+        /// </para>
+        /// </remarks>
+        [HideInInspector] public string GeneratedSignature;
+
         /// <summary>Number of beats in the act.</summary>
         public int Count => Beats != null ? Beats.Count : 0;
 

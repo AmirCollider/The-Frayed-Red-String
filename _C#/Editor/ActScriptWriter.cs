@@ -85,8 +85,110 @@ namespace TheFrayedRedString.EditorTools
             /// <summary>Leave anything that already has beats exactly as it is.</summary>
             OnlyIfEmpty,
 
+            /// <summary>
+            /// Rewrite it unless somebody has edited it since it was generated.
+            /// </summary>
+            /// <remarks>
+            /// The right default for a setup command, and the one that was
+            /// missing. "Has beats in it" was being used to mean "somebody wrote
+            /// this by hand", and it does not: an act generated last week has
+            /// beats in it too, and leaving that alone is how a game gets built
+            /// from a script its own builder no longer contains.
+            /// </remarks>
+            IfUnedited,
+
             /// <summary>Replace it, without asking.</summary>
             Always
+        }
+
+        /// <summary>
+        /// A fingerprint of a script, for telling a hand edit apart from an old
+        /// build.
+        /// </summary>
+        /// <remarks>
+        /// Covers every field a person could change in the Story Editor and
+        /// nothing else, so re-running a builder that has not changed produces
+        /// the same string and re-running one that has does not. Order matters
+        /// and is included, because reordering beats is an edit.
+        /// </remarks>
+        public static string SignatureOf(System.Collections.Generic.IReadOnlyList<BeatData> beats)
+        {
+            if (beats == null)
+            {
+                return string.Empty;
+            }
+
+            System.Text.StringBuilder text = new System.Text.StringBuilder(4096);
+
+            for (int i = 0; i < beats.Count; i++)
+            {
+                BeatData beat = beats[i];
+
+                if (beat == null)
+                {
+                    text.Append("|null");
+                    continue;
+                }
+
+                text.Append('|').Append((int)beat.Kind)
+                    .Append(',').Append((int)beat.Speaker)
+                    .Append(',').Append((int)beat.Portrait)
+                    .Append(',').Append(beat.Text.English)
+                    .Append(',').Append(beat.Text.Japanese)
+                    .Append(',').Append(beat.Text.Persian)
+                    .Append(',').Append(beat.Background)
+                    .Append(',').Append(beat.Caption.English)
+                    .Append(',').Append(beat.MusicTrack)
+                    .Append(',').Append(beat.PlaySound ? (int)beat.Sound : -1)
+                    .Append(',').Append(beat.Seconds.ToString("0.###"))
+                    .Append(',').Append(beat.FadeSeconds.ToString("0.###"))
+                    .Append(',').Append(beat.MeasurePatience ? 1 : 0)
+                    .Append(',').Append(beat.YuaOverridesKindness ? 1 : 0)
+                    .Append(',').Append(beat.OverrideLine.English)
+                    .Append(',').Append(beat.VoiceClip)
+                    .Append(',').Append(beat.Film)
+                    .Append(',').Append(beat.TypeSpeed.ToString("0.###"))
+                    .Append(',').Append(beat.Amount.ToString("0.###"))
+                    .Append(',').Append(beat.Chance.ToString("0.###"))
+                    .Append(',').Append(beat.Interlude != null ? beat.Interlude.name : string.Empty);
+
+                if (beat.Choices == null)
+                {
+                    continue;
+                }
+
+                for (int c = 0; c < beat.Choices.Length; c++)
+                {
+                    text.Append(';').Append((int)beat.Choices[c].Tone)
+                        .Append(':').Append(beat.Choices[c].Text.English);
+                }
+            }
+
+            // A short stable digest rather than the whole string: this is stored
+            // in every act asset and read on every setup run.
+            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+            {
+                byte[] hash = md5.ComputeHash(System.Text.Encoding.UTF8.GetBytes(text.ToString()));
+                return System.BitConverter.ToString(hash).Replace("-", string.Empty);
+            }
+        }
+
+        /// <summary>
+        /// True when nobody has edited this act since a builder wrote it.
+        /// </summary>
+        /// <remarks>
+        /// An act with no signature has never been generated — act one, or
+        /// anything started from scratch in the Story Editor — and is treated as
+        /// hand-written, which is the safe direction to be wrong in.
+        /// </remarks>
+        public static bool IsUntouchedSinceGenerated(ActAsset act)
+        {
+            if (act == null || string.IsNullOrEmpty(act.GeneratedSignature))
+            {
+                return false;
+            }
+
+            return string.Equals(act.GeneratedSignature, SignatureOf(act.Beats), System.StringComparison.Ordinal);
         }
 
         /// <summary>
@@ -108,6 +210,19 @@ namespace TheFrayedRedString.EditorTools
             {
                 if (policy == RebuildPolicy.OnlyIfEmpty)
                 {
+                    return;
+                }
+
+                // Older than its builder is not the same thing as edited by
+                // hand, and treating them alike is how a whole playthrough got
+                // made from a script that had already been rewritten.
+                if (policy == RebuildPolicy.IfUnedited && !IsUntouchedSinceGenerated(act))
+                {
+                    Debug.Log(
+                        $"[Story] {AssetName} has been edited since it was generated, so it was left alone. " +
+                        "Use The Frayed Red String ▸ Build Act " + $"{ActNumber:00}" +
+                        " From The Story Document to overwrite it deliberately.");
+
                     return;
                 }
 
@@ -142,6 +257,7 @@ namespace TheFrayedRedString.EditorTools
             act.ActNumber = ActNumber;
             act.Title = Title;
             act.MusicTrack = MusicTrack;
+            act.GeneratedSignature = SignatureOf(Script);
             // An act with no number is an interlude or an ending: it is played
             // inside somebody else's scene and has no business naming itself
             // over a darkened screen, least of all as "Season 01".

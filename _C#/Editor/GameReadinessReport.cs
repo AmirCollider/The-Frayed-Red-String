@@ -72,6 +72,7 @@ namespace TheFrayedRedString.EditorTools
 
                 int silences = 0;
                 int voiced = 0;
+                int childPlates = 0;
 
                 for (int i = 0; i < act.Count; i++)
                 {
@@ -91,12 +92,19 @@ namespace TheFrayedRedString.EditorTools
                     {
                         voiced++;
                     }
+
+                    if (beat.Speaker == Speaker.YuaChild || beat.Speaker == Speaker.HaruChild)
+                    {
+                        childPlates++;
+                    }
                 }
 
                 report.AppendLine(
                     $"  Act {number:00}  {act.Count,4} beats, {act.SpokenCount(),3} spoken" +
                     $"{(silences > 0 ? $", {silences} silence(s)" : string.Empty)}" +
-                    $"{(voiced > 0 ? $", {voiced} voiced line(s)" : string.Empty)}");
+                    $"{(voiced > 0 ? $", {voiced} voiced line(s)" : string.Empty)}" +
+                    $"{(childPlates > 0 ? $", {childPlates} child name plate(s)" : string.Empty)}" +
+                    $"{(silences > 0 && childPlates == 0 ? "  — SILENCES WITH NO SIGN: rebuild this act" : string.Empty)}");
             }
 
             report.AppendLine();
