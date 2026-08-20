@@ -302,6 +302,9 @@ namespace TheFrayedRedString.EditorTools
                 "何もしてないよ。本当のことを言ってるだけ。",
                 "من کاری نمی‌کنم. دارم بهش راستش رو می‌گم.");
 
+            // The episode, not the instant. See BeginChildhood.
+            BeginChildhood();
+
             Say(Speaker.Yua, Portrait.Sad,
                 "Promise me. Say you will never decide that about me.",
                 "約束して。私のこと、絶対にそう決めないって言って。",
@@ -322,6 +325,10 @@ namespace TheFrayedRedString.EditorTools
                 "هارو جواب نداد. هر بار که این را از او پرسیده بودند جواب داده بود. این‌بار توی خیابان ایستاد و گذاشت همان‌جا بماند.");
 
             Hold(3.4f);
+
+            // The scene ends inside the episode: nobody moves on from this one,
+            // the act does. The plates go back on the far side of the turn.
+            EndChildhood();
         }
 
         // ---------------------------------------------------------------------

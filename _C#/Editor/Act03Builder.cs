@@ -396,6 +396,9 @@ namespace TheFrayedRedString.EditorTools
                 "四つ角を四つ過ぎた、いつも止まるその角で、彼は止まった。",
                 "چهار خیابان بعد، سرِ همان کوچه‌ای که همیشه می‌ایستد، ایستاد.");
 
+            // The episode, not the instant. See BeginChildhood.
+            BeginChildhood();
+
             SayWithSound(Speaker.Haru, Portrait.Sad, SfxId.LegAche, 0.80f,
                 "Sorry. A moment.",
                 "ごめん。少しだけ。",
@@ -443,6 +446,8 @@ namespace TheFrayedRedString.EditorTools
                 "هارو جواب نداد. به خیابان نگاه کرد. نور یک درجه پایین‌تر رفت، و باز هم جواب نداد.");
 
             Hold(3.0f);
+
+            EndChildhood();
 
             Say(Speaker.Haru, Portrait.Neutral,
                 "It is not far now. Let us go.",
@@ -753,6 +758,9 @@ namespace TheFrayedRedString.EditorTools
             Enter(Speaker.Haru, Portrait.Neutral);
             Enter(Speaker.Yua, Portrait.Neutral);
 
+            // The episode, not the instant. See BeginChildhood.
+            BeginChildhood();
+
             Cue(SfxId.BoilerRoom, 0.55f);
 
             Narrate(
@@ -793,6 +801,8 @@ namespace TheFrayedRedString.EditorTools
                 "پس همان‌جا ایستادند. او نپرسید چرا و یوآ توضیح نداد، و صدا دقیقاً تا هر وقت که ادامه داشت، ادامه داشت.");
 
             Hold(3.2f);
+
+            EndChildhood();
 
             Say(Speaker.Yua, Portrait.Neutral,
                 "It stopped.",

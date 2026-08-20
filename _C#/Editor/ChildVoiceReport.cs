@@ -23,16 +23,6 @@ namespace TheFrayedRedString.EditorTools
     /// <summary>Where the game waits, and whether the player is told.</summary>
     public static class ChildVoiceReport
     {
-        /// <summary>
-        /// How far back a child line may sit and still count as the warning.
-        /// </summary>
-        /// <remarks>
-        /// A few staging beats — a change of expression, a sound — routinely sit
-        /// between the line and the silence it belongs to, and none of them are
-        /// visible to the player as anything other than the same moment.
-        /// </remarks>
-        private const int Reach = 6;
-
         [MenuItem("The Frayed Red String/Where Does The Game Wait?", priority = 40)]
         public static void Report()
         {
@@ -42,8 +32,9 @@ namespace TheFrayedRedString.EditorTools
             log.AppendLine("THE FRAYED RED STRING — the waiting moments, as they are on disk");
             log.AppendLine();
 
-            int total = 0;
-            int told = 0;
+            int episodes = 0;
+            int lines = 0;
+            int unsigned = 0;
 
             for (int a = 0; a < acts.Count; a++)
             {
@@ -57,16 +48,49 @@ namespace TheFrayedRedString.EditorTools
 
                 bool headed = false;
 
-                for (int i = 0; i < beats.Count; i++)
-                {
-                    BeatData beat = beats[i];
+                int i = 0;
 
-                    if (beat == null || !beat.MeasurePatience)
+                while (i < beats.Count)
+                {
+                    if (!Measured(beats, i))
                     {
+                        i++;
                         continue;
                     }
 
-                    total++;
+                    // One episode: everything from here to the first line that
+                    // stops measuring. Beats that are not lines at all — a hold,
+                    // a sound — sit inside it and do not end it.
+                    int first = i;
+                    int last = i;
+                    int spoken = 0;
+                    int plated = 0;
+
+                    while (i < beats.Count)
+                    {
+                        BeatData beat = beats[i];
+
+                        if (beat != null && beat.Kind == StoryBeatKind.Line)
+                        {
+                            if (!beat.MeasurePatience)
+                            {
+                                break;
+                            }
+
+                            last = i;
+                            spoken++;
+
+                            if (beat.Speaker == Speaker.YuaChild || beat.Speaker == Speaker.HaruChild)
+                            {
+                                plated++;
+                            }
+                        }
+
+                        i++;
+                    }
+
+                    episodes++;
+                    lines += spoken;
 
                     if (!headed)
                     {
@@ -74,23 +98,23 @@ namespace TheFrayedRedString.EditorTools
                         headed = true;
                     }
 
-                    Speaker sign = ChildSpeakerBefore(beats, i);
-
-                    if (sign == Speaker.YuaChild || sign == Speaker.HaruChild)
+                    if (plated > 0)
                     {
-                        told++;
-                        log.AppendLine($"     beat {i,4}  told — the plate reads {sign}");
+                        log.AppendLine(
+                            $"     beats {first,4}–{last,-4} {spoken,3} line(s), {plated} of them under a child name plate");
                     }
                     else
                     {
-                        log.AppendLine($"     beat {i,4}  NOT TOLD — no child line in the {Reach} beats before it");
+                        unsigned++;
+                        log.AppendLine(
+                            $"     beats {first,4}–{last,-4} {spoken,3} line(s), NO CHILD NAME PLATE ANYWHERE IN IT");
                     }
                 }
             }
 
             log.AppendLine();
 
-            if (total == 0)
+            if (episodes == 0)
             {
                 log.AppendLine("  No waiting moments at all. Either no act has been built, or the beats that");
                 log.AppendLine("  measure patience have lost their tick. Run Rebuild Every Act From The Story");
@@ -98,43 +122,27 @@ namespace TheFrayedRedString.EditorTools
             }
             else
             {
-                log.AppendLine($"  {told} of {total} waiting moments carry the child name plate.");
+                log.AppendLine(
+                    $"  {episodes} episode(s), {lines} line(s) in total. Stopping on any one of those lines for " +
+                    "the full wait offers the ending, if the run has earned one.");
 
-                if (told < total)
+                if (unsigned > 0)
                 {
-                    log.AppendLine("  The ones marked NOT TOLD are silences the player has no way of noticing.");
+                    log.AppendLine(
+                        $"  {unsigned} of them carry no child name plate, so the player has no way of knowing " +
+                        "they are episodes.");
                 }
             }
 
             Debug.Log(log.ToString());
         }
 
-        /// <summary>
-        /// The child speaker of the nearest line before <paramref name="index"/>,
-        /// or <see cref="Speaker.Narrator"/> for none.
-        /// </summary>
-        private static Speaker ChildSpeakerBefore(List<BeatData> beats, int index)
+        /// <summary>True when the beat is a line that measures patience.</summary>
+        private static bool Measured(List<BeatData> beats, int index)
         {
-            int seen = 0;
+            BeatData beat = beats[index];
 
-            for (int i = index; i >= 0 && seen < Reach; i--)
-            {
-                BeatData beat = beats[i];
-
-                if (beat == null || beat.Kind != StoryBeatKind.Line)
-                {
-                    continue;
-                }
-
-                seen++;
-
-                if (beat.Speaker == Speaker.YuaChild || beat.Speaker == Speaker.HaruChild)
-                {
-                    return beat.Speaker;
-                }
-            }
-
-            return Speaker.Narrator;
+            return beat != null && beat.Kind == StoryBeatKind.Line && beat.MeasurePatience;
         }
 
         private static List<ActAsset> LoadAll()

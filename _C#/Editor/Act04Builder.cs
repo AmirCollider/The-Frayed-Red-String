@@ -894,6 +894,9 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(1.6f);
 
+            // The episode, not the instant. See BeginChildhood.
+            BeginChildhood();
+
             SayWithSound(Speaker.Haru, Portrait.Sad, SfxId.LegAche, 0.80f,
                 "Sorry. A moment.",
                 "ごめん。少しだけ。",
@@ -933,6 +936,8 @@ namespace TheFrayedRedString.EditorTools
                 "درِ. همیشه اون دره.");
 
             Hold(2.4f);
+
+            EndChildhood();
 
             Say(Speaker.Haru, Portrait.Neutral,
                 "It is nearly gone. Let us go.",
@@ -1251,6 +1256,9 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(2.6f);
 
+            // The episode, not the instant. See BeginChildhood.
+            BeginChildhood();
+
             Say(Speaker.Yua, Portrait.Sad,
                 "I am not saying it to hurt you.",
                 "傷つけたくて言ってるんじゃない。",
@@ -1297,6 +1305,8 @@ namespace TheFrayedRedString.EditorTools
                 "پس قایم نمی‌شد. نگاه کرد، و حق با اون بود.");
 
             Hold(3.6f);
+
+            EndChildhood();
 
             Narrate(
                 "That is it. That is the sentence the whole act was walking towards, and she did not put a single word of it in his mouth.",

@@ -239,6 +239,7 @@ namespace TheFrayedRedString.EditorTools
             }
 
             Script.Clear();
+            _childhood = false;
 
             _legAche = LoadInterlude(LegAchePath);
             _machineRoom = LoadInterlude(MachineRoomPath);
@@ -431,10 +432,77 @@ namespace TheFrayedRedString.EditorTools
             Script.Add(new BeatData
             {
                 Kind = StoryBeatKind.Line,
-                Speaker = speaker,
+                Speaker = _childhood ? AsChild(speaker) : speaker,
                 Portrait = portrait,
-                Text = L(english, japanese, persian)
+                Text = L(english, japanese, persian),
+
+                // Every line of the episode, not just one of them. A player who
+                // stops anywhere inside it is offered the same thing.
+                MeasurePatience = _childhood
             });
+        }
+
+        /// <summary>True between <see cref="BeginChildhood"/> and its end.</summary>
+        private bool _childhood;
+
+        /// <summary>
+        /// Opens an episode where the older self is not the one answering.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Two things happen to every line written between here and
+        /// <see cref="EndChildhood"/>, and they are two halves of one idea. The
+        /// name plate reads as the nine-year-old for as long as the episode
+        /// lasts, and every line in it measures the player's patience — so the
+        /// sign and the thing it is a sign of cover exactly the same stretch of
+        /// the game.
+        /// </para>
+        /// <para>
+        /// The earlier version put the plate on a single line and the silence on
+        /// the one after it, which meant a player who read the fragment, pressed
+        /// on, and then stopped one line later had done the right thing at the
+        /// wrong instant and got nothing for it. An episode has no wrong instant
+        /// in it.
+        /// </para>
+        /// <para>
+        /// Only Yua and Haru are moved. Narration inside the episode is still
+        /// narration — it keeps its plate and gains only the silence — and a
+        /// line already written in a child's voice is left exactly as it is.
+        /// </para>
+        /// <para>
+        /// The sprite on stage does not change. Nobody arrives, nobody's face
+        /// moves; the picture stays the seventeen-year-old and only the plate
+        /// and the voice are nine.
+        /// </para>
+        /// </remarks>
+        protected void BeginChildhood()
+        {
+            _childhood = true;
+        }
+
+        /// <summary>
+        /// Closes the episode. The plates go back to Yua and Haru on the next
+        /// line written.
+        /// </summary>
+        /// <remarks>
+        /// Put it on the line where the subject is dropped and a new
+        /// conversation starts — the "anyway", the "let us go" — because that
+        /// line is the one the player reads as the moment it is over.
+        /// </remarks>
+        protected void EndChildhood()
+        {
+            _childhood = false;
+        }
+
+        /// <summary>The nine-year-old of whoever this is.</summary>
+        private static Speaker AsChild(Speaker speaker)
+        {
+            switch (speaker)
+            {
+                case Speaker.Yua: return Speaker.YuaChild;
+                case Speaker.Haru: return Speaker.HaruChild;
+                default: return speaker;
+            }
         }
 
         /// <summary>One spoken line with a cue on the same frame.</summary>

@@ -500,6 +500,9 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(1.2f);
 
+            // The episode, not the instant. See BeginChildhood.
+            BeginChildhood();
+
             Cue(SfxId.BoilerRoom, 0.55f);
 
             Narrate(
@@ -543,6 +546,8 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(2.0f);
 
+            EndChildhood();
+
             Say(Speaker.Yua, Portrait.Neutral,
                 "Anyway. Peach.",
                 "……とにかく、桃ね。",
@@ -559,6 +564,9 @@ namespace TheFrayedRedString.EditorTools
                 "Four streets later, he stopped walking.",
                 "四つ角を四つ過ぎたところで、彼は足を止めた。",
                 "چهار خیابان بعد، ایستاد.");
+
+            // The episode, not the instant. See BeginChildhood.
+            BeginChildhood();
 
             SayWithSound(Speaker.Haru, Portrait.Sad, SfxId.LegAche, 0.80f,
                 "Sorry. Give me a moment. My leg.",
@@ -583,6 +591,8 @@ namespace TheFrayedRedString.EditorTools
                 "یوآ منتظر ماند. نپرسید. توی نپرسیدن خیلی خوب است.");
 
             Hold(2.6f);
+
+            EndChildhood();
 
             Say(Speaker.Haru, Portrait.Neutral,
                 "All right. I am fine. Let us go.",
