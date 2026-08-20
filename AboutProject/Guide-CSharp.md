@@ -708,29 +708,31 @@ beat.OverrideLine = new LocalizedLine("No. I did not say that.", "……うう�
 
 ### ساختن یک پرده با یک اسکریپت — الگوی واقعی پروژه
 
-`Editor/ActScriptWriter.cs` پایه است، و `Act02Builder.cs` و `Act03Builder.cs` دو پرده‌ی کامل روی آن.
+`Editor/ActScriptWriter.cs` پایه است، و `Act02Builder.cs`، `Act03Builder.cs`، `Act04Builder.cs`، `Act05Builder.cs` `Act06Builder.cs` و `Act07Builder.cs` شش پرده‌ی کامل روی آن، به‌علاوه‌ی `EndingsBuilder.cs` برای دو پایانِ بی‌شماره.
 
 یک پرده جدید سه چیز است:
 
 ```csharp
-public sealed class Act04Builder : ActScriptWriter
+public sealed class Act06Builder : ActScriptWriter
 {
-    protected override int ActNumber => 4;
-    protected override string AssetName => "Act04";
-    protected override LocalizedLine Title => L("To Deepen", "深まる", "عمیق شدن");
+    protected override int ActNumber => 6;
+    protected override string AssetName => "Act06";
+    protected override LocalizedLine Title => L("Rotten Roots", "腐った根", "ریشه‌های پوسیده");
 
-    [MenuItem("The Frayed Red String/Build Act 04 From The Story Document")]
-    public static void Build() { new Act04Builder().BuildAsset(); }
+    [MenuItem("The Frayed Red String/Build Act 06 From The Story Document")]
+    public static void Build() { new Act06Builder().BuildAsset(); }
 
     protected override void Write()
     {
-        Place(Backgrounds.CafeRainy, "The café", "喫茶店", "کافه");
+        Place(Backgrounds.PlaygroundDay, "Eight years earlier", "八年前", "هشت سال قبل");
         Hold(2f);
         Enter(Speaker.Yua, Portrait.Neutral);
         Say(Speaker.Yua, Portrait.Joyful, "You came.", "来てくれたんだ。", "آمدی.");
     }
 }
 ```
+
+> سه الگوی کامل برای نگاه کردن: `Act04Builder.cs` (هشت صحنه، ۱۵۸ خط، پنج انتخاب، دو سکوتِ شمرده‌شده، سه Interlude) و `Act05Builder.cs` (هفت صحنه، ۶۱ خط که ۲۰تایش صدادار است، و تنها پرده‌ای که به خودِ بازی دست میزند) و `Act06Builder.cs` (نُه صحنه، کلا داخل حالت فیلم، بدون هیچ انتخابی).
 
 `BuildAsset()` بقیه‌اش را انجام میدهد: asset را مینویسد (اگر از قبل باشد **همان** را استفاده میکند تا GUID عوض نشود و هیچ ارجاعی نشکند)، اگر Beat داشته باشد اول میپرسد، و آخرش `Rebuild Act Library` را صدا میزند.
 
@@ -750,6 +752,18 @@ public sealed class Act04Builder : ActScriptWriter
 | `Decide(blue×3, green×3, refusal×3)` | Choice با اورراید یوآ |
 | `DecideIdly(a×3, b×3)` | Choice سفید، بی‌وزن و شمرده‌نشده |
 | `Maybe(LegAche, 0.3f)` | Interlude تصادفی |
+| `SayVoiced(who, face, clip, en, ja, fa)` | Line + اسم فایل صدا |
+| `CutMusic()` | قطع آهنگ در یک فریم |
+| `PullDownDialogue(s)` | هارو باکس را پایین میکشد |
+| `OpenFrame(s)` | باز کردن قاب |
+| `Grade(amount, s)` | پرده‌ی صورتیِ روی تصویر |
+| `Stain(colour, s)` / `ClearStain(s)` | خون روی صفحه |
+| `BeginFilm()` / `EndFilm()` | حالت فیلم — بازیکن نمیتواند رد کند |
+| `CutTo(background)` | برشِ آنی به تصویرِ دیگر |
+| `SetMusic(track)` | شروع یک آهنگ |
+| `PlayFilm(name)` | فیلم تمام‌صفحه |
+| `WriteClosingWords()` | دو جمله‌ی پایانیِ مشترکِ هر سه پایان |
+| `EndGame()` | پاک کردن سیو‌ها و برگشت به منو |
 
 `LegAche` و `MachineRoom` خودشان از `Assets/Story/Acts` لود میشوند؛ نبودنشان فقط یک Warning است.
 
@@ -766,6 +780,11 @@ StoryPlaytest.PlayFrom(act, beat);
 ActSceneSetup.ResetCharacterPlacement();
 Act02Builder.Build();
 Act03Builder.Build();
+Act04Builder.Build();
+Act05Builder.Build();
+Act06Builder.Build();
+Act07Builder.Build();
+EndingsBuilder.BuildBoth();
 ActSceneSetup.AdoptSceneCharacters();
 SfxWavExporter.ExportAll();
 ```
@@ -804,6 +823,16 @@ DefaultMusicVolume = 0.45f;
 
 ---
 
+## یک دکمه برای همه چیز
+
+```
+The Frayed Red String ▸ Prepare The Whole Game
+```
+
+کتابخانه‌ها، جای کاراکترها، Scene ها، اسکریپت هر هفت پرده و هر دو پایان، Act Library، Build Settings و Player Settings — همه با یک بار زدن. جزئیاتش داخل `Guide-Cutscenes.md`.
+
+---
+
 ## پیوست ۲ — جای ایستادن کاراکترها
 
 عددهای مرجع، داخل `Narrative/StageSettings.cs` (`Placement`):
@@ -812,9 +841,22 @@ DefaultMusicVolume = 0.45f;
 YuaAnchorX  = -4.55f;   // موقعیت world کاراکتر داخل Scene
 HaruAnchorX =  4.70f;
 AnchorY     = -1.50f;   // برای هر دو
+
+YuaScale    =  0.48f;   // localScale خودِ Marker
+HaruScale   =  0.50f;
 ```
 
 اینها **مختصات world** هستند، نه canvas. بقیه از رویشان حساب میشود (`CanvasPerWorld = 108`، دوربین Orthographic با `size = 5`). قبلا برعکس بود — عددهای canvas دستی نوشته شده بودند و از Scene فاصله گرفته بودند، که هر دو کاراکتر را در هر پرده‌ای که Marker نداشت دو سوم واحد بالاتر مینشاند.
+
+**Scale هم بخشی از جای کاراکتر است، نه یک چیز جدا.** قبلا فقط X و Y نوشته شده بود و اندازه از یک عدد canvas دستی (`CharacterHeight = 1500`) می‌آمد — یک عدد، برای هر دو کاراکتر، که با هیچ‌کدامشان جور نبود. حالا ارتفاع از روی Scale حساب میشود:
+
+```csharp
+SpriteWorldHeight = 2400px / 100 PPU = 24 واحد world
+HeightFor(Yua)    = 24 × 0.48 × 108 = 1244 واحد canvas
+HeightFor(Haru)   = 24 × 0.50 × 108 = 1296 واحد canvas
+```
+
+مرجع این سه عدد، همان `YuaNeutralGentleSmile` و `HaruNeutralGentleSmile` خاموشِ داخل `Act01.unity` هستند.
 
 سه جا میتوانند جای کاراکتر را تعیین کنند:
 
@@ -822,6 +864,31 @@ AnchorY     = -1.50f;   // برای هر دو
 2. `Assets/Resources/TFRS/StageSettings.asset` — چیزی که همه‌ی پرده‌ها میخوانند
 3. Marker های Scene (یک `Yua…` یا `Haru…` با SpriteRenderer) — فقط برای همان Scene، و بر بقیه غالب
 
-`The Frayed Red String ▸ Reset Character Placement` هر سه را یکی میکند: Marker های Scene باز را روی Anchor میگذارد (و `localScale` را به ۱ برمیگرداند)، بعد اندازه‌گیریشان میکند و همان را — با ارتفاع واقعی خودِ Sprite — داخل asset مینویسد. Scene بدون Marker فقط عددهای پیش‌فرض را میگیرد.
+> **از نسخه‌ی ۳ به بعد، Marker های داخل Scene اصلا خوانده نمیشوند.** بازی فقط `StageSettings.asset` را میخواند. دلیلش: جای کاراکتر دو منبع داشت و آنی که کسی نگاهش نمیکرد برنده میشد. تیکِ `Read Placement From Scene` داخل تب Stage برش میگرداند؛ توصیه نمیشود.
+
+`The Frayed Red String ▸ Reset Character Placement` هر سه را یکی میکند: Marker های Scene باز را روی Anchor میگذارد و `localScale` را روی Scale خودِ آن کاراکتر می‌نشاند (۰.۴۸ برای یوآ، ۰.۵۰ برای هارو)، بعد اندازه‌گیریشان میکند و همان را داخل asset مینویسد. Scene بدون Marker فقط عددهای پیش‌فرض را میگیرد.
+
+> قبلا `localScale` را روی **۱** میگذاشت. یک Sprite با ارتفاع ۲۴۰۰ پیکسل در Scale ۱ برابرِ ۲۴ واحد world است، در حالی که دوربین فقط ۱۰ واحد میبیند — یعنی خودِ همان دکمه‌ای که برای «درست کردن جای خراب‌شده» بود، مطمئن‌ترین راهِ خراب کردنش بود.
 
 همان دکمه بالای تب Stage هم هست: **Reset to the anchors**.
+
+### کاراکترهای بچه (پرده‌ی ششم)
+
+دو `Speaker` جدید: `YuaChild` و `HaruChild`. همان X و Y بزرگسالشان، ولی Scale کوچک‌تر:
+
+| | X | Y | Scale |
+|---|---|---|---|
+| **یوآ (۹ ساله)** | `-4.55` | `-1.5` | `0.335` |
+| **هارو (۹ ساله)** | `4.70` | `-1.5` | `0.350` |
+
+اسم فایل اسپرایت‌ها: `YuaChildNeutralGentleSmile`، `HaruChildSadImploringTearful` و همین الگو برای هر ۸ حالت — یعنی دقیقا اسمِ بزرگسال با `Child` بعد از اسم.
+
+هر دو **همان جایگاه بزرگسالشان** را استفاده میکنند، نه یک جایگاه سوم. صحنه هنوز دو نفره است.
+
+### وقتی Marker غلط باشد
+
+اگر Marker یک Scene ارتفاعی خارج از بازه‌ی `0.6×` تا `1.5×` عددِ طراحی بدهد (مثلا `localScale = 1` که ۲.۰۸ برابر میشود)، بازی آن را **نادیده میگیرد**، کاراکتر را روی Anchor میکشد و یک Warning با علتش داخل Console مینویسد. جابه‌جا کردن عمدی Marker مشکلی ندارد؛ فقط این یک حالت گرفته میشود.
+
+### asset قدیمی
+
+`StageSettings.asset` یک شماره‌ی نسخه دارد (`CurrentPlacementRevision`). asset ای که قبل از این عددها ذخیره شده بود، **یک بار** خودکار به عددهای بالا برگردانده میشود و یک خط داخل Console مینویسد. هر چیزی که بعد از آن خودت تنظیم کنی، دست نخورده میماند.
