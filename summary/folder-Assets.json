@@ -1,0 +1,563 @@
+{
+  "kind": "folder-summary",
+  "generatedBy": "Unity DocSnap v1.0.3",
+  "folder": "Assets",
+  "files": 253,
+  "exportedUtc": "2026-08-20T08:46:05Z",
+  "tree": {
+    "name": "Assets",
+    "direct": 0,
+    "total": 253,
+    "children": [
+      {
+        "name": "+_KsoSherPluss",
+        "direct": 3,
+        "total": 7,
+        "children": [
+          {
+            "name": "Settings",
+            "direct": 3,
+            "total": 4,
+            "children": [
+              { "name": "Scenes", "direct": 1, "total": 1 }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Audio",
+        "direct": 0,
+        "total": 21,
+        "children": [
+          { "name": "BackgroundMusics", "direct": 1, "total": 1 },
+          { "name": "GeneratedSfx", "direct": 20, "total": 20 }
+        ]
+      },
+      { "name": "Fonts", "direct": 2, "total": 2 },
+      {
+        "name": "Images",
+        "direct": 5,
+        "total": 58,
+        "children": [
+          { "name": "Backgrounds", "direct": 14, "total": 14 },
+          {
+            "name": "Characters",
+            "direct": 0,
+            "total": 16,
+            "children": [
+              { "name": "Haru", "direct": 8, "total": 8 },
+              { "name": "Yua", "direct": 8, "total": 8 }
+            ]
+          },
+          { "name": "UI", "direct": 22, "total": 22 },
+          { "name": "_Game", "direct": 1, "total": 1 }
+        ]
+      },
+      {
+        "name": "Resources",
+        "direct": 1,
+        "total": 10,
+        "children": [
+          { "name": "DirectTMPFontData", "direct": 3, "total": 3 },
+          { "name": "TFRS", "direct": 6, "total": 6 }
+        ]
+      },
+      { "name": "Scenes", "direct": 9, "total": 9 },
+      {
+        "name": "Settings",
+        "direct": 0,
+        "total": 1,
+        "children": [
+          { "name": "Build Profiles", "direct": 1, "total": 1 }
+        ]
+      },
+      {
+        "name": "Story",
+        "direct": 0,
+        "total": 11,
+        "children": [
+          { "name": "Acts", "direct": 11, "total": 11 }
+        ]
+      },
+      {
+        "name": "TextMesh Pro",
+        "direct": 0,
+        "total": 33,
+        "children": [
+          { "name": "Fonts", "direct": 2, "total": 2 },
+          {
+            "name": "Resources",
+            "direct": 3,
+            "total": 8,
+            "children": [
+              { "name": "Fonts & Materials", "direct": 4, "total": 4 },
+              { "name": "Style Sheets", "direct": 1, "total": 1 }
+            ]
+          },
+          { "name": "Shaders", "direct": 23, "total": 23 }
+        ]
+      },
+      {
+        "name": "_C#",
+        "direct": 0,
+        "total": 101,
+        "children": [
+          { "name": "Audio", "direct": 11, "total": 11 },
+          { "name": "Core", "direct": 7, "total": 7 },
+          { "name": "Editor", "direct": 27, "total": 27 },
+          { "name": "Flow", "direct": 1, "total": 1 },
+          { "name": "Input", "direct": 1, "total": 1 },
+          { "name": "Localization", "direct": 7, "total": 7 },
+          { "name": "Motion", "direct": 4, "total": 4 },
+          { "name": "Narrative", "direct": 8, "total": 8 },
+          { "name": "Presentation", "direct": 13, "total": 13 },
+          { "name": "SaveSystem", "direct": 3, "total": 3 },
+          { "name": "Scenes", "direct": 3, "total": 3 },
+          { "name": "Tweening", "direct": 4, "total": 4 },
+          { "name": "UI", "direct": 11, "total": 11 },
+          { "name": "Utilities", "direct": 1, "total": 1 }
+        ]
+      }
+    ]
+  },
+  "byFolder": [
+    {
+      "folder": "Assets/+_KsoSherPluss",
+      "files": [
+        { "name": "DefaultVolumeProfile.asset", "type": "VolumeProfile", "size": "18.3 KB" },
+        { "name": "InputSystem_Actions.inputactions", "type": "InputActionAsset", "size": "40 KB" },
+        { "name": "UniversalRenderPipelineGlobalSettings.asset", "type": "UniversalRenderPipelineGlobalSettings", "size": "25.9 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/+_KsoSherPluss/Settings",
+      "files": [
+        { "name": "Lit2DSceneTemplate.scenetemplate", "type": "SceneTemplateAsset", "size": "3.8 MB" },
+        { "name": "Renderer2D.asset", "type": "Renderer2DData", "size": "3.5 KB" },
+        { "name": "UniversalRP.asset", "type": "UniversalRenderPipelineAsset", "size": "4.5 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/+_KsoSherPluss/Settings/Scenes",
+      "files": [
+        { "name": "URP2DSceneTemplate.unity", "type": "SceneAsset", "size": "9.6 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/Audio/BackgroundMusics",
+      "files": [
+        { "name": "MainMenuBackGrungMusic.mp3", "type": "AudioClip", "duration": "30.772 s", "size": "727.8 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/Audio/GeneratedSfx",
+      "files": [
+        { "name": "BoilerRoom.wav", "type": "AudioClip", "duration": "4.2 s", "size": "723.6 KB" },
+        { "name": "Cancel.wav", "type": "AudioClip", "duration": "1.1 s", "size": "189.5 KB" },
+        { "name": "ChoiceAppear.wav", "type": "AudioClip", "duration": "1.3 s", "size": "224 KB" },
+        { "name": "ChoiceCruel.wav", "type": "AudioClip", "duration": "1.4 s", "size": "241.2 KB" },
+        { "name": "ChoiceKind.wav", "type": "AudioClip", "duration": "1.4 s", "size": "241.2 KB" },
+        { "name": "Click.wav", "type": "AudioClip", "duration": "0.85 s", "size": "146.5 KB" },
+        { "name": "Confirm.wav", "type": "AudioClip", "duration": "1.9 s", "size": "327.3 KB" },
+        { "name": "Denied.wav", "type": "AudioClip", "duration": "0.45 s", "size": "77.6 KB" },
+        { "name": "GiftBox.wav", "type": "AudioClip", "duration": "2.8 s", "size": "482.4 KB" },
+        { "name": "Heartbeat.wav", "type": "AudioClip", "duration": "1.15 s", "size": "198.1 KB" },
+        { "name": "Hover.wav", "type": "AudioClip", "duration": "0.45 s", "size": "77.6 KB" },
+        { "name": "LegAche.wav", "type": "AudioClip", "duration": "1.6 s", "size": "275.7 KB" },
+        { "name": "PageTurn.wav", "type": "AudioClip", "duration": "0.6 s", "size": "103.4 KB" },
+        { "name": "Petal.wav", "type": "AudioClip", "duration": "1.6 s", "size": "275.7 KB" },
+        { "name": "Tap.wav", "type": "AudioClip", "duration": "0.55 s", "size": "94.8 KB" },
+        { "name": "Toggle.wav", "type": "AudioClip", "duration": "1 s", "size": "172.3 KB" },
+        { "name": "TypeHaru.wav", "type": "AudioClip", "duration": "0.28 s", "size": "48.3 KB" },
+        { "name": "TypeNarrator.wav", "type": "AudioClip", "duration": "0.22 s", "size": "37.9 KB" },
+        { "name": "TypeYua.wav", "type": "AudioClip", "duration": "0.24 s", "size": "41.4 KB" },
+        { "name": "WishStar.wav", "type": "AudioClip", "duration": "2.2 s", "size": "379 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/Fonts",
+      "files": [
+        { "name": "IranianSans.ttf", "type": "Font", "size": "58.6 KB" },
+        { "name": "KleeOne.ttf", "type": "Font", "size": "7.6 MB" }
+      ]
+    },
+    {
+      "folder": "Assets/Images",
+      "files": [
+        { "name": "LoadMenuPanelBackGrund.png", "type": "Texture2D", "dimensions": "2183×1600", "size": "4.4 MB" },
+        { "name": "MainMenuBackGrund.png", "type": "Texture2D", "dimensions": "1920×1080", "size": "3 MB" },
+        { "name": "MainMenuBackGrundFull.png", "type": "Texture2D", "dimensions": "1920×1080", "size": "3.3 MB" },
+        { "name": "MainMenuBackGrundGameFrayedRedStringText.png", "type": "Texture2D", "dimensions": "435×255", "size": "99.8 KB" },
+        { "name": "MainMenuBackGrundYuaAndHaru.png", "type": "Texture2D", "dimensions": "873×1058", "size": "1.2 MB" }
+      ]
+    },
+    {
+      "folder": "Assets/Images/Backgrounds",
+      "files": [
+        { "name": "CherryBlossomSchoolAlleyDay.png", "type": "Texture2D", "dimensions": "1920×1080", "size": "3.8 MB" },
+        { "name": "CozyCafeDay.png", "type": "Texture2D", "dimensions": "1920×1080", "size": "3.3 MB" },
+        { "name": "CozyCafeDimRainy.png", "type": "Texture2D", "dimensions": "1920×1080", "size": "3.1 MB" },
+        { "name": "OvercastClassroomRainy.png", "type": "Texture2D", "dimensions": "1920×1080", "size": "3.2 MB" },
+        { "name": "PastelPlaygroundDay.png", "type": "Texture2D", "dimensions": "1920×1080", "size": "3.9 MB" },
+        { "name": "PastelStreetVendingDay.png", "type": "Texture2D", "dimensions": "1920×1080", "size": "4 MB" },
+        { "name": "PastelStreetVendingNight.png", "type": "Texture2D", "dimensions": "1920×1080", "size": "3.6 MB" },
+        { "name": "SchoolCorridorSunset.png", "type": "Texture2D", "dimensions": "1920×1080", "size": "2.6 MB" },
+        { "name": "SchoolRooftopSunnyDay.png", "type": "Texture2D", "dimensions": "1920×1080", "size": "3.8 MB" },
+        { "name": "SunnyClassroomDay.png", "type": "Texture2D", "dimensions": "1920×1080", "size": "3.7 MB" },
+        { "name": "TraditionalAlleywayNight.png", "type": "Texture2D", "dimensions": "1920×1080", "size": "3 MB" },
+        { "name": "TrainPlatformSunset.png", "type": "Texture2D", "dimensions": "1920×1080", "size": "3.1 MB" },
+        { "name": "UsagiBakeryStreetDay.png", "type": "Texture2D", "dimensions": "1920×1080", "size": "3.8 MB" },
+        { "name": "YuaRoomSunnyDay.png", "type": "Texture2D", "dimensions": "1920×1080", "size": "3.1 MB" }
+      ]
+    },
+    {
+      "folder": "Assets/Images/Characters/Haru",
+      "files": [
+        { "name": "HaruDeadEyesPokerFace.png", "type": "Texture2D", "dimensions": "1200×2400", "size": "2 MB" },
+        { "name": "HaruInsaneManicSmile.png", "type": "Texture2D", "dimensions": "1200×2400", "size": "1.8 MB" },
+        { "name": "HaruJoyfulHappyLaugh.png", "type": "Texture2D", "dimensions": "1200×2400", "size": "2 MB" },
+        { "name": "HaruNeutralGentleSmile.png", "type": "Texture2D", "dimensions": "1200×2400", "size": "1.8 MB" },
+        { "name": "HaruSadImploringTearful.png", "type": "Texture2D", "dimensions": "1200×2400", "size": "1.8 MB" },
+        { "name": "HaruSeriousAngryFrown .png", "type": "Texture2D", "dimensions": "1200×2400", "size": "1.5 MB" },
+        { "name": "HaruShyBlushingLookAway.png", "type": "Texture2D", "dimensions": "1200×2400", "size": "1.8 MB" },
+        { "name": "HaruSorrowfulCryingTears.png", "type": "Texture2D", "dimensions": "1200×2400", "size": "1.8 MB" }
+      ]
+    },
+    {
+      "folder": "Assets/Images/Characters/Yua",
+      "files": [
+        { "name": "YuaAnnoyedAngryGlare.png", "type": "Texture2D", "dimensions": "1200×2400", "size": "2.9 MB" },
+        { "name": "YuaDeadEyesPokerFace.png", "type": "Texture2D", "dimensions": "1200×2400", "size": "2.9 MB" },
+        { "name": "YuaInsaneManicSmile.png", "type": "Texture2D", "dimensions": "1200×2400", "size": "2.8 MB" },
+        { "name": "YuaJoyfulHappyLaugh.png", "type": "Texture2D", "dimensions": "1200×2400", "size": "2.8 MB" },
+        { "name": "YuaNeutralGentleSmile.png", "type": "Texture2D", "dimensions": "1200×2400", "size": "2.3 MB" },
+        { "name": "YuaSadImploringTearful.png", "type": "Texture2D", "dimensions": "1200×2400", "size": "2.9 MB" },
+        { "name": "YuaShyBlushingLookDown.png", "type": "Texture2D", "dimensions": "1200×2400", "size": "2.7 MB" },
+        { "name": "YuaSorrowfulCryingTears.png", "type": "Texture2D", "dimensions": "1200×2400", "size": "2.8 MB" }
+      ]
+    },
+    {
+      "folder": "Assets/Images/UI",
+      "files": [
+        { "name": "ChoiceButtonBackgroundBlue.png", "type": "Texture2D", "dimensions": "700×200", "size": "143.2 KB" },
+        { "name": "ChoiceButtonBackgroundGreen.png", "type": "Texture2D", "dimensions": "700×200", "size": "138.6 KB" },
+        { "name": "ChoiceButtonBackgroundWhite.png", "type": "Texture2D", "dimensions": "700×200", "size": "152 KB" },
+        { "name": "CircleMask.png", "type": "Texture2D", "dimensions": "512×512", "size": "17.2 KB" },
+        { "name": "EnterButtonImage.png", "type": "Texture2D", "dimensions": "112×122", "size": "6.9 KB" },
+        { "name": "LanguageFlagEnglish.png", "type": "Texture2D", "dimensions": "2000×1200", "size": "42.4 KB" },
+        { "name": "LanguageFlagIran.jpg", "type": "Texture2D", "dimensions": "2560×1474", "size": "81.9 KB" },
+        { "name": "LanguageFlagJapanese.png", "type": "Texture2D", "dimensions": "810×854", "size": "17.1 KB" },
+        { "name": "MainMenuButtonExit.png", "type": "Texture2D", "dimensions": "550×135", "size": "45.4 KB" },
+        { "name": "MainMenuButtonGallery.png", "type": "Texture2D", "dimensions": "550×135", "size": "37 KB" },
+        { "name": "MainMenuButtonLoad.png", "type": "Texture2D", "dimensions": "550×135", "size": "49.4 KB" },
+        { "name": "MainMenuButtonSettings.png", "type": "Texture2D", "dimensions": "550×135", "size": "55.7 KB" },
+        { "name": "MainMenuButtonStart.png", "type": "Texture2D", "dimensions": "550×135", "size": "47.2 KB" },
+        { "name": "MenuButtonBackToMenu.png", "type": "Texture2D", "dimensions": "700×200", "size": "187.3 KB" },
+        { "name": "PauseMenuButtonLoad.png", "type": "Texture2D", "dimensions": "600×300", "size": "309 KB" },
+        { "name": "PauseMenuButtonMenu.png", "type": "Texture2D", "dimensions": "600×300", "size": "314.1 KB" },
+        { "name": "PauseMenuButtonResume.png", "type": "Texture2D", "dimensions": "600×300", "size": "301.9 KB" },
+        { "name": "PauseMenuButtonSave.png", "type": "Texture2D", "dimensions": "600×300", "size": "312.4 KB" },
+        { "name": "SaveSlotButtonKill.png", "type": "Texture2D", "dimensions": "895×350", "size": "406.4 KB" },
+        { "name": "SaveSlotButtonRelive.png", "type": "Texture2D", "dimensions": "895×350", "size": "411.4 KB" },
+        { "name": "SaveSlotEmptyCard.png", "type": "Texture2D", "dimensions": "1100×500", "size": "813 KB" },
+        { "name": "WarningCardPlusEighteen.png", "type": "Texture2D", "dimensions": "800×540", "size": "472.3 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/Images/_Game",
+      "files": [
+        { "name": "TheFrayedRedStringLOGO.png", "type": "Texture2D", "dimensions": "946×946", "size": "981 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/Resources",
+      "files": [
+        { "name": "DirectTMPFontBytes.asset", "type": "DirectFontBytesTable", "size": "947 B" }
+      ]
+    },
+    {
+      "folder": "Assets/Resources/DirectTMPFontData",
+      "files": [
+        { "name": "b36be50a1d246fb4bac6bc1c3947e859.bytes", "type": "TextAsset", "size": "58.6 KB" },
+        { "name": "cc829dcaf9927dd4db42462c46cc092a.bytes", "type": "TextAsset", "size": "7.6 MB" },
+        { "name": "e3265ab4bf004d28a9537516768c1c75.bytes", "type": "TextAsset", "size": "342 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/Resources/TFRS",
+      "files": [
+        { "name": "ActLibrary.asset", "type": "ActLibrary", "size": "1.2 KB" },
+        { "name": "MusicLibrary.asset", "type": "MusicLibrary", "size": "576 B" },
+        { "name": "StageSettings.asset", "type": "StageSettings", "size": "1.2 KB" },
+        { "name": "StageSpriteLibrary.asset", "type": "StageSpriteLibrary", "size": "3.8 KB" },
+        { "name": "UiSpriteLibrary.asset", "type": "UiSpriteLibrary", "size": "1.3 KB" },
+        { "name": "VoiceLibrary.asset", "type": "VoiceLibrary", "size": "468 B" }
+      ]
+    },
+    {
+      "folder": "Assets/Scenes",
+      "files": [
+        { "name": "Act01.unity", "type": "SceneAsset", "size": "2.1 MB" },
+        { "name": "Act02.unity", "type": "SceneAsset", "size": "104.9 KB" },
+        { "name": "Act03.unity", "type": "SceneAsset", "size": "104.9 KB" },
+        { "name": "Act04.unity", "type": "SceneAsset", "size": "105 KB" },
+        { "name": "Act05.unity", "type": "SceneAsset", "size": "103.7 KB" },
+        { "name": "Act06.unity", "type": "SceneAsset", "size": "104.9 KB" },
+        { "name": "Act07.unity", "type": "SceneAsset", "size": "103.6 KB" },
+        { "name": "MainMenu.unity", "type": "SceneAsset", "size": "4.2 MB" },
+        { "name": "WarningScene.unity", "type": "SceneAsset", "size": "4.4 MB" }
+      ]
+    },
+    {
+      "folder": "Assets/Settings/Build Profiles",
+      "files": [
+        { "name": "Windows.asset", "type": "BuildProfile", "size": "1.6 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/Story/Acts",
+      "files": [
+        { "name": "Act01.asset", "type": "ActAsset", "size": "90.7 KB" },
+        { "name": "Act02.asset", "type": "ActAsset", "size": "175.6 KB" },
+        { "name": "Act03.asset", "type": "ActAsset", "size": "140.6 KB" },
+        { "name": "Act04.asset", "type": "ActAsset", "size": "218.9 KB" },
+        { "name": "Act05.asset", "type": "ActAsset", "size": "103.8 KB" },
+        { "name": "Act06.asset", "type": "ActAsset", "size": "161.5 KB" },
+        { "name": "Act07.asset", "type": "ActAsset", "size": "27.8 KB" },
+        { "name": "Ending_Good.asset", "type": "ActAsset", "size": "53.7 KB" },
+        { "name": "Ending_Normal.asset", "type": "ActAsset", "size": "35.7 KB" },
+        { "name": "Interlude_LegAche.asset", "type": "ActAsset", "size": "5.4 KB" },
+        { "name": "Interlude_MachineRoom.asset", "type": "ActAsset", "size": "7.4 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/TextMesh Pro/Fonts",
+      "files": [
+        { "name": "LiberationSans - OFL.txt", "type": "TextAsset", "size": "4.4 KB" },
+        { "name": "LiberationSans.ttf", "type": "Font", "size": "342 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/TextMesh Pro/Resources",
+      "files": [
+        { "name": "LineBreaking Following Characters.txt", "type": "TextAsset", "size": "269 B" },
+        { "name": "LineBreaking Leading Characters.txt", "type": "TextAsset", "size": "95 B" },
+        { "name": "TMP Settings.asset", "type": "TMP_Settings", "size": "1.8 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/TextMesh Pro/Resources/Fonts & Materials",
+      "files": [
+        { "name": "LiberationSans SDF - Drop Shadow.mat", "type": "Material", "shader": "TextMeshPro/Mobile/Distance Field", "size": "2.9 KB" },
+        { "name": "LiberationSans SDF - Fallback.asset", "type": "TMP_FontAsset", "size": "9.1 KB" },
+        { "name": "LiberationSans SDF - Outline.mat", "type": "Material", "shader": "TextMeshPro/Mobile/Distance Field", "size": "2.8 KB" },
+        { "name": "LiberationSans SDF.asset", "type": "TMP_FontAsset", "size": "2.2 MB" }
+      ]
+    },
+    {
+      "folder": "Assets/TextMesh Pro/Resources/Style Sheets",
+      "files": [
+        { "name": "Default Style Sheet.asset", "type": "TMP_StyleSheet", "size": "5.4 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/TextMesh Pro/Shaders",
+      "files": [
+        { "name": "SDFFunctions.hlsl", "type": "ShaderInclude", "size": "5.9 KB" },
+        { "name": "TMPro.cginc", "type": "ShaderInclude", "size": "2.2 KB" },
+        { "name": "TMPro_Mobile.cginc", "type": "ShaderInclude", "size": "5.3 KB" },
+        { "name": "TMPro_Properties.cginc", "type": "ShaderInclude", "size": "2.6 KB" },
+        { "name": "TMPro_Surface.cginc", "type": "ShaderInclude", "size": "3.4 KB" },
+        { "name": "TMP_Bitmap-Custom-Atlas.shader", "type": "Shader", "size": "3.7 KB" },
+        { "name": "TMP_Bitmap-Mobile.shader", "type": "Shader", "size": "4 KB" },
+        { "name": "TMP_Bitmap.shader", "type": "Shader", "size": "3.7 KB" },
+        { "name": "TMP_SDF Overlay.shader", "type": "Shader", "size": "10.8 KB" },
+        { "name": "TMP_SDF SSD.shader", "type": "Shader", "size": "12.1 KB" },
+        { "name": "TMP_SDF-HDRP LIT.shadergraph", "type": "Shader", "size": "280.7 KB" },
+        { "name": "TMP_SDF-HDRP UNLIT.shadergraph", "type": "Shader", "size": "273.3 KB" },
+        { "name": "TMP_SDF-Mobile Masking.shader", "type": "Shader", "size": "8.1 KB" },
+        { "name": "TMP_SDF-Mobile Overlay.shader", "type": "Shader", "size": "7.9 KB" },
+        { "name": "TMP_SDF-Mobile SSD.shader", "type": "Shader", "size": "3 KB" },
+        { "name": "TMP_SDF-Mobile-2-Pass.shader", "type": "Shader", "size": "11.5 KB" },
+        { "name": "TMP_SDF-Mobile.shader", "type": "Shader", "size": "7.9 KB" },
+        { "name": "TMP_SDF-Surface-Mobile.shader", "type": "Shader", "size": "3.4 KB" },
+        { "name": "TMP_SDF-Surface.shader", "type": "Shader", "size": "4.3 KB" },
+        { "name": "TMP_SDF-URP Lit.shadergraph", "type": "Shader", "size": "277.2 KB" },
+        { "name": "TMP_SDF-URP Unlit.shadergraph", "type": "Shader", "size": "270.5 KB" },
+        { "name": "TMP_SDF.shader", "type": "Shader", "size": "10.8 KB" },
+        { "name": "TMP_Sprite.shader", "type": "Shader", "size": "3.4 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/_C#/Audio",
+      "files": [
+        { "name": "AudioService.cs", "type": "MonoScript", "class": "AudioService", "size": "6.6 KB" },
+        { "name": "GlobalPointerSfx.cs", "type": "MonoScript", "class": "GlobalPointerSfx", "size": "4 KB" },
+        { "name": "MusicLibrary.cs", "type": "MonoScript", "class": "MusicTracks", "size": "5 KB" },
+        { "name": "MusicService.cs", "type": "MonoScript", "class": "MusicService", "size": "9.2 KB" },
+        { "name": "ProceduralAudioSynth.cs", "type": "MonoScript", "class": "ProceduralAudioSynth", "size": "19.2 KB" },
+        { "name": "ProceduralSfxLibrary.cs", "type": "MonoScript", "class": "ProceduralSfxLibrary", "size": "31.5 KB" },
+        { "name": "SceneAudioInstaller.cs", "type": "MonoScript", "class": "SceneAudioInstaller", "size": "2.1 KB" },
+        { "name": "SelectableSfx.cs", "type": "MonoScript", "class": "SelectableSfx", "size": "2.9 KB" },
+        { "name": "SfxId.cs", "type": "MonoScript", "size": "6.3 KB" },
+        { "name": "VoiceLibrary.cs", "type": "MonoScript", "class": "VoiceLibrary", "size": "4 KB" },
+        { "name": "VoiceService.cs", "type": "MonoScript", "class": "VoiceService", "size": "6.7 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/_C#/Core",
+      "files": [
+        { "name": "GameBootstrap.cs", "type": "MonoScript", "class": "GameBootstrap", "size": "5.2 KB" },
+        { "name": "GameConfig.cs", "type": "MonoScript", "class": "GameConfig", "size": "17 KB" },
+        { "name": "ObjectNames.cs", "type": "MonoScript", "class": "ObjectNames", "size": "4.9 KB" },
+        { "name": "SceneInstaller.cs", "type": "MonoScript", "class": "SceneInstaller", "size": "7.3 KB" },
+        { "name": "SceneNames.cs", "type": "MonoScript", "class": "SceneNames", "size": "1.8 KB" },
+        { "name": "StoryClock.cs", "type": "MonoScript", "class": "StoryClock", "size": "2.7 KB" },
+        { "name": "StoryTesting.cs", "type": "MonoScript", "class": "StoryTesting", "size": "3.1 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/_C#/Editor",
+      "files": [
+        { "name": "Act02Builder.cs", "type": "MonoScript", "class": "Act02Builder", "size": "57.7 KB" },
+        { "name": "Act03Builder.cs", "type": "MonoScript", "class": "Act03Builder", "size": "44.8 KB" },
+        { "name": "Act04Builder.cs", "type": "MonoScript", "class": "Act04Builder", "size": "72.1 KB" },
+        { "name": "Act05Builder.cs", "type": "MonoScript", "class": "Act05Builder", "size": "38.1 KB" },
+        { "name": "Act06Builder.cs", "type": "MonoScript", "class": "Act06Builder", "size": "45.6 KB" },
+        { "name": "Act07Builder.cs", "type": "MonoScript", "class": "Act07Builder", "size": "10.2 KB" },
+        { "name": "ActSceneSetup.cs", "type": "MonoScript", "class": "ActSceneSetup", "size": "13.9 KB" },
+        { "name": "ActScriptWriter.cs", "type": "MonoScript", "class": "for", "size": "24.5 KB" },
+        { "name": "AssetPaths.cs", "type": "MonoScript", "class": "AssetPaths", "size": "6.3 KB" },
+        { "name": "AudioLibraryBuilder.cs", "type": "MonoScript", "class": "AudioLibraryBuilder", "size": "4.7 KB" },
+        { "name": "BuildSettingsAutoConfigurator.cs", "type": "MonoScript", "class": "BuildSettingsAutoConfigurator", "size": "5.7 KB" },
+        { "name": "EndingsBuilder.cs", "type": "MonoScript", "class": "EndingsBuilder", "size": "25.3 KB" },
+        { "name": "EndingTools.cs", "type": "MonoScript", "class": "EndingTools", "size": "6.2 KB" },
+        { "name": "GameReadinessReport.cs", "type": "MonoScript", "class": "GameReadinessReport", "size": "12.4 KB" },
+        { "name": "PersianEditorText.cs", "type": "MonoScript", "class": "PersianEditorText", "size": "12.3 KB" },
+        { "name": "PrepareWholeGame.cs", "type": "MonoScript", "class": "PrepareWholeGame", "size": "13.2 KB" },
+        { "name": "SfxWavExporter.cs", "type": "MonoScript", "class": "SfxWavExporter", "size": "6.3 KB" },
+        { "name": "SoundPreview.cs", "type": "MonoScript", "class": "SoundPreview", "size": "12.4 KB" },
+        { "name": "StageSpriteLibraryBuilder.cs", "type": "MonoScript", "class": "StageSpriteLibraryBuilder", "size": "4.9 KB" },
+        { "name": "StoryAssetBuilder.cs", "type": "MonoScript", "class": "StoryAssetBuilder", "size": "9.5 KB" },
+        { "name": "StoryDiagnostics.cs", "type": "MonoScript", "class": "StoryDiagnostics", "size": "8.2 KB" },
+        { "name": "StoryEditorWindow.cs", "type": "MonoScript", "class": "StoryEditorWindow", "size": "115 KB" },
+        { "name": "StoryPlaytest.cs", "type": "MonoScript", "class": "StoryPlaytest", "size": "5.2 KB" },
+        { "name": "UiSpriteLibraryBuilder.cs", "type": "MonoScript", "class": "UiSpriteLibraryBuilder", "size": "4.9 KB" },
+        { "name": "VideoLibraryBuilder.cs", "type": "MonoScript", "class": "VideoLibraryBuilder", "size": "4.1 KB" },
+        { "name": "VideoModuleGuard.cs", "type": "MonoScript", "class": "VideoModuleGuard", "size": "3.9 KB" },
+        { "name": "VoiceLibraryBuilder.cs", "type": "MonoScript", "class": "VoiceLibraryBuilder", "size": "5.2 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/_C#/Flow",
+      "files": [
+        { "name": "GameFlowService.cs", "type": "MonoScript", "class": "GameFlowService", "size": "6.3 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/_C#/Input",
+      "files": [
+        { "name": "InputService.cs", "type": "MonoScript", "class": "InputService", "size": "4.5 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/_C#/Localization",
+      "files": [
+        { "name": "GameLanguage.cs", "type": "MonoScript", "class": "GameLanguageExtensions", "size": "2.6 KB" },
+        { "name": "ILocalizedView.cs", "type": "MonoScript", "size": "1.2 KB" },
+        { "name": "LocalizationDatabase.cs", "type": "MonoScript", "class": "LocalizationDatabase", "size": "12.9 KB" },
+        { "name": "LocalizationRefresher.cs", "type": "MonoScript", "class": "of", "size": "5.6 KB" },
+        { "name": "LocalizationService.cs", "type": "MonoScript", "class": "LocalizationService", "size": "3.8 KB" },
+        { "name": "LocalizedText.cs", "type": "MonoScript", "class": "LocalizedText", "size": "6.2 KB" },
+        { "name": "LocKeys.cs", "type": "MonoScript", "class": "LocKeys", "size": "5.6 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/_C#/Motion",
+      "files": [
+        { "name": "AmbientMotion.cs", "type": "MonoScript", "class": "AmbientMotion", "size": "13 KB" },
+        { "name": "AmbientMotionInstaller.cs", "type": "MonoScript", "class": "AmbientMotionInstaller", "size": "9.4 KB" },
+        { "name": "AmbientMotionProfile.cs", "type": "MonoScript", "size": "10.3 KB" },
+        { "name": "Light2DAmbientPulse.cs", "type": "MonoScript", "class": "Light2DAmbientPulse", "size": "4.8 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/_C#/Narrative",
+      "files": [
+        { "name": "ActAsset.cs", "type": "MonoScript", "class": "BeatData", "size": "12.5 KB" },
+        { "name": "ActLibrary.cs", "type": "MonoScript", "class": "ActLibrary", "size": "5 KB" },
+        { "name": "CharacterArt.cs", "type": "MonoScript", "class": "CharacterArt", "size": "10.8 KB" },
+        { "name": "Endings.cs", "type": "MonoScript", "class": "Endings", "size": "6.1 KB" },
+        { "name": "StageSettings.cs", "type": "MonoScript", "class": "StageSettings", "size": "29.1 KB" },
+        { "name": "StoryDirector.cs", "type": "MonoScript", "class": "StoryDirector", "size": "43 KB" },
+        { "name": "StoryEnums.cs", "type": "MonoScript", "class": "of", "size": "8.3 KB" },
+        { "name": "StorySession.cs", "type": "MonoScript", "class": "StorySession", "size": "13.7 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/_C#/Presentation",
+      "files": [
+        { "name": "EntranceAnimator.cs", "type": "MonoScript", "class": "EntranceAnimator", "size": "3.6 KB" },
+        { "name": "ProceduralBackgrounds.cs", "type": "MonoScript", "class": "ProceduralBackgrounds", "size": "12.7 KB" },
+        { "name": "ProceduralUiSprites.cs", "type": "MonoScript", "class": "ProceduralUiSprites", "size": "10.2 KB" },
+        { "name": "SceneTransitionService.cs", "type": "MonoScript", "class": "SceneTransitionService", "size": "5.6 KB" },
+        { "name": "ScreenFader.cs", "type": "MonoScript", "class": "ScreenFader", "size": "7.3 KB" },
+        { "name": "StageSpriteLibrary.cs", "type": "MonoScript", "class": "StageSpriteLibrary", "size": "6.2 KB" },
+        { "name": "StoryFonts.cs", "type": "MonoScript", "class": "StoryFonts", "size": "28.8 KB" },
+        { "name": "StoryFrameView.cs", "type": "MonoScript", "class": "StoryFrameView", "size": "8.7 KB" },
+        { "name": "StoryGrade.cs", "type": "MonoScript", "class": "StoryGrade", "size": "9.2 KB" },
+        { "name": "StoryText.cs", "type": "MonoScript", "class": "StoryText", "size": "3.1 KB" },
+        { "name": "VideoLibrary.cs", "type": "MonoScript", "class": "VideoLibrary", "size": "3.7 KB" },
+        { "name": "VideoScreenView.cs", "type": "MonoScript", "class": "survives", "size": "10.4 KB" },
+        { "name": "VisualNovelStage.cs", "type": "MonoScript", "class": "animates", "size": "33.8 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/_C#/SaveSystem",
+      "files": [
+        { "name": "SaveService.cs", "type": "MonoScript", "class": "is", "size": "7.5 KB" },
+        { "name": "SaveSlotData.cs", "type": "MonoScript", "size": "3.7 KB" },
+        { "name": "StoryProgress.cs", "type": "MonoScript", "class": "StoryProgress", "size": "2.2 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/_C#/Scenes",
+      "files": [
+        { "name": "ActSceneController.cs", "type": "MonoScript", "class": "ActSceneController", "size": "24.8 KB" },
+        { "name": "MainMenuSceneController.cs", "type": "MonoScript", "class": "MainMenuSceneController", "size": "8.8 KB" },
+        { "name": "WarningSceneController.cs", "type": "MonoScript", "class": "WarningSceneController", "size": "9.3 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/_C#/Tweening",
+      "files": [
+        { "name": "Ease.cs", "type": "MonoScript", "class": "Ease", "size": "3.6 KB" },
+        { "name": "FadeExtensions.cs", "type": "MonoScript", "class": "FadeExtensions", "size": "4.6 KB" },
+        { "name": "TweenHandle.cs", "type": "MonoScript", "class": "TweenHandle", "size": "1.6 KB" },
+        { "name": "TweenRunner.cs", "type": "MonoScript", "class": "TweenRunner", "size": "6.9 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/_C#/UI",
+      "files": [
+        { "name": "ChoicePanelView.cs", "type": "MonoScript", "class": "ChoicePanelView", "size": "14 KB" },
+        { "name": "DialogueBoxView.cs", "type": "MonoScript", "class": "DialogueBoxView", "size": "28.6 KB" },
+        { "name": "LanguageToggleButton.cs", "type": "MonoScript", "class": "LanguageToggleButton", "size": "5.6 KB" },
+        { "name": "LoadPanelController.cs", "type": "MonoScript", "class": "LoadPanelController", "size": "15.5 KB" },
+        { "name": "PauseMenuView.cs", "type": "MonoScript", "class": "PauseMenuView", "size": "18 KB" },
+        { "name": "PointerClickRelay.cs", "type": "MonoScript", "class": "PointerClickRelay", "size": "1.2 KB" },
+        { "name": "ProceduralSavePanel.cs", "type": "MonoScript", "class": "ProceduralSavePanel", "size": "12.7 KB" },
+        { "name": "SaveSlotView.cs", "type": "MonoScript", "class": "SaveSlotView", "size": "11 KB" },
+        { "name": "StoryOverlayView.cs", "type": "MonoScript", "class": "StoryOverlayView", "size": "19.8 KB" },
+        { "name": "TypewriterLabel.cs", "type": "MonoScript", "class": "TypewriterLabel", "size": "14.1 KB" },
+        { "name": "UiSpriteLibrary.cs", "type": "MonoScript", "class": "UiSpriteLibrary", "size": "6.2 KB" }
+      ]
+    },
+    {
+      "folder": "Assets/_C#/Utilities",
+      "files": [
+        { "name": "UnityUtility.cs", "type": "MonoScript", "class": "UnityUtility", "size": "3.9 KB" }
+      ]
+    }
+  ]
+}
