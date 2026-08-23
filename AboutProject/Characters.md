@@ -44,3 +44,4 @@
 | `HaruDeadEyesPokerFace.png` | Blank, lifeless, and empty gaze (dead eyes), completely flat and emotionless facial expression. |
 | `HaruInsaneManicSmile.png` | Head sharply tilted sideways, wide manic grin, crazed wide eyes, right hand clutching chest, left hand tensed. |
 | `HaruSorrowfulCryingTears.png` | Deep weeping with closed eyes, streaming tears, both hands brought up to cover his mouth. |
+| `HaruInjuredKneeGrimace.png` | Painful grimace with gritted teeth and visible sweat, right fist clenched at his side, left hand resting tensely on his thigh above the knee. |
