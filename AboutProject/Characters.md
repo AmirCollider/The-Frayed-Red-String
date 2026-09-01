@@ -22,6 +22,9 @@
 | Sprite File Name | Visual Description |
 | :--- | :--- |
 | `YuaNeutralGentleSmile.png` | Soft and calm smile, direct forward gaze, arms relaxed at her sides. |
+| `YuaPeacefulClosedEyesSmile.png` | Serene and relaxed smile with eyes closed, arms resting at her sides. |
+| `YuaBobaSipFullCup.png` | Eyes closed in satisfaction while sipping through the straw of a full boba tea cup held at chest level. |
+| `YuaBobaHoldEmptyCup.png` | Gentle smile looking forward, holding the finished/empty boba tea cup with both hands at chest level. |
 | `YuaJoyfulHappyLaugh.png` | Bright open-mouthed laugh with eyes closed, hands clasped together at chest level. |
 | `YuaShyBlushingLookDown.png` | Heavily blushed cheeks, downcast eyes, hands brought up to cover her mouth and nose in bashfulness. |
 | `YuaSadImploringTearful.png` | Glistening tearful eyes, furrowed worried brows, hands tightly clasped over her chest in an imploring stance. |
