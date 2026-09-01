@@ -32,6 +32,16 @@
 | `YuaDeadEyesPokerFace.png` | Completely desaturated, hollow, and lifeless eyes (dead-eyes poker face), void of any emotion. |
 | `YuaInsaneManicSmile.png` | Wide unhinged grin showing teeth, dilated golden eyes, hands clasped over chest with red strings taut. |
 | `YuaSorrowfulCryingTears.png` | Heavy streaming tears running down blushing cheeks, hands covering her trembling mouth in grief. |
+| `YuaBento01HoldClosedBox.png` | Soft smile, holding closed wooden bento with both hands at chest level. |
+| `YuaBento02ShowFullFood.png` | Cheerful smile, displaying fully packed bento (6 sushi, 4 octopus sausages). |
+| `YuaBento03SharedMostlyEmpty.png` | Gentle smile, bento mostly shared with Haru (2 sushi, 1 octopus remaining). |
+| `YuaBento04LiftFirstSushi.png` | Open smile, lifting first sushi with chopsticks to eat (1 sushi, 1 octopus left in box). |
+| `YuaBento05SavorFirstSushi.png` | Closed eyes, puffed cheeks chewing first sushi (1 sushi, 1 octopus left in box). |
+| `YuaBento06LiftLastSushi.png` | Open smile, lifting second sushi with chopsticks (left side empty, 1 octopus left in box). |
+| `YuaBento07SavorLastSushi.png` | Closed eyes, chewing second sushi (left side empty, 1 octopus left in box). |
+| `YuaBento08LiftLastOctopus.png` | Open smile, lifting final octopus sausage (box interior completely empty). |
+| `YuaBento09SavorLastOctopus.png` | Closed eyes, chewing final octopus sausage (box interior completely empty). |
+| `YuaBento10ClosedFinishedSmile.png` | Closed-eye blissful smile, holding finished bento closed again with both hands. |
 
 ---
 
