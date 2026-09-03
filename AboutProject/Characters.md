@@ -58,3 +58,6 @@
 | `HaruInsaneManicSmile.png` | Head sharply tilted sideways, wide manic grin, crazed wide eyes, right hand clutching chest, left hand tensed. |
 | `HaruSorrowfulCryingTears.png` | Deep weeping with closed eyes, streaming tears, both hands brought up to cover his mouth. |
 | `HaruInjuredKneeGrimace.png` | Painful grimace with gritted teeth and visible sweat, right fist clenched at his side, left hand resting tensely on his thigh above the knee. |
+| `HaruMatchaHoldFullCup.png` | Gentle, polite smile, holding a full glass of iced matcha latte with straw in his raised hand while trying to look pleased. |
+| `HaruMatchaSipReluctant.png` | Sipping matcha through straw with subtle nervous sweat and conflicted sideways glance, forcing himself to drink despite disliking the taste. |
+| `HaruMatchaHoldEmptyCup.png` | Peaceful closed-eye smile with blushing cheeks, relieved after finishing the drink, holding the empty glass with straw residue. |
