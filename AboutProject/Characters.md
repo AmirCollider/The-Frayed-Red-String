@@ -61,3 +61,11 @@
 | `HaruMatchaHoldFullCup.png` | Gentle, polite smile, holding a full glass of iced matcha latte with straw in his raised hand while trying to look pleased. |
 | `HaruMatchaSipReluctant.png` | Sipping matcha through straw with subtle nervous sweat and conflicted sideways glance, forcing himself to drink despite disliking the taste. |
 | `HaruMatchaHoldEmptyCup.png` | Peaceful closed-eye smile with blushing cheeks, relieved after finishing the drink, holding the empty glass with straw residue. |
+| `HaruBento01HoldEmptyLid.png` | Gentle smile looking forward, holding empty wooden bento lid tray at chest level with left hand, chopsticks in right hand. |
+| `HaruBento02FoodReceived.png` | Warm grateful smile looking down, wooden lid loaded with food shared by Yua (4 sushi rolls, 3 octopus sausages). |
+| `HaruBento03LiftFirstOctopus.png` | Happy eager smile, lifting the first octopus sausage toward mouth with chopsticks (4 sushi, 2 octopus sausages left in tray). |
+| `HaruBento04SavorFirstOctopus.png` | Serene closed-eye smile, cheeks slightly puffed savoring the first octopus sausage (4 sushi, 2 octopus sausages left in tray). |
+| `HaruBento05LiftFirstSushi.png` | Open cheerful smile, lifting the first sushi roll toward mouth with chopsticks (3 sushi, 2 octopus sausages left in tray). |
+| `HaruBento06SavorFirstSushi.png` | Content closed-eye smile, chewing and savoring the first sushi roll (3 sushi, 2 octopus sausages left in tray). |
+| `HaruBento07LiftSecondOctopus.png` | Happy eager smile, lifting the second octopus sausage toward mouth with chopsticks (3 sushi, 1 octopus sausage left in tray). |
+| `HaruBento08SavorSecondOctopus.png` | Peaceful closed-eye blissful smile, savoring the second octopus sausage (3 sushi, 1 octopus sausage left in tray). |
