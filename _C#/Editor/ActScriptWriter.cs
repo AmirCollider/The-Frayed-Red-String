@@ -549,6 +549,70 @@ namespace TheFrayedRedString.EditorTools
             Script.Add(new BeatData { Kind = StoryBeatKind.Beat, Seconds = seconds });
         }
 
+        // ---------------------------------------------------------------------
+        //  Wordless sequences
+        //
+        //  A stretch of the act where nobody says anything and the picture does
+        //  the telling: the two of them eating a shared lunch, the two of them
+        //  finishing a drink. One pose each, then the picture holds for a
+        //  couple of seconds, then the next one — flat cuts, no crossfade,
+        //  because a character changing expression on somebody already standing
+        //  there is a cut everywhere else in this game too.
+        //
+        //  Deliberately built out of beats that already existed rather than out
+        //  of a new kind of beat. There is nothing here a pose change and a held
+        //  picture do not already do, and an act asset that needed a new beat
+        //  kind to hold an animation would be one more thing the Story Editor,
+        //  the save system and the readiness report each had to learn.
+        // ---------------------------------------------------------------------
+
+        /// <summary>How long one picture of a wordless sequence stays up.</summary>
+        /// <remarks>
+        /// Two seconds. Long enough to read what has changed in the picture,
+        /// short enough that ten of them is a scene rather than an intermission.
+        /// </remarks>
+        protected const float CelSeconds = 2f;
+
+        /// <summary>
+        /// One picture of a wordless sequence, with both of them on the same
+        /// moment of it.
+        /// </summary>
+        /// <remarks>
+        /// The single argument is the usual case and the reason the poses of a
+        /// sequence are named for the moment rather than for the drawing: Yua
+        /// lifting a piece of sushi and Haru lifting an octopus sausage are the
+        /// same instant of the same meal, so the script says it once.
+        /// </remarks>
+        protected void Cel(Portrait pose, float seconds = CelSeconds)
+        {
+            Cel(pose, pose, seconds);
+        }
+
+        /// <summary>
+        /// One picture of a wordless sequence where the two of them are not on
+        /// the same moment of it.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="Portrait.Unchanged"/> for either of them leaves that one
+        /// exactly as the line before this left them, which is what the opening
+        /// picture of a sequence usually wants: she has produced a lunch box and
+        /// he has not reacted to it yet.
+        /// </remarks>
+        protected void Cel(Portrait yua, Portrait haru, float seconds = CelSeconds)
+        {
+            if (yua != Portrait.Unchanged)
+            {
+                Enter(Speaker.Yua, yua);
+            }
+
+            if (haru != Portrait.Unchanged)
+            {
+                Enter(Speaker.Haru, haru);
+            }
+
+            Hold(seconds);
+        }
+
         /// <summary>One cue on its own, with nothing said over it.</summary>
         protected void Cue(SfxId sound, float volume)
         {

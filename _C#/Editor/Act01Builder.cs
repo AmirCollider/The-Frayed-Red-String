@@ -27,6 +27,10 @@
 //    • Once — for about two-tenths of a second, right when Haru's leg catches
 //      the desk — Yua's face goes somewhere else before she puts the smile
 //      back on. Nothing in the scene remarks on it. It is the first of many.
+//    • Two scenes have no dialogue in them at all — the lunch on the roof and
+//      the drinks at the café — and both are her feeding him and watching him
+//      finish. Ten pictures and three, one every two seconds, with the box out
+//      of the way and nothing for the player to press.
 //
 //  Every line said out loud is broken into short, single-thought beats rather
 //  than paragraphs — nobody's wording changed, only how many clicks it takes
@@ -452,7 +456,26 @@ namespace TheFrayedRedString.EditorTools
                 "……ご飯、ありがとう。",
                 "بابت غذا ممنون!");
 
-            Hold(2.2f);
+            // The meal itself, with nothing said over it — ten pictures, one
+            // every two seconds. It is the first time the game asks the player
+            // to sit and watch rather than to click, and what there is to watch
+            // is a bento being divided: she keeps two pieces of sushi and one
+            // sausage and he gets the rest of it, and neither of them remarks
+            // on that either.
+            //
+            // He is a picture behind her the whole way through, because he has
+            // to be handed something before he can hold it. See Portrait's
+            // LunchOpen…LunchFinished for the two halves of each one.
+            Cel(Portrait.LunchOpen, Portrait.Unchanged);
+            Cel(Portrait.LunchOffer);
+            Cel(Portrait.LunchShared);
+            Cel(Portrait.LunchFirstLift);
+            Cel(Portrait.LunchFirstBite);
+            Cel(Portrait.LunchSecondLift);
+            Cel(Portrait.LunchSecondBite);
+            Cel(Portrait.LunchThirdLift);
+            Cel(Portrait.LunchThirdBite);
+            Cel(Portrait.LunchFinished);
 
             Enter(Speaker.Haru, Portrait.Joyful);
 
@@ -669,6 +692,18 @@ namespace TheFrayedRedString.EditorTools
                 "すごくいい選択だね!",
                 "واقعاً انتخابای خوبین!");
 
+            // Long enough for the order to arrive.
+            Hold(1.8f);
+
+            // The drinks, the same way the lunch was: three pictures, one every
+            // two seconds, and not a word over any of them. She is already
+            // drinking hers in the first one and he is still only holding his;
+            // by the second, hers is gone and he has made himself start. The
+            // last line of the act is Yua telling herself what that meant.
+            Cel(Portrait.DrinkFull);
+            Cel(Portrait.DrinkReluctant);
+            Cel(Portrait.DrinkFinished);
+
             Hold(2.2f);
         }
 
@@ -763,15 +798,16 @@ namespace TheFrayedRedString.EditorTools
                 "私に勝手に頼ませてくれて、しかも選んだものを褒めてくれた。",
                 "گذاشت من واسش سفارش بدم و حتی از انتخابم تعریف کرد!");
 
+            // The act used to close on "it's so nice when he listens like that"
+            // and a wish that he stay that way, which said the quiet part almost
+            // out loud on the first day. This is the same thought with the
+            // ownership taken back out of it: she is not pleased that he obeys,
+            // she is pleased that she gets to look after him. Act two is soon
+            // enough for the player to start hearing the other reading.
             InnerVoice(Portrait.Unchanged,
-                "It's so nice when he listens like that.",
-                "こうやって言うことを聞いてくれるの、すごくいいな。",
-                "خیلی خوبه وقتی این‌طوری حرف گوش می‌کنه؛");
-
-            InnerVoice(Portrait.Unchanged,
-                "I wish he'd always stay exactly this way.",
-                "ずっとこのままでいてくれたらいいのに。",
-                "ای‌کاش همیشه همین‌طوری بمونه!");
+                "I'm so happy I get to look after him.",
+                "彼のお世話ができて、本当に嬉しい。",
+                "خیلی خوشحالم که می‌تونم مراقبش باشم!");
 
             Hold(2.6f);
         }

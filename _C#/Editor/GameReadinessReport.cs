@@ -194,6 +194,14 @@ namespace TheFrayedRedString.EditorTools
                 report.AppendLine($"      {missingBackgrounds[i]}");
             }
 
+            // Counted by the name each pose resolves to rather than by every
+            // speaker-and-expression pair there is, because plenty of those
+            // pairs are the same drawing: Yua has no wince of her own and Haru
+            // has no picture of an empty-handed finished lunch, and both fall
+            // through to a neutral face that has already been counted once. The
+            // total was written into the sentence as "32" and had been wrong
+            // since the day the wince was added.
+            HashSet<string> expectedPoses = new HashSet<string>();
             int missingPoses = 0;
 
             foreach (Speaker speaker in new[] { Speaker.Yua, Speaker.Haru, Speaker.YuaChild, Speaker.HaruChild })
@@ -205,7 +213,14 @@ namespace TheFrayedRedString.EditorTools
                         continue;
                     }
 
-                    if (library == null || library.FindCharacter(speaker, portrait) == null)
+                    string pose = CharacterArt.SpriteName(speaker, portrait);
+
+                    if (pose == null || !expectedPoses.Add(pose))
+                    {
+                        continue;
+                    }
+
+                    if (library == null || library.FindCharacter(pose) == null)
                     {
                         missingPoses++;
                     }
@@ -214,9 +229,10 @@ namespace TheFrayedRedString.EditorTools
 
             report.AppendLine(
                 missingPoses == 0
-                    ? "  All 32 character poses exist."
-                    : $"  {missingPoses} of 32 character pose(s) MISSING — a silhouette stands in. The " +
-                      "children are YuaChild… and HaruChild…, spelled exactly like their older selves.");
+                    ? $"  All {expectedPoses.Count} character poses exist."
+                    : $"  {missingPoses} of {expectedPoses.Count} character pose(s) MISSING — a silhouette " +
+                      "stands in. The children are YuaChild… and HaruChild…, spelled exactly like their " +
+                      "older selves.");
 
             report.AppendLine();
         }

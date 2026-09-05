@@ -86,7 +86,67 @@ namespace TheFrayedRedString.Narrative
         /// as well as <see cref="Speaker.Haru"/>, so a "HaruChildInjuredKnee-
         /// Grimace" sprite is now a valid (if not yet drawn) request too.
         /// </remarks>
-        Injured = 9
+        Injured = 9,
+
+        // ---------------------------------------------------------------------
+        //  Act one's two wordless sequences
+        //
+        //  Ten pictures of a lunch and three of a drink, and the numbers matter:
+        //  a pose here is a moment of a shared action rather than a face, so
+        //  both characters answer the same name with a different drawing of the
+        //  same instant. Yua's fourth picture of the meal has her lifting a
+        //  piece of sushi while Haru's has him lifting an octopus sausage, and
+        //  the script that plays them says LunchFirstLift once and means both.
+        //
+        //  Written as portraits rather than as an animation format because
+        //  nothing else about them is special: they are two people changing
+        //  expression on a timer, which is what this enum and a held beat
+        //  already do. See ActScriptWriter.Cel.
+        // ---------------------------------------------------------------------
+
+        /// <summary>The bento is still shut. Only Yua is holding anything.</summary>
+        LunchOpen = 10,
+
+        /// <summary>She opens it and shows him; he holds the empty lid out.</summary>
+        LunchOffer = 11,
+
+        /// <summary>Most of it is on his lid now.</summary>
+        LunchShared = 12,
+
+        /// <summary>Both lift their first piece.</summary>
+        LunchFirstLift = 13,
+
+        /// <summary>Both eat it.</summary>
+        LunchFirstBite = 14,
+
+        /// <summary>Their second.</summary>
+        LunchSecondLift = 15,
+
+        LunchSecondBite = 16,
+
+        /// <summary>Their last.</summary>
+        LunchThirdLift = 17,
+
+        LunchThirdBite = 18,
+
+        /// <summary>
+        /// The box is shut again.
+        /// </summary>
+        /// <remarks>
+        /// Haru has no drawing of his own for this one and does not need it —
+        /// he is finished, with nothing left in his hands, which is his neutral
+        /// face and nothing else. It falls through to it.
+        /// </remarks>
+        LunchFinished = 19,
+
+        /// <summary>Two full cups: she is already drinking hers, he is holding his.</summary>
+        DrinkFull = 20,
+
+        /// <summary>Hers is gone. He makes himself start on the matcha he does not like.</summary>
+        DrinkReluctant = 21,
+
+        /// <summary>Both empty, and both of them pleased about it for different reasons.</summary>
+        DrinkFinished = 22
     }
 
     /// <summary>Which half of the stage a character stands on.</summary>
@@ -119,8 +179,11 @@ namespace TheFrayedRedString.Narrative
                 // The children reuse their older selves' expression spellings,
                 // so act six can be written today against art that does not
                 // exist yet and the file names are already decided when it does.
-                case Speaker.YuaChild: return "YuaChild" + YuaSuffix(portrait);
-                case Speaker.HaruChild: return "HaruChild" + HaruSuffix(portrait);
+                // Everything except the props: the flashback is a schoolyard
+                // and a machine room, and a "YuaChildBento04LiftFirstSushi"
+                // would be a name for a picture nobody is ever going to draw.
+                case Speaker.YuaChild: return "YuaChild" + YuaSuffix(WithoutProps(portrait));
+                case Speaker.HaruChild: return "HaruChild" + HaruSuffix(WithoutProps(portrait));
 
                 default: return null;
             }
@@ -175,6 +238,47 @@ namespace TheFrayedRedString.Narrative
             return speaker == Speaker.YuaChild || speaker == Speaker.HaruChild;
         }
 
+        /// <summary>
+        /// True for a pose that only exists with something in the character's
+        /// hands — a bento, a lid, a cup.
+        /// </summary>
+        /// <remarks>
+        /// Worth being able to ask, because these are the only poses in the game
+        /// that are not simply a face. Two things read it: the child speakers,
+        /// who have no drawing of any of them, and the readiness report, which
+        /// would otherwise count a nine-year-old's bento as art somebody still
+        /// owes the project.
+        /// </remarks>
+        public static bool IsPropPose(Portrait portrait)
+        {
+            switch (portrait)
+            {
+                case Portrait.LunchOpen:
+                case Portrait.LunchOffer:
+                case Portrait.LunchShared:
+                case Portrait.LunchFirstLift:
+                case Portrait.LunchFirstBite:
+                case Portrait.LunchSecondLift:
+                case Portrait.LunchSecondBite:
+                case Portrait.LunchThirdLift:
+                case Portrait.LunchThirdBite:
+                case Portrait.LunchFinished:
+                case Portrait.DrinkFull:
+                case Portrait.DrinkReluctant:
+                case Portrait.DrinkFinished:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>The same pose with nothing in hand, for whoever has no props.</summary>
+        private static Portrait WithoutProps(Portrait portrait)
+        {
+            return IsPropPose(portrait) ? Portrait.Neutral : portrait;
+        }
+
         private static string YuaSuffix(Portrait portrait)
         {
             switch (portrait)
@@ -186,6 +290,27 @@ namespace TheFrayedRedString.Narrative
                 case Portrait.DeadEyes: return "DeadEyesPokerFace";
                 case Portrait.Manic: return "InsaneManicSmile";
                 case Portrait.Crying: return "SorrowfulCryingTears";
+
+                // Her half of the lunch: six sushi and four octopus sausages,
+                // most of which go to him, and the four pieces she keeps for
+                // herself are the four pictures in the middle.
+                case Portrait.LunchOpen: return "Bento01HoldClosedBox";
+                case Portrait.LunchOffer: return "Bento02ShowFullFood";
+                case Portrait.LunchShared: return "Bento03SharedMostlyEmpty";
+                case Portrait.LunchFirstLift: return "Bento04LiftFirstSushi";
+                case Portrait.LunchFirstBite: return "Bento05SavorFirstSushi";
+                case Portrait.LunchSecondLift: return "Bento06LiftLastSushi";
+                case Portrait.LunchSecondBite: return "Bento07SavorLastSushi";
+                case Portrait.LunchThirdLift: return "Bento08LiftLastOctopus";
+                case Portrait.LunchThirdBite: return "Bento09SavorLastOctopus";
+                case Portrait.LunchFinished: return "Bento10ClosedFinishedSmile";
+
+                // And her half of the café. She finishes first, and the last
+                // picture is her sitting with her eyes shut while he catches up.
+                case Portrait.DrinkFull: return "BobaSipFullCup";
+                case Portrait.DrinkReluctant: return "BobaHoldEmptyCup";
+                case Portrait.DrinkFinished: return "PeacefulClosedEyesSmile";
+
                 default: return "NeutralGentleSmile";
             }
         }
@@ -202,6 +327,26 @@ namespace TheFrayedRedString.Narrative
                 case Portrait.Manic: return "InsaneManicSmile";
                 case Portrait.Crying: return "SorrowfulCryingTears";
                 case Portrait.Injured: return "InjuredKneeGrimace";
+
+                // His half of the lunch, one picture behind hers all the way
+                // through: she has to open the box before he has anything to
+                // hold, so his first drawing lands on her second, and by the
+                // time the box is shut again he is back to having empty hands
+                // and no picture of his own — which is his neutral face, below.
+                case Portrait.LunchOffer: return "Bento01HoldEmptyLid";
+                case Portrait.LunchShared: return "Bento02FoodReceived";
+                case Portrait.LunchFirstLift: return "Bento03LiftFirstOctopus";
+                case Portrait.LunchFirstBite: return "Bento04SavorFirstOctopus";
+                case Portrait.LunchSecondLift: return "Bento05LiftFirstSushi";
+                case Portrait.LunchSecondBite: return "Bento06SavorFirstSushi";
+                case Portrait.LunchThirdLift: return "Bento07LiftSecondOctopus";
+                case Portrait.LunchThirdBite: return "Bento08SavorSecondOctopus";
+
+                // The matcha he was ordered and does not like.
+                case Portrait.DrinkFull: return "MatchaHoldFullCup";
+                case Portrait.DrinkReluctant: return "MatchaSipReluctant";
+                case Portrait.DrinkFinished: return "MatchaHoldEmptyCup";
+
                 default: return "NeutralGentleSmile";
             }
         }

@@ -463,6 +463,24 @@ namespace TheFrayedRedString.Presentation
             ApplyFocus(_right, _right.Occupant == speaker && _right.Present, duration);
         }
 
+        /// <summary>
+        /// Lights everybody on stage, because nobody is talking.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="SetFocus"/> cannot say this: it lights the slot holding a
+        /// given speaker and steps the other one back, and there is no speaker
+        /// that means "both". Passing it <see cref="Speaker.Narrator"/> dims the
+        /// pair of them, which is right under a paragraph of description and
+        /// wrong on a held picture — a wordless scene is nobody's line, and
+        /// leaving whoever spoke last lit through twenty seconds of it makes the
+        /// other one read as having wandered out of the shot.
+        /// </remarks>
+        public void LightEveryone(float duration)
+        {
+            ApplyFocus(_left, _left != null && _left.Present, duration);
+            ApplyFocus(_right, _right != null && _right.Present, duration);
+        }
+
         private void ApplyFocus(Slot slot, bool active, float duration)
         {
             if (slot?.Image == null)

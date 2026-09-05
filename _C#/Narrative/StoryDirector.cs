@@ -974,10 +974,21 @@ namespace TheFrayedRedString.Narrative
             }
         }
 
-        /// <summary>Holds on the picture with the box out of the way.</summary>
+        /// <summary>
+        /// Holds on the picture, with the box out of the way.
+        /// </summary>
+        /// <remarks>
+        /// Everybody on stage comes back up to full while it lasts. The dim on
+        /// the character who is not speaking answers "who said that?", and with
+        /// the box gone there is no line for it to answer about — so act one's
+        /// two wordless scenes were playing out with Haru lit and Yua, whose
+        /// scenes they are, standing in his shadow for the whole of them. The
+        /// next line dims the pair of them again on its own.
+        /// </remarks>
         private IEnumerator HoldOnPicture(float seconds)
         {
             HideDialogue(GameConfig.DialogueFadeDuration);
+            _stage.LightEveryone(GameConfig.CharacterFocusDuration);
 
             yield return StoryClock.Wait(seconds);
         }
