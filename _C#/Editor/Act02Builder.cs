@@ -7,24 +7,63 @@
 //  Run it once from The Frayed Red String ▸ Build Act 02 From The Story
 //  Document. It writes Assets/Story/Acts/Act02.asset, reusing the asset that is
 //  already there so nothing pointing at it breaks, and then hands over to the
-//  Story Editor for good.
+//  Story Editor.
 //
-//  What act two adds to the game, beyond its own script:
+//  This is a complete rewrite against the dialogue manual, version five
+//  (AboutProject/دستورنامه-دیالوگ-نخ-قرمز-پوسیده-v5.md) and the narrative
+//  document 3.1.2, which give act two four jobs and no others:
 //
-//    • The blue and green buttons, used for the first time. Act one has none,
-//      and the reveal only lands if the player has never seen one before Yua
-//      explains them.
-//    • Yua's override. Take the blue option and she takes it back — her face
-//      goes flat for a beat and the scene carries on the green way regardless.
-//      The press is still counted as kind: the endings are decided by what the
-//      player reached for, not by what she allowed them to have.
-//    • The two silences. One where the machine room reaches her through a road,
-//      one where his leg stops him walking. Neither asks for anything. A player
-//      who sits with either of them for five minutes is counted as having
-//      listened, and the endings read that count.
+//    • Go deeper than act one, and go slower doing it. The manual is exact
+//      about what "slower" means and it is not "shorter": a deeper scene has
+//      FEWER changes of subject and MORE frames, longer lines, more comfortable
+//      silence, and a narrator who works harder because atmosphere is the only
+//      thing that makes slowness read as deliberate rather than as a game that
+//      has stalled. So act one's twenty short scenes over six days become nine
+//      long ones over five, the narration density goes from about one in
+//      fifteen to about one in eight, and the café scene alone is longer than
+//      any three scenes of act one put together.
 //
-//  The verbs the script below is written in — Say, Narrate, Hold, Place, Decide
-//  — are in ActScriptWriter, along with everything about writing the asset.
+//    • Haru tells Yua about his friend. It is the only heavy scene in the first
+//      four acts and it is written under the manual's seven rules for one: it
+//      is entered from the side, in the middle of something ordinary; it is
+//      told badly, out of order, with one completely irrelevant detail stuck to
+//      it; the method is never said, not once, not obliquely; the horror is in
+//      the listener and not in the story; nothing is resolved and nobody is
+//      comforted; the scene does not end on it; and it leaks into the next day
+//      as an absence nobody explains.
+//
+//    • Several white choices, and NO blue or green ones. Not one, anywhere in
+//      this act. The mechanics table forbids a mechanic before its date, and
+//      the date for blue and green is the explanation — which is the last scene
+//      of this act. A blue button before Yua has said what a blue button is
+//      would spend the whole device for nothing.
+//
+//    • Yua's room, and the first time anything in this story looks back at the
+//      player. It is the act's last scene, it is the top of the escalation
+//      ladder, and it is where the buttons are named.
+//
+//  What act two therefore adds to the game, beyond its own script:
+//
+//    • The two silences, written out in full for the first time. One where the
+//      machine room reaches her through a floor, one where his leg stops him
+//      walking. Neither asks the player for anything and both can be clicked
+//      straight past. Nothing is offered for sitting with them yet — the
+//      endings need a blue or a green press on record before waiting means
+//      anything, and there has not been one — so what these two are for, here,
+//      is to teach the shape.
+//
+//    • Yua speaking to the player. Act three answers it with "still there",
+//      act four has Haru do the same thing without knowing she got there first.
+//
+//  The verbs the script below is written in — Say, Narrate, Listen, Hold,
+//  Place, Cel, DecideIdly — are in ActScriptWriter, along with everything about
+//  writing the asset.
+//
+//  One note for whoever writes act three. Act four's file header says Yua has
+//  overruled blue buttons "since act two". After this rewrite the first act
+//  that can contain a refusal is act three, because act two's last scene is
+//  where the buttons are introduced. The comment is wrong, the behaviour is
+//  not, and it was left alone rather than edited from inside this task.
 // -----------------------------------------------------------------------------
 
 using TheFrayedRedString.Audio;
@@ -54,463 +93,1211 @@ namespace TheFrayedRedString.EditorTools
             new Act02Builder().BuildAsset(policy);
         }
 
+        // =====================================================================
+        //  WHAT ACT ONE LEFT ON THE TABLE
+        //
+        //  Filled in from act one's actual text rather than from memory, which
+        //  is the manual's rule for this block and the reason it is at the top
+        //  of the file instead of in somebody's head.
+        //
+        //  Where act one stopped
+        //      Saturday night, the corner with the pink juice machine, the
+        //      streetlamps on and the bicycle back. She sent him home. The last
+        //      thing either of them said was his own joke about a tree, in her
+        //      mouth. Then two frames of her thinking: six days, nothing
+        //      changed, and nothing is going to.
+        //
+        //  Said already, and no longer new
+        //      They are "-pi" to each other and always were. Morita-sensei and
+        //      class 1-A. The classroom window that would not shut, and that
+        //      somebody fixed on the Friday. The pink juice machine on the
+        //      corner, broken, which ate a hundred yen and was pronounced fine.
+        //      Usagi Bakery and melon bread. Volume four of a manga nobody owns
+        //      one to three of. The salty lychee that will not sell. Tofu, the
+        //      classroom plant, named by a committee of one. The flowerbed at
+        //      the playground that goes red in autumn. One classmate, once, who
+        //      asked what "-pi" meant and was told to mind her own business.
+        //
+        //  Jokes the two of them built and now own
+        //      "Somebody said."  ·  "It's a good tree."  ·  counting things at
+        //      each other  ·  "…which is me."
+        //
+        //  What each of act one's ten dread moments was excused by
+        //      Old friends. A better memory. A boy who apologises for weather.
+        //      A girl who likes the air on a rainy morning. Every one of them
+        //      had an ordinary sentence available, and six had that sentence
+        //      planted in the script before the moment arrived.
+        //
+        //  Rungs act one burned
+        //      One — knowing more than she should — and two — a reaction half a
+        //      size wrong. Repeatedly, and nothing above them.
+        //
+        // ---------------------------------------------------------------------
+        //  THE ESCALATION REGISTER
+        //
+        //  Used so far        1, 2
+        //  Not yet used       3, 4, 5, 6
+        //  This act goes to   5, by way of 3 and then 4, one rung at a time and
+        //                     never two in the same scene.
+        //
+        //  Rung three, twice, in the first half: she corrects his account of
+        //  himself and she is right, and nobody in the scene notices that this
+        //  happened. Rung four, twice, in the café and once more the day after:
+        //  the gap opens between what she says out loud and what she is
+        //  thinking, and the manual's own warning applies from here — rung four
+        //  is not deniable any more, which is why it does not arrive until the
+        //  narrative document has asked for the scene it arrives in.
+        //
+        //  Rung five is the last scene and nothing else in the act.
+        //
+        //  Rung six — the game doing something it should not, which is the
+        //  refused blue button — belongs to act three. It cannot happen here.
+        //  There is no button to refuse until twenty frames before this act
+        //  ends.
+        //
+        // ---------------------------------------------------------------------
+        //  WHAT THIS ACT PLANTS, AND WHO COLLECTS IT
+        //
+        //  The friend is never named            → act four, which opens on
+        //                                         "you never said his name"
+        //  The promise, given on the first ask  → act three keeps it, act four
+        //                                         turns it around and points it
+        //                                         at him
+        //  "dark, and full of loud, sudden      → act six
+        //   noises"
+        //  Yua's second promise, asked for      → act five, where he says he
+        //   lightly: tell nobody else             chose that story on purpose
+        //  Haru drops the "-pi", once, mid       → act five, where he drops it
+        //   sentence, and nobody reacts            and does not pick it back up
+        //  "You are there."                     → act three's "still there"
+        //  The rabbit with the worn left ear    → act five
+        //  The crack in the mirror              → act five and six
+        //  The flowerbed, still only green      → act three's spider lilies
+        //
+        //  Every one of those is two lines long at most and none of them is
+        //  emphasised. A plant with weight on it gets marked by the player and
+        //  the payoff is visible from three acts away.
+        //
+        // ---------------------------------------------------------------------
+        //  THE CONTINUITY TABLE
+        //
+        //  Nothing enters the dialogue below unless it is here.
+        //
+        //  Season     The rainy season. Act one was April and the blossom; act
+        //             three is autumn. This is June, and it rains on Monday, is
+        //             hot and clear on Tuesday, and rains again on Wednesday.
+        //  Days       1 Monday · 2 Tuesday · 3 Wednesday · 4 Thursday ·
+        //             5 Sunday morning. Friday and Saturday are not in the act
+        //             and nobody refers to them.
+        //  Class      1-A, second floor. Morita-sensei.
+        //  Clothes    School uniform, both of them, every day. There is no
+        //             other sprite and it is never mentioned.
+        //  Carrying   A school bag each. Haru also has an overdue library book
+        //             from Monday morning until Thursday morning, when it goes
+        //             back without being mentioned. Yua has two umbrellas on
+        //             Monday, on purpose.
+        //  Haru's leg Tuesday evening, four streets from the corner. He says
+        //             the word "leg" and nothing else about it, ever.
+        //  The sound  Wednesday, through the classroom floor. She says she has
+        //             been frightened of it since she was small. He says he
+        //             knows. Nobody asks anything.
+        //  The plant  Tofu, on the classroom sill, which has doubled in size in
+        //             the wet weather and is a peace lily whatever she says.
+        //  The poster A rainy-season safety poster for the corridor. Her name
+        //             is on it, his lettering is on it, and somebody draws on
+        //             it by Thursday.
+        //  The cat    Mochi. The cat with the collar she would not read in act
+        //             one. There is a flyer about it on the roof fence on
+        //             Tuesday, and the flyer has the name on it.
+        //  The machine The same pink juice machine on the corner, still broken,
+        //             still fine. The salty lychee row has finally been
+        //             restocked with peach, which she takes badly.
+        //  The café   Usagi Café, the one with the terrible umbrella stand.
+        //             Matcha cake, two forks, boba for her and an iced matcha
+        //             for him that he does not like and drinks anyway — and
+        //             this time she does not have to tell him to.
+        //  The friend Never named, in this act, by anybody. He had a pencil
+        //             case with a broken zip. That is the only fact about him
+        //             the act contains that is not about Haru.
+        //  Third      Nobody. Act one had one classmate for one scene and spent
+        //  person     her on the "-pi" suffix. This act has two people in it
+        //             and no more, which is part of what makes it slower.
+        // =====================================================================
+
         /// <summary>
-        /// The act, in order.
+        /// Five days, and the act gets quieter across all five.
         /// </summary>
         /// <remarks>
-        /// Haru's monologue in the café is broken into short lines on purpose.
-        /// It is one speech in the design document and it has to stay one
-        /// speech, but a wall of it in a dialogue box is a wall the player
-        /// clicks through. Broken at the places he would actually stop, it is
-        /// paced by the person reading it — which is the only way the last line
-        /// of it lands.
+        /// Nine scenes where act one had twenty. Monday and Tuesday are two
+        /// scenes each and are almost entirely warmth; Wednesday is two scenes
+        /// and is the act; Thursday is two scenes of afterwards; Sunday is one
+        /// room, one girl, and the player.
         /// </remarks>
         protected override void Write()
         {
-            WriteClassroom();
-            WriteCafe();
-            WriteWayHome();
-            WriteYuaRoom();
-            WriteFirstChoice();
-            WriteCorridor();
-            WriteCafeAgain();
-            WritePlatform();
+            WriteMondayClassroom();
+            WriteMondayCorridor();
+
+            WriteTuesdayRooftop();
+            WriteTuesdayCorner();
+
+            WriteWednesdayClassroom();
+            WriteWednesdayCafe();
+
+            WriteThursdayClassroom();
+            WriteThursdayPlatform();
+
+            WriteSundayRoom();
         }
 
-        /// <summary>Act one closes in spring rain; act two opens in it.</summary>
-        private void WriteClassroom()
+        // ---------------------------------------------------------------------
+        //  Two things this act does often enough to name
+        // ---------------------------------------------------------------------
+
+        /// <summary>Characters per second for <see cref="InnerVoice"/> lines.</summary>
+        /// <remarks>
+        /// The normal rate is 45. Slow enough to read as thinking rather than
+        /// as speaking, and the same number act one used, because the player
+        /// has to recognise the voice.
+        /// </remarks>
+        private const float InnerMonologueTypeSpeed = 28f;
+
+        /// <summary>
+        /// Yua thinking, with nobody to hear it.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Act one used this for two jobs: a girl being embarrassed about her
+        /// own uniform, and twice, at the end of a day, the dread budget. This
+        /// act adds the third and it is the whole of rung four — a line of it
+        /// placed directly against a line she has just said out loud, so that
+        /// the two do not match.
+        /// </para>
+        /// <para>
+        /// Same box, same voice, same speed as her embarrassment about a hem.
+        /// That is the point of it.
+        /// </para>
+        /// </remarks>
+        private void InnerVoice(string english, string japanese, string persian)
+        {
+            Say(Speaker.Yua, Portrait.Unchanged, english, japanese, persian);
+            Script[Script.Count - 1].TypeSpeed = InnerMonologueTypeSpeed;
+        }
+
+        /// <summary>How long Yua's face is somewhere else.</summary>
+        private const float SlipSeconds = 0.2f;
+
+        /// <summary>
+        /// Yua's face goes flat and comes back.
+        /// </summary>
+        /// <remarks>
+        /// Once in act one and once here, in the café, on the line about a dark
+        /// room with loud noises in it. Two tenths of a second, off her
+        /// brightest face rather than her neutral one, because the recovery is
+        /// the frightening half. Nothing in the scene remarks on it.
+        /// </remarks>
+        private void FaceSlips(Portrait back)
+        {
+            Enter(Speaker.Yua, Portrait.DeadEyes);
+            Hold(SlipSeconds);
+            Enter(Speaker.Yua, back);
+        }
+
+        // =====================================================================
+        //  MONDAY — the rainy season arrives
+        //
+        //  Dread budget: 1, and it is in the second scene. The first scene of
+        //  the act has none at all, for the same reason the first fifty frames
+        //  of the game had none: the player has just come back from a title
+        //  card and has to be given a reason to want to be here again.
+        // =====================================================================
+
+        /// <summary>
+        /// Monday morning. Rain, an umbrella that is not one, a plant that has
+        /// had a very good weekend, and a poster.
+        /// </summary>
+        /// <remarks>
+        /// The longest purely happy scene in the act and deliberately the first
+        /// thing in it. Everything the player is about to be asked to care
+        /// about on Wednesday is bought here.
+        /// </remarks>
+        private void WriteMondayClassroom()
         {
             Place(
                 Backgrounds.ClassroomRainy,
                 "The classroom", "教室", "کلاس درس");
 
-            Hold(2.2f);
+            Hold(2.4f);
 
             Narrate(
-                "It had been raining since before either of them woke up. Nobody had opened the windows, and the room had gone the colour of an old photograph.",
-                "二人が目を覚ますよりも前から、雨は降っていた。誰も窓を開けず、教室は古い写真のような色になっていた。",
-                "از قبل از اینکه هیچ‌کدامشان بیدار شوند باران می‌بارید. کسی پنجره‌ها را باز نکرده بود و کلاس رنگ یک عکس قدیمی را گرفته بود.");
+                "The rainy season came in on Sunday night, and by Monday morning the whole school smelled of wet socks.",
+                "梅雨は日曜の夜に来た。月曜の朝には、学校じゅうが濡れた靴下のにおいだった。",
+                "فصلِ بارون یکشنبه‌شب اومد، و صبحِ دوشنبه کلِ مدرسه بوی جورابِ خیس می‌داد.");
 
             Narrate(
-                "Three weeks since the first day. Long enough for a desk to become your desk, and for a boy by the window to become the boy by the window.",
-                "始業式から三週間。机が自分の机になり、窓際の男の子が「あの子」になるには、十分な時間だった。",
-                "سه هفته از روز اول گذشته بود. آن‌قدر که یک میز بشود میزِ تو، و پسری کنار پنجره بشود آن پسرِ کنار پنجره.");
+                "Three weeks since the first day of term. Long enough for a desk to become your desk, and for a boy by the window to become the boy by the window.",
+                "始業式から三週間。机が自分の机になり、窓際の男の子が「あの子」になるには十分な時間だった。",
+                "سه هفته از روز اول گذشته بود. اون‌قدر که یه میز بشه میزِ تو، و یه پسرِ کنارِ پنجره بشه اون پسرِ کنارِ پنجره.");
 
-            Enter(Speaker.Yua, Portrait.Neutral);
+            Enter(Speaker.Haru, Portrait.Neutral);
 
-            Say(Speaker.Yua, Portrait.Joyful,
-                "Haru-pi. Haru-pi. You have been looking at that window for eleven minutes.",
-                "ハルぴ。ハルぴってば。その窓、もう十一分も見てるよ。",
-                "هارو‌پی. هارو‌پی. یازده دقیقه‌ست داری به اون پنجره نگاه می‌کنی.");
+            Cue(SfxId.ChairScrape, 0.45f);
 
-            Enter(Speaker.Haru, Portrait.Shy);
+            Enter(Speaker.Yua, Portrait.Angry);
 
-            Say(Speaker.Haru, Portrait.Unchanged,
-                "You counted?",
-                "数えてたの？",
-                "شمردی؟");
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "Haru-pi. That is not an umbrella.",
+                "ハルぴ。それ、傘じゃない。",
+                "هارو‌پی. اون چتر نیست.");
 
-            Say(Speaker.Yua, Portrait.Neutral,
-                "Of course I counted.",
-                "もちろん数えてた。",
-                "معلومه که شمردم.");
+            Say(Speaker.Haru, Portrait.Neutral,
+                "It is an umbrella.",
+                "傘だよ。",
+                "چتره.");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "It folds down into a sock. It is a sock.",
+                "靴下みたいに畳めるやつでしょ。あれは靴下。",
+                "تا می‌شه اندازه‌ی یه جوراب. اون جورابه.");
 
             Say(Speaker.Haru, Portrait.Joyful,
-                "That is a little frightening.",
-                "それ、ちょっと怖いよ。",
-                "این یه‌کم ترسناکه.");
+                "It kept the rain off.",
+                "雨はしのげた。",
+                "بارون رو گرفت.");
 
-            Say(Speaker.Yua, Portrait.Joyful,
-                "It is a little romantic. Say thank you.",
-                "ちょっとロマンチック、でしょ。ありがとうは？",
-                "یه‌کم رمانتیکه. بگو ممنون.");
+            Say(Speaker.Yua, Portrait.Neutral,
+                "It kept your head off. Your entire left side is a different colour to the rest of you.",
+                "頭だけね。左半分だけ、色が違うんだけど。",
+                "فقط سرتو گرفت. کلِ سمتِ چپت یه رنگِ دیگه‌ست.");
 
-            Say(Speaker.Haru, Portrait.Unchanged,
-                "Thank you.",
-                "ありがとう。",
-                "ممنون.");
+            Say(Speaker.Haru, Portrait.Shy,
+                "…That part is true.",
+                "……それは、そう。",
+                "...این یکی راسته.");
+
+            Hold(1.2f);
+
+            Narrate(
+                "She had two umbrellas with her. She had had two umbrellas with her since the shoe lockers.",
+                "彼女は傘を二本持っていた。下駄箱のときから二本持っていた。",
+                "دو تا چتر همراهش بود. از دمِ جاکفشی دو تا چتر همراهش بود.");
+
+            SayWithSound(Speaker.Yua, Portrait.Joyful, SfxId.GiftBox, 0.40f,
+                "Take the yellow one.",
+                "黄色いほう、持ってて。",
+                "زردی رو وردار.");
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "Why do you have two umbrellas?",
+                "なんで傘二本あるの？",
+                "چرا دو تا چتر داری؟");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "Because you have a sock.",
+                "ハルぴが靴下持ってるから。",
+                "چون تو یه جوراب داری.");
 
             Hold(1.4f);
 
+            // The argument he wins, and he is right about it.
             Narrate(
-                "Something moved behind his eyes and settled again. She saw it. She always sees it.",
-                "彼の目の奥で何かが動き、また静かになった。結愛は見ていた。結愛はいつも見ている。",
-                "چیزی پشت چشم‌هایش تکان خورد و دوباره سر جایش نشست. یوآ دید. یوآ همیشه می‌بیند.");
+                "Tofu had doubled in size over the weekend. Nobody had done anything to it. It had simply decided.",
+                "豆腐は週末のあいだに倍になっていた。誰も何もしていない。ただ、そう決めたらしい。",
+                "توفو آخرِ هفته دو برابر شده بود. کسی هیچ کاری باهاش نکرده بود. خودش تصمیم گرفته بود.");
 
-            Say(Speaker.Yua, Portrait.Neutral,
-                "So what were you actually thinking about?",
-                "で、本当は何を考えてたの？",
-                "خب، واقعاً به چی فکر می‌کردی؟");
+            Say(Speaker.Yua, Portrait.Angry,
+                "Look at it. Look at what three days of weather has done to it.",
+                "見てよ。三日雨が降っただけでこれ。",
+                "نگاش کن. ببین سه روز هوا چه بلایی سرش آورده.");
 
             Say(Speaker.Haru, Portrait.Neutral,
-                "Nothing. Rain makes me quiet, that is all.",
-                "別に。雨の日は静かになるだけだよ。",
-                "هیچی. بارون منو ساکت می‌کنه، همین.");
+                "It likes the wet.",
+                "湿気が好きなんだよ。",
+                "خیسی رو دوست داره.");
 
             Say(Speaker.Yua, Portrait.Unchanged,
-                "Rain makes you a liar, Haru-pi.",
-                "雨はハルぴを嘘つきにするの。",
-                "بارون تو رو دروغگو می‌کنه، هارو‌پی.");
+                "It has been on that sill since March doing absolutely nothing, and now, after one weekend, it has decided to become a tree.",
+                "三月からずっとあの窓際で何もしてなかったのに、週末ひとつで木になろうとしてる。",
+                "از مارس رو اون طاقچه‌ست و هیچ غلطی نکرده، حالا بعدِ یه آخرِ هفته تصمیم گرفته درخت بشه.");
 
-            Say(Speaker.Haru, Portrait.Shy,
-                "It makes me quiet.",
-                "……静かになるだけだよ。",
-                "…ساکت می‌کنه.");
+            Say(Speaker.Haru, Portrait.Joyful,
+                "It is a peace lily.",
+                "スパティフィラムだよ。",
+                "اون گلِ صلحه.");
+
+            Say(Speaker.Yua, Portrait.Angry,
+                "It is a tree.",
+                "木だってば。",
+                "درخته.");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "It is in a plastic pot, on a windowsill, indoors. It is a peace lily.",
+                "プラスチックの鉢で、窓際で、室内。スパティフィラム。",
+                "تو یه گلدونِ پلاستیکیه، رو طاقچه، تو اتاق. گلِ صلحه.");
 
             Hold(1.2f);
 
             Say(Speaker.Yua, Portrait.Neutral,
-                "The cafe. After class. The one with the terrible umbrella stand.",
-                "放課後、あの喫茶店。傘立てがひどいところ。",
-                "کافه. بعد از کلاس. همون که جاچتری‌اش افتضاحه.");
+                "It is a tree with low expectations.",
+                "……夢の小さい木。",
+                "درختیه که توقعِ زیادی نداره.");
 
-            Say(Speaker.Haru, Portrait.Neutral,
-                "You are not asking.",
-                "それ、訊いてないよね。",
-                "داری نمی‌پرسی.");
+            Say(Speaker.Haru, Portrait.Joyful,
+                "That I will accept.",
+                "それは認める。",
+                "این یکی رو قبول دارم.");
 
-            Say(Speaker.Yua, Portrait.Joyful,
-                "I never ask. I announce, and you agree. It is a very efficient relationship.",
-                "訊かないよ。私が決めて、ハルぴが頷く。とても効率のいい関係でしょ。",
-                "من هیچ‌وقت نمی‌پرسم. اعلام می‌کنم و تو قبول می‌کنی. رابطه‌ی خیلی کارآمدیه.");
-
-            SayWithSound(Speaker.Haru, Portrait.Unchanged, SfxId.Petal, 0.45f,
-                "Okay.",
-                "……うん。",
-                "…باشه.");
+            Cue(SfxId.PageTurn, 0.35f);
 
             Hold(1.6f);
+
+            // Yua, doing something that has nothing to do with Haru.
+            Say(Speaker.Yua, Portrait.Neutral,
+                "Morita-sensei put my name on the corridor poster. For the rainy season.",
+                "森田先生が、廊下のポスターにあたしの名前書いた。梅雨のやつ。",
+                "خانمِ موریتا اسمِ منو زد رو پوسترِ راهرو. مالِ فصلِ بارون.");
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "What does it have to say?",
+                "何て書くの？",
+                "چی باید توش بنویسی؟");
+
+            Say(Speaker.Yua, Portrait.Angry,
+                "Do not run on wet floors.",
+                "「濡れた床は走らない」。",
+                "روی زمینِ خیس ندوید.");
+
+            Say(Speaker.Haru, Portrait.Joyful,
+                "That is a good message.",
+                "いい標語じゃない。",
+                "پیامِ خوبیه.");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "It is a terrible message. It is a poster whose entire purpose is to stop people doing the only enjoyable thing that has ever happened in a corridor.",
+                "最悪の標語。廊下で唯一楽しいことを、まるごと禁止するためだけのポスターだよ。",
+                "پیامِ افتضاحیه. یه پوستره که کلِ هدفش اینه جلوی تنها کارِ باحالی رو بگیره که تا حالا تو یه راهرو اتفاق افتاده.");
+
+            Say(Speaker.Haru, Portrait.Joyful,
+                "You are going to draw someone falling over, aren't you.",
+                "転んでる人、描く気でしょ。",
+                "می‌خوای یکی رو بکشی که داره می‌افته، نه؟");
+
+            Say(Speaker.Yua, Portrait.Joyful,
+                "I am going to draw someone falling over beautifully.",
+                "すっごくきれいに転んでる人を描く。",
+                "می‌خوام یکی رو بکشم که داره خیلی قشنگ می‌افته.");
+
+            Hold(1.2f);
+
+            // The real decision, lost quietly, in the middle of a joke. Nobody
+            // names it and the book stays in his bag until Thursday.
+            Say(Speaker.Yua, Portrait.Neutral,
+                "You are doing the lettering. At lunch.",
+                "字はハルぴが書いて。お昼に。",
+                "خط‌نویسیش با توئه. زنگِ ناهار.");
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "I have to take a book back at lunch. It is four days late.",
+                "お昼は本返しに行くんだ。四日遅れてる。",
+                "زنگِ ناهار باید یه کتاب رو پس بدم. چهار روز دیر کرده.");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "The lettering takes twenty minutes.",
+                "字なんて二十分でしょ。",
+                "خط‌نویسیش بیست دقیقه‌ست.");
+
+            Hold(1.0f);
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "…Okay.",
+                "……うん。",
+                "...باشه.");
+
+            Hold(1.4f);
+
+            DecideIdly(
+                "Ask what the poster actually says", "ポスターの中身を訊く", "بپرس دقیقاً چی قراره روش بنویسه",
+                () =>
+                {
+                    Say(Speaker.Haru, Portrait.Neutral,
+                        "So what am I writing? The whole sentence?",
+                        "で、何て書けばいいの？　文まるごと？",
+                        "خب من چی بنویسم؟ کلِ جمله رو؟");
+
+                    Say(Speaker.Yua, Portrait.Joyful,
+                        "Do not run. That is the whole poster.",
+                        "「走るな」。それだけ。",
+                        "ندوید. کلِ پوستر همینه.");
+
+                    Say(Speaker.Haru, Portrait.Unchanged,
+                        "The sensei said wet floors.",
+                        "先生は「濡れた床」って言ってたよね。",
+                        "معلم گفت زمینِ خیس.");
+
+                    Say(Speaker.Yua, Portrait.Unchanged,
+                        "The sensei is not on the committee.",
+                        "先生は委員じゃないもん。",
+                        "معلم که تو کمیته نیست.");
+
+                    Say(Speaker.Haru, Portrait.Joyful,
+                        "Who is on the committee?",
+                        "委員って誰？",
+                        "کی تو کمیته‌ست؟");
+
+                    Say(Speaker.Yua, Portrait.Joyful,
+                        "You know who is on the committee.",
+                        "誰か知ってるでしょ。",
+                        "خودت می‌دونی کی تو کمیته‌ست.");
+                },
+                "Ask about the shoe lockers", "下駄箱の話をする", "حرفِ جاکفشی رو پیش بکش",
+                () =>
+                {
+                    Say(Speaker.Haru, Portrait.Neutral,
+                        "There were shoes in locker twelve again this morning.",
+                        "今朝も十二番に靴入ってた。",
+                        "امروز صبح بازم تو جاکفشیِ دوازده کفش بود.");
+
+                    Say(Speaker.Yua, Portrait.Angry,
+                        "There have been shoes in locker twelve since April.",
+                        "四月からずっと入ってるよ。",
+                        "از آوریل تو جاکفشیِ دوازده کفش هست.");
+
+                    Say(Speaker.Haru, Portrait.Unchanged,
+                        "Somebody owns them.",
+                        "誰かのでしょ。",
+                        "مالِ یکیه دیگه.");
+
+                    Say(Speaker.Yua, Portrait.Unchanged,
+                        "Nobody owns them. If you owned a pair of shoes you would notice, at some point in two months, that you were not wearing them.",
+                        "誰のものでもない。自分の靴なら、二ヶ月のうちどこかで「履いてないな」って気づくはずでしょ。",
+                        "مالِ هیچ‌کس نیست. اگه یه جفت کفش مالِ تو باشه، یه جایی تو دو ماه متوجه می‌شی که پات نیستن.");
+
+                    Say(Speaker.Haru, Portrait.Joyful,
+                        "Maybe they have other shoes.",
+                        "別の靴があるのかも。",
+                        "شاید کفشِ دیگه دارن.");
+
+                    Say(Speaker.Yua, Portrait.Joyful,
+                        "Nobody in this school has other shoes.",
+                        "この学校の誰も、別の靴なんて持ってない。",
+                        "تو این مدرسه هیچ‌کس کفشِ دیگه نداره.");
+                });
+
+            Hold(1.2f);
+
+            SayWithSound(Speaker.Yua, Portrait.Joyful, SfxId.SchoolBell, 0.55f,
+                "That is us. Second floor.",
+                "はい、行くよ。二階。",
+                "خب، ما رفتیم. طبقه‌ی دوم.");
+
+            Narrate(
+                "The rain kept doing what rain does. Somewhere below them a door shut too hard and she was quiet for about half a second.",
+                "雨は雨のすることを続けていた。下の階でドアが強く閉まり、彼女は半秒だけ黙った。",
+                "بارون کارِ همیشگی‌شو می‌کرد. یه جایی طبقه‌ی پایین دری محکم بسته شد و یوآ حدودِ نیم ثانیه ساکت شد.");
+
+            Say(Speaker.Yua, Portrait.Neutral,
+                "Bring the yellow one.",
+                "黄色いの、持ってきて。",
+                "زردی رو بیار.");
+
+            Hold(1.8f);
         }
 
         /// <summary>
-        /// The café, and the story Haru has been carrying since he was fourteen.
+        /// Monday, after school. The rain has stopped and the corridor is full
+        /// of umbrellas standing open along the wall.
         /// </summary>
         /// <remarks>
-        /// The monologue is broken into short lines on purpose. It is one speech
-        /// in the design document and it has to stay one speech, but a wall of
-        /// it in a dialogue box is a wall the player clicks through. Broken at
-        /// the places he would actually stop, it is paced by the person reading
-        /// it — which is the only way the last line of it lands.
+        /// Rung three, first use: she corrects his account of himself and she
+        /// is right. It is placed where it is because the manual's version of
+        /// this is not a moment of astonishment — nobody asks how she knows,
+        /// and nothing is explained. He concedes the fact and then argues about
+        /// what it is worth, which is what a person actually does, and it is why
+        /// the frame gets past the player.
         /// </remarks>
-        private void WriteCafe()
+        private void WriteMondayCorridor()
         {
-            Maybe(LegAche, 0.30f);
+            ClearStage();
+
+            Place(
+                Backgrounds.CorridorSunset,
+                "The corridor, after school", "放課後の廊下", "راهرو، بعد از مدرسه");
+
+            Hold(2.2f);
+
+            Narrate(
+                "It stopped raining at about two, and by four the corridor had umbrellas standing open all along the wall, drying, and nobody could find theirs.",
+                "二時ごろ雨が上がって、四時には廊下じゅうの壁際に傘が開いたまま並んでいた。誰も自分のを見つけられなかった。",
+                "حدودِ ساعت دو بارون بند اومد، و ساعتِ چهار کلِ راهرو پر بود از چترای باز که کنارِ دیوار خشک می‌شدن، و هیچ‌کس مالِ خودشو پیدا نمی‌کرد.");
+
+            Enter(Speaker.Yua, Portrait.Angry);
+            Enter(Speaker.Haru, Portrait.Neutral);
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "They all look the same.",
+                "全部おんなじに見える。",
+                "همه‌شون شبیه همن.");
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "Third stand. Ours are the third stand.",
+                "三つ目の傘立て。うちのは三つ目。",
+                "جاچتریِ سوم. مالِ ما تو سومیه.");
+
+            Say(Speaker.Yua, Portrait.Neutral,
+                "You do not know that.",
+                "そんなの分かんないでしょ。",
+                "تو از کجا می‌دونی.");
+
+            Say(Speaker.Haru, Portrait.Joyful,
+                "We came in the side door. The side door is the third stand.",
+                "横の入口から入ったから。横の入口は三つ目。",
+                "از درِ کناری اومدیم تو. درِ کناری می‌شه جاچتریِ سوم.");
+
+            Hold(1.0f);
+
+            Cue(SfxId.CanDrop, 0.50f);
+
+            Narrate(
+                "Both of them were in the third stand. She got hers out without saying anything about it.",
+                "二本とも三つ目にあった。彼女は何も言わずに自分のを抜いた。",
+                "هر دوتاشون تو جاچتریِ سوم بودن. یوآ مالِ خودشو ورداشت و چیزی نگفت.");
+
+            Hold(1.4f);
+
+            // Setting Wednesday up, three scenes early, in the middle of an
+            // argument about a drink. Nobody treats it as a plan.
+            Say(Speaker.Yua, Portrait.Joyful,
+                "Wednesday. The café. The one with the terrible umbrella stand.",
+                "水曜、喫茶店ね。傘立てがひどいところ。",
+                "چهارشنبه. کافه. همون که جاچتریش افتضاحه.");
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "The umbrella stand there is very bad.",
+                "あそこの傘立て、本当にひどい。",
+                "جاچتریِ اونجا واقعاً بده.");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "You are having the iced matcha.",
+                "ハルぴは冷たい抹茶ね。",
+                "تو ماچای سرد می‌خوری.");
+
+            Say(Speaker.Haru, Portrait.Joyful,
+                "I have never once liked iced matcha.",
+                "冷たい抹茶、一回も好きだったことない。",
+                "من حتی یه بارم از ماچای سرد خوشم نیومده.");
+
+            // ◆ Dread moment 1 — rung three.
+            Say(Speaker.Yua, Portrait.Neutral,
+                "You liked it once.",
+                "一回好きだったよ。",
+                "یه بار خوشت اومد.");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "I did not.",
+                "好きじゃなかった。",
+                "نه نیومد.");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "There was far too much sugar in it, and you drank the entire thing, and then you were strange for an hour.",
+                "砂糖が入りすぎてて、全部飲んで、そのあと一時間くらい変だった。",
+                "خیلی توش شکر بود، و کلِّشو خوردی، و بعدش یه ساعت یه‌جوری بودی.");
+
+            Hold(1.2f);
+
+            Say(Speaker.Haru, Portrait.Shy,
+                "…That does not count.",
+                "……それは、カウントしないよ。",
+                "...اون حساب نیست.");
+
+            Say(Speaker.Yua, Portrait.Joyful,
+                "It counts.",
+                "カウントする。",
+                "حساب می‌شه.");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "It counts against me.",
+                "僕に不利にカウントされてる。",
+                "به ضررِ من حساب می‌شه.");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "Everything counts against you. That is what counting is.",
+                "全部ハルぴに不利だよ。数えるってそういうことでしょ。",
+                "همه‌چی به ضررِ توئه. شمردن یعنی همین.");
+
+            Hold(1.6f);
+
+            Cue(SfxId.Petal, 0.35f);
+
+            Narrate(
+                "The light in that corridor arrives late and leaves slowly, which is why nobody hurries through it.",
+                "この廊下の光は遅れて来て、ゆっくり去る。だから誰もここを急がない。",
+                "نورِ اون راهرو دیر می‌رسه و آروم می‌ره؛ واسه همینه که کسی با عجله ازش رد نمی‌شه.");
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "I still have that book.",
+                "まだ本、持ったままだ。",
+                "هنوز اون کتاب دستمه.");
+
+            Say(Speaker.Yua, Portrait.Neutral,
+                "The library shuts at five.",
+                "図書室、五時までだよ。",
+                "کتابخونه پنج می‌بنده.");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "It shuts at five.",
+                "五時まで。",
+                "پنج می‌بنده.");
+
+            Cue(SfxId.SchoolBell, 0.40f);
+
+            Say(Speaker.Yua, Portrait.Joyful,
+                "Then walk me to the corner first.",
+                "じゃあ先に角まで送って。",
+                "پس اول تا سرِ نبش منو برسون.");
+
+            Hold(1.2f);
+
+            Say(Speaker.Haru, Portrait.Joyful,
+                "…Okay.",
+                "……うん。",
+                "...باشه.");
+
+            Hold(2.2f);
+
+            Narrate(
+                "They went down the side stairs. The book stayed where it was.",
+                "二人は横の階段を下りていった。本はそのままだった。",
+                "از پله‌های کناری رفتن پایین. کتاب همون‌جا موند.");
+
+            Hold(1.8f);
+        }
+
+        // =====================================================================
+        //  TUESDAY — the rain breaks and the heat arrives
+        //
+        //  Dread budget: 2, both of them in the evening scene. The roof is the
+        //  last long stretch of the act with nothing wrong in it anywhere, and
+        //  it is long on purpose. Wednesday costs more if Tuesday was good.
+        // =====================================================================
+
+        /// <summary>
+        /// Tuesday lunchtime. The roof, the heat, the shimmer over the flat
+        /// roofs of the town, and a flyer tied to the fence.
+        /// </summary>
+        /// <remarks>
+        /// The act is called Maboroshi and this is the only place the word is
+        /// visible, in the one form nobody has to name: heat coming off a city
+        /// in June, making solid things move. Neither of them calls it anything
+        /// and the title card was four scenes ago.
+        /// </remarks>
+        private void WriteTuesdayRooftop()
+        {
+            Maybe(MachineRoom, 0.20f);
 
             ClearStage();
 
             Place(
-                Backgrounds.CafeRainy,
-                "Usagi Café", "うさぎ喫茶", "کافه اوساگی");
-
-            Hold(2.0f);
-
-            Narrate(
-                "Rain down the window, and the lights inside turned up too warm to argue with.",
-                "窓を雨がつたい、店の灯りは反論できないほど暖かかった。",
-                "باران روی شیشه سُر می‌خورد و چراغ‌های داخل آن‌قدر گرم بودند که نشود با آن‌ها بحث کرد.");
-
-            Enter(Speaker.Yua, Portrait.Neutral);
-            Enter(Speaker.Haru, Portrait.Neutral);
-
-            Say(Speaker.Yua, Portrait.Joyful,
-                "Matcha cake. Two forks. I ordered before you sat down.",
-                "抹茶ケーキ。フォーク二本。座る前に頼んでおいた。",
-                "کیک ماچا. دو تا چنگال. قبل از اینکه بشینی سفارش دادم.");
-
-            Say(Speaker.Haru, Portrait.Joyful,
-                "Before I stood up, I think.",
-                "……立つ前じゃない？",
-                "فکر کنم قبل از اینکه بلند شم.");
-
-            Say(Speaker.Yua, Portrait.Unchanged,
-                "Before you stood up.",
-                "立つ前だね。",
-                "قبل از اینکه بلند شی.");
-
-            Hold(1.2f);
-
-            Narrate(
-                "He turned the fork over. Then again. Then a third time, and ate nothing.",
-                "彼はフォークを裏返した。もう一度。三度目も裏返して、何も食べなかった。",
-                "چنگال را برگرداند. دوباره. بار سوم هم برگرداند و چیزی نخورد.");
-
-            Say(Speaker.Yua, Portrait.Neutral,
-                "Haru-pi.",
-                "ハルぴ。",
-                "هارو‌پی.");
-
-            Say(Speaker.Haru, Portrait.Neutral,
-                "Mm.",
-                "うん。",
-                "هوم.");
-
-            Say(Speaker.Yua, Portrait.Unchanged,
-                "Four times. Say it.",
-                "四回目。言って。",
-                "چهار بار. بگو.");
-
-            Say(Speaker.Haru, Portrait.Sad,
-                "It is not a happy story.",
-                "……楽しい話じゃないよ。",
-                "…داستان قشنگی نیست.");
-
-            Say(Speaker.Yua, Portrait.Unchanged,
-                "I like the ones that are not happy.",
-                "楽しくない話、好き。",
-                "من از داستان‌هایی که قشنگ نیستند خوشم میاد.");
-
-            Narrate(
-                "She said it lightly. She meant it precisely.",
-                "軽い口調だった。言葉どおりの意味だった。",
-                "سبک گفتش. دقیقاً همان را هم منظور داشت.");
-
-            Hold(2.0f);
-
-            // --- the monologue ------------------------------------------------
-
-            Say(Speaker.Haru, Portrait.Sad,
-                "First of all — I am sorry that I ask you so many questions. When you say you are not all right. Or when I only feel that you are not.",
-                "まず……たくさん訊いてごめん。君が「大丈夫じゃない」って言うとき。あるいは、そう感じるだけのときも。",
-                "اول از همه ببخشید که این‌قدر سؤال‌پیچت می‌کنم. وقت‌هایی که می‌گی حالت خوب نیست. یا وقت‌هایی که فقط من این‌طور حس می‌کنم که حالت خوب نیست.");
-
-            Say(Speaker.Haru, Portrait.Unchanged,
-                "I want to know. That is all it is.",
-                "知りたいんだ。それだけなんだ。",
-                "می‌خوام بدونم. فقط همین.");
-
-            Say(Speaker.Haru, Portrait.Unchanged,
-                "I had a best friend. Same class from second grade to eighth. We talked every day.",
-                "親友がいた。小二から中二まで、ずっと同じクラスで、毎日たくさん話した。",
-                "یه رفیق صمیمی داشتم. از کلاس دوم دبستان تا کلاس هشتم همکلاسی بودیم. هر روز کلی صحبت می‌کردیم.");
-
-            Say(Speaker.Haru, Portrait.Unchanged,
-                "Except on the days he was not doing well. On those days he did not have it in him to talk.",
-                "調子が良くない日を除いて。そういう日は、話す元気がなかった。",
-                "بجز بعضی وقت‌ها که حالش خوب نبود و حال نداشت زیاد صحبت کنه.");
-
-            Say(Speaker.Haru, Portrait.Unchanged,
-                "I knew he was sad. I asked him. I kept asking. He was not someone who talked.",
-                "落ち込んでるのは分かってた。何度も訊いた。でも彼は、あまり話す人じゃなかった。",
-                "می‌دونستم ناراحته. ازش می‌پرسیدم. مدام می‌پرسیدم. اما از اون آدم‌هایی نبود که زیاد صحبت کنه.");
-
-            Say(Speaker.Haru, Portrait.Unchanged,
-                "I said the same things over and over. Trust me. Tell me. I am right here. I am your friend.",
-                "同じことを何度も言った。信じてよ。話してよ。ここにいるよ。友達だろ。",
-                "همیشه بهش می‌گفتم: بهم اعتماد کن. بهم بگو. من کنارتم. من رفیقتم.");
-
-            Say(Speaker.Haru, Portrait.Unchanged,
-                "If not me, then who? Do not keep it inside. If you ever want to talk, I am not going anywhere.",
-                "俺に言わないなら、誰に言うんだ。ひとりで抱えるなよ。話したくなったら、俺はどこにも行かないから。",
-                "به من نگی می‌خوای به کی بگی؟ نباید بریزی تو خودت. هر وقت خواستی با کسی صحبت کنی، من همیشه همین‌جام.");
-
-            Hold(1.5f);
-
-            Say(Speaker.Haru, Portrait.Sad,
-                "He still did not talk. He never told me what hurt. I did not understand why.",
-                "それでも話してくれなかった。何が痛いのか、一度も言わなかった。理由が分からなかった。",
-                "اما بازم زیاد صحبت نمی‌کرد. از دردهاش نمی‌گفت. نمی‌فهمیدم چرا.");
-
-            Say(Speaker.Haru, Portrait.Unchanged,
-                "Was I not someone he could trust? Was I not his friend? Did he not see me as one?",
-                "俺は信用できなかった？ 友達じゃなかった？ そう見てもらえてなかった？",
-                "من قابل اعتماد نبودم؟ من دوستش نبودم؟ منو رفیق خودش نمی‌دید؟");
-
-            Say(Speaker.Haru, Portrait.Unchanged,
-                "Did he think I was a child who would not understand? That I had my own problems and no room left to listen?",
-                "俺を、分からない子どもだと思ってた？ 自分の問題で手一杯で、聞く余裕なんてないと思ってた？",
-                "فکر می‌کرد من بچه‌ام و درک نمی‌کنم؟ فکر می‌کرد من مشکلات خودم رو دارم و حال گوش دادن به کس دیگه‌ای رو ندارم؟");
-
-            Say(Speaker.Haru, Portrait.Unchanged,
-                "That if he told me, it would come back to him as pity?",
-                "話したら、同情されるだけだと思ってた？",
-                "فکر می‌کرد اگه بهم بگه، انگار دارم بهش ترحم می‌کنم؟");
-
-            Say(Speaker.Haru, Portrait.Sad,
-                "I do not know. I did everything I could think of so that none of those thoughts could reach him.",
-                "分からない。そんな考えが彼に届かないように、思いつくことは全部やった。",
-                "نمی‌دونم. تمام تلاشم رو می‌کردم که هیچ‌کدوم از این فکرها سراغش نیاد.");
-
-            Say(Speaker.Haru, Portrait.Unchanged,
-                "So it would not feel one-sided, I complained to him too. About my day. About the things that had upset me.",
-                "一方通行にならないように、俺も愚痴った。今日のこととか、嫌だったこととか。",
-                "حتی برای اینکه احساس نکنه یک‌طرفه‌ست، خودم هم بعضی وقت‌ها ازش غر می‌زدم. از روزم. از چیزهایی که ناراحتم کرده بود.");
-
-            Say(Speaker.Haru, Portrait.Unchanged,
-                "He still did not really talk to me.",
-                "それでも、ちゃんとは話してくれなかった。",
-                "اما بازم درست باهام صحبت نمی‌کرد.");
-
-            Say(Speaker.Haru, Portrait.Unchanged,
-                "When he was happy he never stopped talking. When he was sad, nothing.",
-                "嬉しいときはよく喋るのに。悲しいときは、何も。",
-                "وقتی خوشحال بود پرحرف بود. اما وقت‌هایی که ناراحت بود، نه.");
-
-            Hold(2.0f);
-
-            Say(Speaker.Haru, Portrait.Unchanged,
-                "We were not classmates after eighth grade. Guess why.",
-                "八年生からは、同じクラスじゃなくなった。理由、当ててみて。",
-                "از کلاس هشتم دیگه همکلاسی نشدیم. حدس بزن چرا.");
+                Backgrounds.RooftopDay,
+                "The roof", "屋上", "پشت‌بوم");
 
             Hold(2.4f);
 
-            Say(Speaker.Haru, Portrait.Crying,
-                "He killed himself.",
-                "自殺したんだ。",
-                "خودکشی کرد.");
-
-            Hold(3.0f);
+            Narrate(
+                "The rain broke overnight and Tuesday came up hot. By lunch the roof was the only place in the building with any air in it.",
+                "夜のうちに雨は上がり、火曜は暑くなった。昼には、校舎で空気があるのは屋上だけだった。",
+                "شب بارون بند اومد و سه‌شنبه گرم دراومد. تا ظهر پشت‌بوم تنها جایی تو کلِ ساختمون بود که هوا داشت.");
 
             Narrate(
-                "The rain kept doing what rain does. Somewhere behind the counter a kettle came to the boil and was taken off it.",
-                "雨は雨のすることを続けていた。カウンターの奥でやかんが沸き、火から下ろされた。",
-                "باران کار همیشگی‌اش را می‌کرد. پشت پیشخوان کتری جوش آمد و از روی شعله برداشته شد.");
+                "Over the flat roofs of the town the air was moving in a way air does not usually move, and the water tanks on top of them were not quite standing still.",
+                "町の平らな屋根の上で、空気がふだんとは違う動き方をしていた。屋根の上の貯水タンクは、じっとしていなかった。",
+                "روی پشت‌بومای صافِ شهر هوا یه جوری تکون می‌خورد که معمولاً تکون نمی‌خوره، و منبع‌های آبِ روشون درست سرِ جاشون نبودن.");
 
-            Say(Speaker.Haru, Portrait.Sad,
-                "I do not know how to ask you this properly. But if anything ever makes you sad — at any time —",
-                "うまく頼めないけど。もし君が何かで悲しくなったら、いつでも——",
-                "نمی‌دونم چطوری ازت بخوام. اما اگه هر وقت از چیزی ناراحت شدی —");
-
-            Say(Speaker.Haru, Portrait.Unchanged,
-                "— or if there is something from before that is still with you —",
-                "——あるいは、昔のことで、まだ君の中に残っているものがあるなら——",
-                "— یا اگه چیزی از گذشته هست که ازش ناراحتی و هنوز پیشت مونده —");
-
-            SayWithSound(Speaker.Haru, Portrait.Unchanged, SfxId.BoilerRoom, 0.30f,
-                "— even if the reason is that I was weak. Even if none of it was your fault. Even if it was dark, and full of loud, sudden noises —",
-                "——たとえその理由が、俺が弱かったことでも。たとえ君のせいじゃなかったとしても。たとえそこが暗くて、大きな音が突然する場所だったとしても——",
-                "— حتی اگه دلیل ناراحتیت ضعیف بودنِ خودِ من بوده باشه. حتی اگه در اصل تقصیر خودت نبوده باشه. حتی اگه تاریک بوده و پر از صداهای بلند و ناگهانی —");
-
-            Cue(SfxId.Heartbeat, 0.75f);
-            Enter(Speaker.Yua, Portrait.DeadEyes);
-            Hold(2.2f);
+            Enter(Speaker.Haru, Portrait.Neutral);
 
             Narrate(
-                "Yua did not move. Her cup was halfway to her mouth and it stayed there.",
-                "結愛は動かなかった。口元まで運ばれたカップは、そのまま止まっていた。",
-                "یوآ تکان نخورد. فنجانش نیمه‌راهِ دهانش بود و همان‌جا ماند.");
+                "He got to the bench first and put his bag down on the sunny end of it.",
+                "彼が先にベンチに着いて、日の当たる側に鞄を置いた。",
+                "اول اون به نیمکت رسید و کیفشو گذاشت رو اون سرش که آفتاب داشت.");
 
-            Narrate(
-                "He had not named a place. He had not named a year. He had described a room she has never told anyone about.",
-                "彼は場所を言わなかった。年も言わなかった。ただ、彼女が誰にも話したことのない部屋を描写した。",
-                "او نه جایی را گفت نه سالی را. فقط اتاقی را توصیف کرد که یوآ هرگز درباره‌اش به کسی چیزی نگفته بود.");
-
-            Hold(1.8f);
+            Enter(Speaker.Yua, Portrait.Joyful);
 
             Say(Speaker.Yua, Portrait.Unchanged,
-                "Go on.",
-                "続けて。",
-                "ادامه بده.");
+                "The cicadas are out.",
+                "蝉、鳴いてる。",
+                "زنجره‌ها دراومدن.");
 
-            Narrate(
-                "She did not ask how he knew. That is the whole of what she did not do, and it took everything she had.",
-                "なぜ知っているのかを、彼女は訊かなかった。訊かなかった、ただそれだけのことに、持っているものを全部使った。",
-                "نپرسید از کجا می‌داند. تنها کاری که نکرد همین بود، و تمام توانش را برد.");
+            Say(Speaker.Haru, Portrait.Neutral,
+                "They are early.",
+                "早いよね。",
+                "زودن.");
 
-            Say(Speaker.Haru, Portrait.Sad,
-                "I will get on my knees. I will bow. I will beg you. I want you to talk to me.",
-                "膝をつくよ。頭を下げる。お願いする。俺と話してほしい。",
-                "به پات می‌افتم. تعظیم می‌کنم. ازت التماس می‌کنم. و واقعاً ازت می‌خوام با من صحبت کنی.");
+            Say(Speaker.Yua, Portrait.Angry,
+                "They are three weeks early. They are three weeks early and nobody is doing anything about it, and in three weeks, when they are supposed to arrive, there will be a second lot, and then there will be two lots of them, all summer, forever, and this is how it starts.",
+                "三週間も早い。三週間早いのに誰も何もしない。で、本来の時期にもう一群来て、夏じゅうずっと二群になる。永遠に。こうやって始まるんだよ。",
+                "سه هفته زودن. سه هفته زودن و هیچ‌کس هیچ کاری نمی‌کنه، و سه هفته‌ی دیگه که قرار بوده بیان، یه دسته‌ی دوم میاد، و بعدش دو دسته می‌شن، کلِ تابستون، تا ابد، و شروعش همینه.");
 
-            Say(Speaker.Haru, Portrait.Unchanged,
-                "Even if you do not know how. You do not have to be exact, or long about it.",
-                "話し方が分からなくてもいい。正確じゃなくても、長くなくてもいい。",
-                "حتی اگه نمی‌دونی چطوری صحبت کنی. لازم نیست دقیق و طولانی بگی.");
+            Say(Speaker.Haru, Portrait.Joyful,
+                "This is how what starts?",
+                "何が始まるの？",
+                "شروعِ چی؟");
 
-            Say(Speaker.Haru, Portrait.Unchanged,
-                "Come to me and say you are sad. I will cut the whole world loose and stay with you until you are all right.",
-                "俺のところに来て、つらいって言ってくれるだけでいい。世界のほうを全部手放して、君が大丈夫になるまでそばにいる。",
-                "فقط کافیه بیای پیشم و بهم بگی ناراحتی. من تماماً از دنیا جدا می‌شم و پیش تو می‌مونم تا حالت خوب بشه.");
+            Say(Speaker.Yua, Portrait.Joyful,
+                "I have not decided yet. Something.",
+                "まだ決めてない。何かが。",
+                "هنوز تصمیم نگرفتم. یه چیزی.");
 
             Hold(1.4f);
 
+            // The argument he wins.
+            Say(Speaker.Haru, Portrait.Neutral,
+                "That wobble over the roofs is the vents.",
+                "屋根の上のあの揺れ、換気口だよ。",
+                "اون لرزشِ روی پشت‌بوما مالِ دریچه‌هاست.");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "It is the heat.",
+                "暑いからでしょ。",
+                "مالِ گرماست.");
+
             Say(Speaker.Haru, Portrait.Unchanged,
-                "All right? Promise me.",
-                "……いい？ 約束して。",
-                "باشه؟ بهم قول بده.");
+                "It is only over the flat roofs. The flat roofs are the ones with vents on them.",
+                "平らな屋根の上だけ。換気口があるのは平らな屋根。",
+                "فقط رو پشت‌بومای صافه. پشت‌بومای صاف همونان که دریچه دارن.");
 
-            Hold(2.6f);
-
-            Narrate(
-                "There was already a promise in that room. Eight years old, still holding, and neither of them said a word about it.",
-                "その部屋には、すでに一つの約束があった。八年前のもので、まだ生きていて、二人ともそれに一言も触れなかった。",
-                "یک قول از قبل توی آن اتاق بود. هشت‌ساله، هنوز پابرجا، و هیچ‌کدامشان یک کلمه هم درباره‌اش نگفتند.");
+            Hold(1.2f);
 
             Say(Speaker.Yua, Portrait.Neutral,
-                "I promise.",
-                "約束する。",
-                "قول می‌دم.");
-
-            Narrate(
-                "She said it the way you sign something you have no intention of reading.",
-                "読むつもりのない書類にサインするような言い方だった。",
-                "طوری گفتش که آدم چیزی را امضا می‌کند که قصد خواندنش را ندارد.");
+                "The heat comes out of the vents.",
+                "……換気口から熱が出てるんでしょ。",
+                "گرما از تو دریچه‌ها میاد بیرون.");
 
             Say(Speaker.Haru, Portrait.Joyful,
-                "Thank you.",
-                "ありがとう。",
-                "ممنون.");
+                "You are agreeing with me and calling it disagreeing.",
+                "同意しながら反論って言ってる。",
+                "داری باهام موافقت می‌کنی و اسمشو می‌ذاری مخالفت.");
 
-            Hold(2.0f);
+            Say(Speaker.Yua, Portrait.Joyful,
+                "It is a skill.",
+                "才能だよ。",
+                "یه مهارته.");
+
+            Hold(1.8f);
+
+            Narrate(
+                "Somebody had tied a flyer to the wire fence with string, and the wind had already had most of one corner off it.",
+                "誰かが紙をひもで金網に結んでいた。角のひとつは、もう風にほとんど持っていかれていた。",
+                "یکی با نخ یه اعلامیه بسته بود به توری، و باد تا حالا یه گوشه‌شو کنده بود.");
+
+            DecideIdly(
+                "Read the flyer", "貼り紙を読む", "اعلامیه رو بخون",
+                () =>
+                {
+                    Say(Speaker.Haru, Portrait.Neutral,
+                        "It is the cat. Somebody has lost the bench cat.",
+                        "猫だ。ベンチにいる猫、いなくなったって。",
+                        "گربه‌ست. یکی گربه‌ی نیمکت رو گم کرده.");
+
+                    Say(Speaker.Yua, Portrait.Angry,
+                        "The bakery cat? The one on the bench outside Usagi?",
+                        "パン屋の猫？　うさぎの前のベンチの？",
+                        "گربه‌ی نونوایی؟ همون که رو نیمکتِ جلوی اوساگیه؟");
+
+                    Say(Speaker.Haru, Portrait.Unchanged,
+                        "Its name is Mochi.",
+                        "名前、もち。",
+                        "اسمش موچیه.");
+
+                    Say(Speaker.Yua, Portrait.Unchanged,
+                        "I did not want to know its name.",
+                        "名前、知りたくなかった。",
+                        "من نمی‌خواستم اسمشو بدونم.");
+
+                    Say(Speaker.Haru, Portrait.Joyful,
+                        "It had a collar on. In April. You would not read it.",
+                        "四月に首輪してたよ。結愛ぴ、読まなかったけど。",
+                        "آوریل قلاده داشت. تو نخوندیش.");
+
+                    Say(Speaker.Yua, Portrait.Neutral,
+                        "Because then it is somebody's.",
+                        "だって、読んだら誰かのになるじゃん。",
+                        "چون اون‌وقت مالِ یکی می‌شه.");
+                },
+                "Complain about the heat", "暑さの文句を言う", "از گرما غر بزن",
+                () =>
+                {
+                    Say(Speaker.Yua, Portrait.Angry,
+                        "It was raining yesterday. Yesterday I had wet socks. Today I am being cooked on a roof.",
+                        "昨日は雨だった。昨日は靴下が濡れてた。今日は屋上で焼かれてる。",
+                        "دیروز بارون می‌اومد. دیروز جورابام خیس بود. امروز دارم رو پشت‌بوم پخته می‌شم.");
+
+                    Say(Speaker.Haru, Portrait.Neutral,
+                        "It is the same amount of water. It has just moved.",
+                        "水の量は同じだよ。場所が変わっただけ。",
+                        "همون مقدار آبه. فقط جاش عوض شده.");
+
+                    Say(Speaker.Yua, Portrait.Unchanged,
+                        "Moved where?",
+                        "どこに？",
+                        "کجا عوض شده؟");
+
+                    Say(Speaker.Haru, Portrait.Joyful,
+                        "Into the air. That is why it is like this.",
+                        "空気の中。だからこうなってる。",
+                        "رفته تو هوا. واسه همینه این‌جوریه.");
+
+                    Say(Speaker.Yua, Portrait.Neutral,
+                        "So I am being rained on from the inside.",
+                        "つまり、内側から降られてる。",
+                        "یعنی از تو دارم بارون می‌خورم.");
+
+                    Say(Speaker.Haru, Portrait.Joyful,
+                        "…Broadly.",
+                        "……まあ、だいたい。",
+                        "...تقریباً.");
+                });
+
+            Hold(1.6f);
+
+            Cue(SfxId.Petal, 0.40f);
+
+            Narrate(
+                "The wind came across the roof and took the last corner of the flyer with it, and the string held.",
+                "風が屋上を渡り、貼り紙の最後の角を持っていった。ひもは残った。",
+                "باد از رو پشت‌بوم رد شد و آخرین گوشه‌ی اعلامیه رو هم برد، و نخ سرِ جاش موند.");
+
+            // Anticipation, and nobody remarks on it — including the narrator,
+            // who is only allowed to say where the bag is.
+            Say(Speaker.Haru, Portrait.Neutral,
+                "I will come up again tomorrow. It is better than the classroom.",
+                "明日も来ようかな。教室よりいい。",
+                "فردا هم میام بالا. از کلاس بهتره.");
+
+            Say(Speaker.Yua, Portrait.Joyful,
+                "Tomorrow it rains again. The classroom.",
+                "明日はまた雨。教室ね。",
+                "فردا دوباره بارون میاد. کلاس.");
+
+            SayWithSound(Speaker.Haru, Portrait.Joyful, SfxId.SchoolBell, 0.45f,
+                "…The classroom.",
+                "……教室ね。",
+                "...کلاس.");
+
+            Hold(2.2f);
         }
 
         /// <summary>
-        /// The walk home, and both of the act's silences.
+        /// Tuesday evening, the corner with the pink machine, and the first of
+        /// the act's two silences.
         /// </summary>
         /// <remarks>
-        /// The two recurring events the design document asks for — the machine
-        /// room heard at random, and Haru's leg stopping him — are written here
-        /// as scripted moments rather than left to the random interludes,
-        /// because act two is where they stop being colour. Each is followed by
-        /// a line that measures patience. Neither line asks for anything; both
-        /// of them are true, and both of them can be clicked straight past.
+        /// <para>
+        /// The leg. The design document asks for it as something that happens
+        /// on the way home now and then, with no explanation offered and none
+        /// requested, and that is exactly and only what is written: he says the
+        /// word, he says nothing after it, and she waits.
+        /// </para>
+        /// <para>
+        /// Written as an episode rather than an instant — see BeginChildhood —
+        /// so that a player who stops anywhere inside it is treated the same as
+        /// one who stopped on the first line of it. Nothing is offered for the
+        /// waiting yet, because nothing can be: the endings read a count of
+        /// blue and green presses, and there have not been any. What this is
+        /// for is the shape.
+        /// </para>
+        /// <para>
+        /// Rung three's second use is placed immediately after it, on purpose.
+        /// She breaks a silence about his leg by correcting him about his own
+        /// body, and neither of them notices that either of those things
+        /// happened.
+        /// </para>
         /// </remarks>
-        private void WriteWayHome()
+        private void WriteTuesdayCorner()
         {
             ClearStage();
 
             Place(
-                Backgrounds.VendingStreetNight,
-                "The way home", "帰り道", "راه خانه");
+                Backgrounds.VendingStreetDay,
+                "The corner", "角の道", "سرِ نبش");
 
             Hold(2.2f);
 
             Narrate(
-                "The rain had stopped without either of them noticing. The street smelled of wet stone and vending-machine sugar.",
-                "いつのまにか雨は上がっていた。濡れた石畳と、自販機の甘い匂いがした。",
-                "باران بی‌آنکه هیچ‌کدامشان متوجه شوند بند آمده بود. خیابان بوی سنگِ خیس و شیرینیِ دستگاه نوشیدنی می‌داد.");
+                "The heat stayed on into the evening. Somebody up the road had watered a doorstep and the whole street smelled of wet concrete.",
+                "暑さは夕方まで残った。通りの先で誰かが玄関先に水を撒いたらしく、道じゅうが濡れたコンクリートのにおいだった。",
+                "گرما تا عصر موند. یکی اون بالای خیابون جلوی درشو آب پاشیده بود و کلِ کوچه بوی بتنِ خیس می‌داد.");
 
             Enter(Speaker.Yua, Portrait.Neutral);
             Enter(Speaker.Haru, Portrait.Neutral);
 
-            Say(Speaker.Yua, Portrait.Joyful,
-                "Peach. You are having the peach one. I have decided.",
-                "桃。ハルぴは桃ね。決めた。",
-                "هلو. تو مالِ هلو رو می‌خوری. تصمیم گرفتم.");
+            SayWithSound(Speaker.Yua, Portrait.Angry, SfxId.VendingThunk, 0.50f,
+                "It is gone.",
+                "……なくなってる。",
+                "نیست.");
 
-            Say(Speaker.Haru, Portrait.Joyful,
-                "You always decide.",
-                "いつも決めるよね。",
-                "همیشه تو تصمیم می‌گیری.");
+            Say(Speaker.Haru, Portrait.Neutral,
+                "What is gone?",
+                "何が？",
+                "چی نیست؟");
 
             Say(Speaker.Yua, Portrait.Unchanged,
-                "And you are always glad that I did.",
-                "そして、いつも決めてよかったって思うでしょ。",
-                "و همیشه هم خوشحالی که گرفتم.");
+                "The salty lychee is gone. The whole row is peach.",
+                "塩ライチがなくなってる。一列ぜんぶ桃。",
+                "لیچیِ نمکی نیست. کلِ ردیف شده هلو.");
 
-            Hold(1.2f);
+            Say(Speaker.Haru, Portrait.Joyful,
+                "Somebody bought them.",
+                "誰かが買ったんだよ。",
+                "یکی خریدشون.");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "Nobody bought them. Somebody stood exactly here, in front of this machine, with every other flavour in the world available to them, and pressed the salty lychee. Twice. That did not happen.",
+                "誰も買ってない。誰かがここに立って、この機械の前で、世界中の味が選べる状態で、塩ライチを押した。二回。そんなことは起きてない。",
+                "هیچ‌کس نخریدشون. یکی دقیقاً همین‌جا وایساده، جلوی همین دستگاه، با اینکه هر طعمِ دیگه‌ای تو دنیا جلوش بوده، و لیچیِ نمکی رو زده. دو بار. همچین چیزی اتفاق نیفتاده.");
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "They restocked it.",
+                "補充しただけ。",
+                "شارژش کردن.");
+
+            Hold(1.0f);
+
+            Say(Speaker.Yua, Portrait.Angry,
+                "…They restocked it.",
+                "……補充しただけか。",
+                "...شارژش کردن.");
+
+            Say(Speaker.Haru, Portrait.Joyful,
+                "You are upset that it stopped losing.",
+                "負けなくなったのが悔しいんだ。",
+                "ناراحتی که دیگه داره نمی‌بازه.");
+
+            Say(Speaker.Yua, Portrait.Neutral,
+                "I liked it better when it was losing.",
+                "負けてるほうが好きだった。",
+                "وقتی می‌باخت بیشتر دوستش داشتم.");
+
+            Cue(SfxId.CanDrop, 0.55f);
+
+            Narrate(
+                "She bought a peach one anyway, and neither of them said anything about that either.",
+                "それでも彼女は桃を買った。そのことにも、二人とも何も言わなかった。",
+                "بازم یه هلو خرید، و هیچ‌کدومشون درباره‌ی اینم چیزی نگفتن.");
+
+            Hold(1.8f);
+
+            Narrate(
+                "They started walking. Four streets on, he stopped.",
+                "二人は歩き出した。四つ角を四つ過ぎて、彼は足を止めた。",
+                "راه افتادن. چهار تا خیابون بعد، ایستاد.");
+
+            // The wince goes on before the episode opens, not inside it.
+            // Inside, Say remaps him to his nine-year-old self, and a pose on
+            // that speaker would swap the picture for a stand-in silhouette of
+            // a child — see VisualNovelStage.ShowCharacter. Every line between
+            // BeginChildhood and EndChildhood is therefore Unchanged.
+            Enter(Speaker.Haru, Portrait.Injured);
 
             // The episode, not the instant. See BeginChildhood.
             BeginChildhood();
 
-            Cue(SfxId.BoilerRoom, 0.55f);
+            // ◆ Dread moment 2 — the leg.
+            SayWithSound(Speaker.Haru, Portrait.Unchanged, SfxId.LegAche, 0.80f,
+                "Sorry. Give me a moment. My leg.",
+                "ごめん。少しだけ。……脚が。",
+                "ببخشید. یه لحظه وایسا. پام.");
 
             Narrate(
-                "Somewhere under the road, something large turned over, and kept turning.",
-                "道の下のどこかで、大きな何かが一度回り、そのまま回り続けた。",
-                "یک جایی زیر خیابان، چیزی بزرگ چرخید و همین‌طور چرخید.");
+                "He did not say anything after that. Not which leg. Not why.",
+                "そのあと彼は何も言わなかった。どちらの脚かも、なぜかも。",
+                "بعدش هیچی نگفت. نگفت کدوم پا. نگفت چرا.");
 
-            SayWithSound(Speaker.Yua, Portrait.Sad, SfxId.Heartbeat, 0.70f,
+            ChildVoice(Speaker.HaruChild,
+                "It is fine. I can still walk.",
+                "平気。まだ歩けるよ。",
+                "چیزی نیست. هنوز می‌تونم راه برم.");
+
+            Hold(2.2f);
+
+            Listen(
+                "Yua waited. She did not ask. She has never asked him about it, not once, in front of anybody or otherwise.",
+                "結愛は待った。訊かなかった。人前でもそうでなくても、一度も訊いたことがない。",
+                "یوآ منتظر موند. نپرسید. هیچ‌وقت ازش نپرسیده، نه جلوی کسی نه جای دیگه.");
+
+            Hold(2.8f);
+
+            EndChildhood();
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "All right. Let us go.",
+                "……うん。行こう。",
+                "خب. بریم.");
+
+            Say(Speaker.Yua, Portrait.Neutral,
+                "Mm.",
+                "うん。",
+                "هوم.");
+
+            Hold(1.6f);
+
+            Say(Speaker.Haru, Portrait.Shy,
+                "Sorry. I am slow.",
+                "ごめん。遅くて。",
+                "ببخشید. کندم.");
+
+            // ◆ Dread moment 3 — rung three, second use.
+            Say(Speaker.Yua, Portrait.Neutral,
+                "You are not slow. You have always walked like that.",
+                "遅くない。ずっとその歩き方でしょ。",
+                "کند نیستی. همیشه همین‌جوری راه می‌ری.");
+
+            Say(Speaker.Haru, Portrait.Joyful,
+                "You mean I have always been slow.",
+                "つまり、ずっと遅いってことじゃん。",
+                "یعنی همیشه کند بودم.");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "You used to run everywhere.",
+                "昔はどこでも走ってた。",
+                "قبلاً همه‌جا می‌دویدی.");
+
+            Hold(1.6f);
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "…Did I.",
+                "……そうだったかな。",
+                "...می‌دویدم؟");
+
+            Say(Speaker.Yua, Portrait.Joyful,
+                "Constantly. It was exhausting to look at.",
+                "ずっと。見てるだけで疲れた。",
+                "دائم. نگاه کردنش خسته‌کننده بود.");
+
+            Hold(2.0f);
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "That machine still owes me a hundred yen.",
+                "あの機械、まだ百円借りてる。",
+                "اون دستگاه هنوز صد ین به من بدهکاره.");
+
+            Say(Speaker.Yua, Portrait.Joyful,
+                "It does not owe you anything. It is fine.",
+                "何も借りてない。あれは大丈夫。",
+                "هیچی به تو بدهکار نیست. اون سالمه.");
+
+            Hold(1.4f);
+
+            Narrate(
+                "They walked the rest of it the way they always do. Half a step apart, and matching.",
+                "残りの道は、いつもどおりに歩いた。半歩あけて、歩幅は同じで。",
+                "بقیه‌ی راهو مثلِ همیشه رفتن. نیم قدم فاصله، و هم‌قدم.");
+
+            Hold(2.2f);
+        }
+
+        // =====================================================================
+        //  WEDNESDAY — the act
+        //
+        //  Dread budget: 3. One in the classroom, two in the café, and the
+        //  rung goes up exactly once across the whole day.
+        // =====================================================================
+
+        /// <summary>
+        /// Wednesday morning. The rain is back, and the second of the act's two
+        /// silences comes up through the floor.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The design document's other recurring event: the sound of the
+        /// machine room reaches Yua, she says out loud and without deciding to
+        /// that she has been frightened of it since she was small, and Haru
+        /// says he knows. She does not ask how, and that is the entire point of
+        /// the moment — the manual's forbidden pattern number one is
+        /// astonishment followed by explanation, and the version that frightens
+        /// is the one where nobody is astonished at all.
+        /// </para>
+        /// <para>
+        /// The scene also has to say the word "café" out loud before the
+        /// background changes, which is the scene-lock rule, and it has to lose
+        /// him the library book for the third and last time.
+        /// </para>
+        /// </remarks>
+        private void WriteWednesdayClassroom()
+        {
+            ClearStage();
+
+            Place(
+                Backgrounds.ClassroomRainy,
+                "The classroom", "教室", "کلاس درس");
+
+            Hold(2.4f);
+
+            Narrate(
+                "It came back in the night, harder than Monday, and by the morning break the windows had gone the colour of an old photograph.",
+                "雨は夜のうちに戻ってきた。月曜より強く。中休みには、窓は古い写真の色になっていた。",
+                "شب دوباره اومد، سنگین‌تر از دوشنبه، و تا زنگِ تفریح پنجره‌ها رنگِ یه عکسِ قدیمی رو گرفته بودن.");
+
+            Enter(Speaker.Yua, Portrait.Neutral);
+            Enter(Speaker.Haru, Portrait.Neutral);
+
+            Say(Speaker.Yua, Portrait.Joyful,
+                "The poster is up.",
+                "ポスター、貼ったよ。",
+                "پوستر رفت بالا.");
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "By the stairs?",
+                "階段のとこ？",
+                "کنارِ پله‌ها؟");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "By the stairs. Which is where people run.",
+                "階段のとこ。走るとこでしょ。",
+                "کنارِ پله‌ها. همون‌جایی که مردم می‌دون.");
+
+            Say(Speaker.Haru, Portrait.Joyful,
+                "Your falling-over person is very good.",
+                "転んでる人、すごく上手だった。",
+                "اون آدمی که داره می‌افته خیلی خوب شده.");
+
+            Say(Speaker.Yua, Portrait.Joyful,
+                "She is falling over beautifully. I told you.",
+                "きれいに転んでるでしょ。言ったじゃん。",
+                "داره قشنگ می‌افته. بهت گفتم.");
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "Your lettering is better than mine.",
+                "字も、僕のより結愛ぴのほうが上手い。",
+                "خطِ تو از مالِ من بهتره.");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "My lettering is not on it. That is all yours.",
+                "あたし、字書いてないよ。ぜんぶハルぴ。",
+                "خطِ من روش نیست. همه‌ش مالِ توئه.");
+
+            Say(Speaker.Haru, Portrait.Shy,
+                "…Oh.",
+                "……あ。",
+                "...آها.");
+
+            Hold(1.6f);
+
+            Narrate(
+                "Something turned over under the floor, once, and then kept turning.",
+                "床の下で何かが一度回り、そのまま回り続けた。",
+                "یه چیزی زیرِ کف یه بار چرخید، و بعد همین‌جوری چرخید.");
+
+            Cue(SfxId.BoilerRoom, 0.55f);
+
+            Hold(2.0f);
+
+            // Her face goes before the episode opens, for the same reason his
+            // does on Tuesday: inside it, Say is speaking as a nine-year-old.
+            Enter(Speaker.Yua, Portrait.Sad);
+
+            BeginChildhood();
+
+            // ◆ Dread moment 4 — the machine room.
+            SayWithSound(Speaker.Yua, Portrait.Unchanged, SfxId.Heartbeat, 0.70f,
                 "I hate that sound.",
                 "……その音、嫌い。",
                 "از این صدا بدم میاد.");
@@ -518,14 +1305,14 @@ namespace TheFrayedRedString.EditorTools
             Say(Speaker.Yua, Portrait.Unchanged,
                 "I have been frightened of the boiler room since I was small.",
                 "小さいころから、ボイラー室の音が怖い。",
-                "من از صدای موتورخانه از بچگی‌ام می‌ترسم.");
+                "من از صدای موتورخونه از بچگیم می‌ترسم.");
 
             Narrate(
-                "It came out of her before she had decided to say it.",
+                "It was out of her before she had decided to say it.",
                 "言おうと決める前に、口から出ていた。",
-                "قبل از اینکه تصمیم بگیرد بگوید، از دهانش بیرون آمده بود.");
+                "قبل از اینکه تصمیم بگیره بگه، از دهنش دراومده بود.");
 
-            Say(Speaker.Haru, Portrait.Neutral,
+            Say(Speaker.Haru, Portrait.Unchanged,
                 "I know.",
                 "知ってる。",
                 "می‌دونم.");
@@ -540,508 +1327,1030 @@ namespace TheFrayedRedString.EditorTools
             Hold(2.0f);
 
             Listen(
-                "He did not explain how he knew, and she did not ask. The sound went on under the road, and the two of them stood in it.",
-                "彼はなぜ知っているのかを説明せず、彼女も訊かなかった。音は道の下で続き、二人はその中に立っていた。",
-                "او توضیح نداد از کجا می‌داند و یوآ هم نپرسید. صدا زیر خیابان ادامه داشت و آن دو داخلش ایستاده بودند.");
+                "He did not say how he knew and she did not ask him. The sound went on under the floor and the two of them sat in it.",
+                "彼はなぜ知っているのかを言わず、彼女も訊かなかった。音は床の下で続き、二人はその中に座っていた。",
+                "نگفت از کجا می‌دونه و یوآ هم ازش نپرسید. صدا زیرِ کف ادامه داشت و اون دوتا توش نشسته بودن.");
 
-            Hold(2.0f);
+            Hold(2.8f);
 
             EndChildhood();
 
-            Say(Speaker.Yua, Portrait.Neutral,
-                "Anyway. Peach.",
-                "……とにかく、桃ね。",
-                "به‌هرحال. هلو.");
+            Enter(Speaker.Yua, Portrait.Neutral);
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "Anyway. The café. After school.",
+                "……とにかく、放課後、喫茶店ね。",
+                "به‌هرحال. کافه. بعد از مدرسه.");
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "The café.",
+                "喫茶店ね。",
+                "کافه.");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "I have to take the book back.",
+                "本、返さないと。",
+                "باید کتابو پس بدم.");
+
+            Say(Speaker.Yua, Portrait.Joyful,
+                "Take it back on Friday.",
+                "金曜でいいでしょ。",
+                "جمعه پسش بده.");
+
+            Hold(1.2f);
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "…Okay.",
+                "……うん。",
+                "...باشه.");
+
+            Hold(1.4f);
+
+            SayWithSound(Speaker.Yua, Portrait.Neutral, SfxId.SchoolBell, 0.50f,
+                "Do not run in the corridor. There is a poster.",
+                "廊下は走らないこと。ポスターあるよ。",
+                "تو راهرو ندو. پوستر هست.");
 
             Say(Speaker.Haru, Portrait.Joyful,
-                "Peach.",
-                "桃ね。",
-                "هلو.");
+                "I never run in the corridor.",
+                "僕、廊下走らないよ。",
+                "من هیچ‌وقت تو راهرو نمی‌دوم.");
+
+            Say(Speaker.Yua, Portrait.Joyful,
+                "I know.",
+                "知ってる。",
+                "می‌دونم.");
+
+            Hold(2.0f);
+        }
+
+        /// <summary>
+        /// Wednesday, after school. Usagi Café in the rain, and the story Haru
+        /// has been carrying since he was fourteen.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The longest scene in the act by a distance, and the manual's seven
+        /// rules for a heavy scene are what the shape of it is:
+        /// </para>
+        /// <para>
+        /// It is entered from the side. Nobody works up to it. She complains
+        /// that he asks her four times a day whether she is all right, which is
+        /// a joke, and the answer to it is the thing.
+        /// </para>
+        /// <para>
+        /// It is told badly, because people tell these badly: out of order, with
+        /// one completely irrelevant detail stuck to it that he apologises for,
+        /// stopping in the middle, understating it, and finally not saying the
+        /// sentence at all but asking her to guess.
+        /// </para>
+        /// <para>
+        /// The method is never said. Not the place, not the means, not
+        /// obliquely, not in narration. This is both the right thing to do and
+        /// the better writing — the detail is never the point, and its absence
+        /// makes the scene stronger.
+        /// </para>
+        /// <para>
+        /// The horror is in the listener. The story is a sad story. What is
+        /// wrong with this scene is a question she asks afterwards that nobody
+        /// asks, a pause that breaks about a second late, and four frames where
+        /// what she says and what she is thinking are not the same thing.
+        /// </para>
+        /// <para>
+        /// Nothing is resolved, nobody is comforted, and the scene does not end
+        /// on it: the last thing in it is an argument about who is having the
+        /// last piece of cake.
+        /// </para>
+        /// <para>
+        /// One note on the monologue itself. It is one speech in the design
+        /// document and it stays one speech, but a wall of it in a dialogue box
+        /// is a wall the player clicks through. Broken at the places he would
+        /// actually stop, it is paced by the person reading it — which is the
+        /// only way its last line lands.
+        /// </para>
+        /// </remarks>
+        private void WriteWednesdayCafe()
+        {
+            ClearStage();
+
+            Place(
+                Backgrounds.CafeRainy,
+                "Usagi Café", "うさぎ喫茶", "کافه اوساگی");
+
+            Hold(2.6f);
+
+            Narrate(
+                "Rain down the window, and the lights inside turned up too warm to argue with.",
+                "窓を雨がつたい、店の灯りは反論できないほど暖かかった。",
+                "بارون رو شیشه سُر می‌خورد و چراغای داخل اون‌قدر گرم بودن که نشه باهاشون بحث کرد.");
+
+            Enter(Speaker.Yua, Portrait.Joyful);
+
+            Cue(SfxId.ChairScrape, 0.45f);
+
+            Enter(Speaker.Haru, Portrait.Neutral);
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "The umbrella stand has three slots and a hole in the bottom.",
+                "ここの傘立て、三本しか入らないうえに底に穴が空いてる。",
+                "جاچتریِ اینجا سه تا جا داره و ته‌ش سوراخه.");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "The hole is for the water.",
+                "穴は水を出すためでしょ。",
+                "سوراخ واسه آبه.");
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "The hole is over the doormat.",
+                "その穴、マットの上にある。",
+                "سوراخ روی پادریه.");
+
+            Hold(1.2f);
+
+            Say(Speaker.Yua, Portrait.Joyful,
+                "…That is a design flaw.",
+                "……それは設計ミス。",
+                "...این یه ایرادِ طراحیه.");
+
+            Say(Speaker.Haru, Portrait.Joyful,
+                "That is what I have been saying since April.",
+                "四月からずっとそう言ってる。",
+                "من از آوریل دارم همینو می‌گم.");
 
             Hold(1.4f);
 
             Narrate(
-                "Four streets later, he stopped walking.",
-                "四つ角を四つ過ぎたところで、彼は足を止めた。",
-                "چهار خیابان بعد، ایستاد.");
-
-            // The episode, not the instant. See BeginChildhood.
-            BeginChildhood();
-
-            SayWithSound(Speaker.Haru, Portrait.Sad, SfxId.LegAche, 0.80f,
-                "Sorry. Give me a moment. My leg.",
-                "ごめん。少しだけ。……脚が。",
-                "ببخشید. یه لحظه صبر کن. پام.");
-
-            Narrate(
-                "He said nothing after that. Not which leg. Not why.",
-                "そのあと彼は何も言わなかった。どちらの脚かも、なぜかも。",
-                "بعدش چیزی نگفت. نگفت کدام پا. نگفت چرا.");
-
-            ChildVoice(Speaker.HaruChild,
-                "It is fine. I can still walk.",
-                "平気。まだ歩けるよ。",
-                "چیزی نیست. هنوز می‌تونم راه برم.");
-
-            Hold(2.0f);
-
-            Listen(
-                "Yua waited. She did not ask. She is very good at not asking.",
-                "結愛は待った。訊かなかった。訊かないことが、彼女はとても上手だ。",
-                "یوآ منتظر ماند. نپرسید. توی نپرسیدن خیلی خوب است.");
-
-            Hold(2.6f);
-
-            EndChildhood();
+                "She had ordered before he sat down. Matcha cake, two forks, a boba for her and an iced matcha for him.",
+                "彼が座る前に、彼女はもう注文していた。抹茶ケーキ、フォーク二本、自分にタピオカ、彼に冷たい抹茶。",
+                "قبل از اینکه بشینه سفارش داده بود. کیکِ ماچا، دو تا چنگال، یه بابل‌تی واسه خودش و یه ماچای سرد واسه اون.");
 
             Say(Speaker.Haru, Portrait.Neutral,
-                "All right. I am fine. Let us go.",
-                "……うん、大丈夫。行こう。",
-                "خب. خوبم. بریم.");
+                "You ordered before I sat down.",
+                "座る前に頼んでたでしょ。",
+                "قبل از اینکه بشینم سفارش دادی.");
 
-            Say(Speaker.Yua, Portrait.Neutral,
-                "Mm.",
-                "うん。",
-                "هوم.");
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "Before you stood up, I think.",
+                "立つ前だと思う。",
+                "فکر کنم قبل از اینکه بلند شی.");
+
+            DecideIdly(
+                "Argue about the cake", "ケーキで揉める", "سرِ کیک بحث کن",
+                () =>
+                {
+                    Say(Speaker.Haru, Portrait.Neutral,
+                        "Two forks and one cake is a trap.",
+                        "フォーク二本にケーキ一個って、罠だよね。",
+                        "دو تا چنگال و یه کیک یعنی تله.");
+
+                    Say(Speaker.Yua, Portrait.Joyful,
+                        "It is not a trap. It is an arrangement.",
+                        "罠じゃない。取り決め。",
+                        "تله نیست. یه قراره.");
+
+                    Say(Speaker.Haru, Portrait.Unchanged,
+                        "Whose arrangement?",
+                        "誰の取り決め？",
+                        "قرارِ کی؟");
+
+                    Say(Speaker.Yua, Portrait.Unchanged,
+                        "The committee's.",
+                        "委員会の。",
+                        "قرارِ کمیته.");
+
+                    Say(Speaker.Haru, Portrait.Joyful,
+                        "There it is.",
+                        "出た。",
+                        "بفرما.");
+
+                    Say(Speaker.Yua, Portrait.Joyful,
+                        "The committee is unanimous.",
+                        "委員会は全会一致です。",
+                        "کمیته به اتفاقِ آرا رأی داده.");
+                },
+                "Argue about the rain", "雨で揉める", "سرِ بارون بحث کن",
+                () =>
+                {
+                    Say(Speaker.Yua, Portrait.Angry,
+                        "It is going to do this until July.",
+                        "七月までずっとこれだよ。",
+                        "تا جولای همینه.");
+
+                    Say(Speaker.Haru, Portrait.Neutral,
+                        "Until the second week of July.",
+                        "七月の第二週まで。",
+                        "تا هفته‌ی دومِ جولای.");
+
+                    Say(Speaker.Yua, Portrait.Unchanged,
+                        "You have made that up.",
+                        "今作ったでしょ。",
+                        "اینو از خودت درآوردی.");
+
+                    Say(Speaker.Haru, Portrait.Unchanged,
+                        "It was on the weather last night. Second week.",
+                        "昨日の天気予報でやってた。第二週。",
+                        "دیشب تو هواشناسی گفتن. هفته‌ی دوم.");
+
+                    Say(Speaker.Yua, Portrait.Neutral,
+                        "Who says?",
+                        "誰が言ってたの？",
+                        "کی می‌گه؟");
+
+                    Say(Speaker.Haru, Portrait.Joyful,
+                        "Somebody said.",
+                        "誰かが言ってた。",
+                        "یکی می‌گفت.");
+
+                    Say(Speaker.Yua, Portrait.Joyful,
+                        "You are going to say that for the rest of your life.",
+                        "一生それ言うでしょ。",
+                        "تا آخرِ عمرت اینو می‌گی.");
+                });
 
             Hold(1.6f);
 
+            // Act one's drink sequence, brought back once, with the one thing
+            // about it that has changed. She told him to finish it in April.
             Narrate(
-                "They walked the rest of it the way they always do. Half a step apart, and matching.",
-                "残りの道は、いつもどおりに歩いた。半歩あけて、歩幅は同じで。",
-                "بقیه‌ی راه را مثل همیشه رفتند. نیم قدم فاصله، و هم‌قدم.");
+                "The drinks came. The matcha still had ice in it and the ice was already going.",
+                "飲み物が来た。抹茶にはまだ氷があって、その氷はもう溶けかけていた。",
+                "نوشیدنیا اومدن. ماچا هنوز یخ داشت و یخش داشت آب می‌شد.");
 
-            Hold(2.0f);
-        }
+            Cel(Portrait.DrinkFull);
 
-        /// <summary>
-        /// Yua's room, and the moment the game turns around and looks back.
-        /// </summary>
-        /// <remarks>
-        /// The first time anyone in this story addresses the player. It is Yua
-        /// and not Haru on purpose: he does it in act four, and by then the
-        /// player already knows what it means for a character to speak to them
-        /// directly — because she taught them, and because she lied while she
-        /// did it.
-        /// </remarks>
-        private void WriteYuaRoom()
-        {
-            ClearStage();
+            Cel(Portrait.DrinkReluctant);
 
-            Place(
-                Backgrounds.YuaRoomDay,
-                "Yua's room", "結愛の部屋", "اتاق یوآ");
-
-            Hold(2.6f);
+            Cel(Portrait.DrinkFinished);
 
             Narrate(
-                "The next morning was bright, the way mornings after rain usually are, and it did not suit the room at all.",
-                "翌朝は晴れていた。雨のあとの朝はたいていそうだ。そしてその明るさは、この部屋にまるで似合わなかった。",
-                "صبح روز بعد روشن بود، همان‌طور که معمولاً صبحِ بعد از باران است، و اصلاً به آن اتاق نمی‌آمد.");
-
-            Narrate(
-                "There is a mirror on that wall with a crack across it, and nobody in this house has ever mentioned it.",
-                "その壁には、ひびの入った鏡が掛かっている。この家の誰も、一度も口にしたことがない。",
-                "روی آن دیوار آینه‌ای هست با یک ترک، و هیچ‌کس توی این خانه تا حالا حرفش را نزده.");
-
-            Enter(Speaker.Yua, Portrait.Neutral);
-
-            Narrate(
-                "She sat on the edge of the bed with the rabbit in her lap and, for a while, did nothing at all.",
-                "彼女はベッドの端に腰かけ、うさぎを膝にのせ、しばらく何もしなかった。",
-                "لبه‌ی تخت نشست، خرگوش را روی پایش گذاشت و مدتی هیچ کاری نکرد.");
-
-            Hold(3.0f);
-
-            BeginAside();
-
-            Say(Speaker.Yua, Portrait.Neutral,
-                "You are there.",
-                "……そこにいるよね。",
-                "تو اونجایی.");
+                "She did not have to tell him to finish it. She watched him do it and said nothing at all.",
+                "全部飲んでとは言わなかった。彼が飲みきるのを見ていて、何も言わなかった。",
+                "لازم نبود بهش بگه تا آخرشو بخوره. نگاه کرد که خوردش و هیچی نگفت.");
 
             Hold(2.0f);
 
-            Say(Speaker.Yua, Portrait.Unchanged,
-                "Do not go quiet on me. I have known for a while.",
-                "黙らないで。けっこう前から知ってる。",
-                "ساکت نشو. یه مدته می‌دونم.");
+            Enter(Speaker.Yua, Portrait.Joyful);
+            Enter(Speaker.Haru, Portrait.Neutral);
+
+            // --- in from the side ---------------------------------------------
 
             Say(Speaker.Yua, Portrait.Unchanged,
-                "Not Haru-pi. I do not think Haru-pi knows you are watching our lives and listening to us. I think it is only me.",
-                "ハルぴじゃない。ハルぴは、あなたが私たちの生活を見て、話を聞いていることを知らないと思う。知ってるのは、たぶん私だけ。",
-                "هارو‌پی نه. فکر نکنم هارو‌پی خبر داشته باشه که تو داری زندگی و صحبت‌هامون رو می‌بینی. فکر کنم فقط من می‌دونم.");
+                "You do it four times a day.",
+                "一日四回やってるよ。",
+                "روزی چهار بار این کارو می‌کنی.");
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "Do what?",
+                "何を？",
+                "چه کاری؟");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "Ask me if I am all right.",
+                "「大丈夫？」って訊くやつ。",
+                "می‌پرسی حالم خوبه یا نه.");
+
+            Say(Speaker.Haru, Portrait.Shy,
+                "I do not do it four times.",
+                "四回もやってないよ。",
+                "چهار بار که نمی‌پرسم.");
 
             Say(Speaker.Yua, Portrait.Joyful,
-                "Which makes you mine, in a way. That is nice, is it not.",
-                "つまり、あなたは私のもの。……いいでしょ。",
-                "یعنی یه‌جورهایی تو مالِ منی. قشنگه، نه؟");
+                "The shoe lockers. The stairs. Outside the staff room. And once with your face, in maths, which counts.",
+                "下駄箱。階段。職員室の前。あと数学の時間に顔で一回。それもカウント。",
+                "جاکفشی. پله‌ها. جلوی دفترِ معلما. و یه بار با قیافه‌ت، سرِ ریاضی، که حساب می‌شه.");
+
+            Say(Speaker.Haru, Portrait.Joyful,
+                "That one does not count.",
+                "それはカウントしないでしょ。",
+                "اون یکی حساب نیست.");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "That one counts double.",
+                "それは二回分。",
+                "اون یکی دو برابر حساب می‌شه.");
 
             Hold(1.6f);
 
             Say(Speaker.Yua, Portrait.Neutral,
-                "So let me explain how this works, since you have been doing it blind.",
-                "じゃあ、仕組みを説明する。今までずっと手探りだったでしょ。",
-                "پس بذار توضیح بدم این چطوری کار می‌کنه، چون تا حالا داشتی کورکورانه انجامش می‌دادی.");
-
-            SayWithSound(Speaker.Yua, Portrait.Unchanged, SfxId.ChoiceAppear, 0.55f,
-                "Sometimes, while we are talking, you will be given two buttons.",
-                "ときどき、私たちが話しているあいだに、あなたにボタンが二つ出る。",
-                "بعضی وقت‌ها، وقتی داریم صحبت می‌کنیم، دو تا دکمه بهت داده می‌شه.");
-
-            Say(Speaker.Yua, Portrait.Unchanged,
-                "A blue one, and a green one.",
-                "青いのと、緑の。",
-                "یکی آبی، یکی سبز.");
-
-            Say(Speaker.Yua, Portrait.Joyful,
-                "Blue is the kind thing. Green is the thing I want.",
-                "青は優しいほう。緑は、私が欲しいほう。",
-                "آبی چیزِ مهربونه. سبز چیزیه که من می‌خوام.");
-
-            Say(Speaker.Yua, Portrait.Neutral,
-                "Press the green ones.",
-                "緑を押して。",
-                "سبزها رو فشار بده.");
-
-            Hold(1.8f);
-
-            Say(Speaker.Yua, Portrait.Unchanged,
-                "I want to control him. I want him to be mine, exactly the way I want him. That is the whole of it.",
-                "彼を支配したい。私が望むとおりに、私のものでいてほしい。それだけ。",
-                "می‌خوام کنترلش کنم. می‌خوام واسه‌ی من باشه، دقیقاً همون‌طوری که من می‌خوام. کل ماجرا همینه.");
-
-            Say(Speaker.Yua, Portrait.Shy,
-                "Do not look at me like that.",
-                "そんな目で見ないで。",
-                "این‌طوری نگام نکن.");
-
-            Say(Speaker.Yua, Portrait.Neutral,
-                "Haru-pi will not be hurt. He loves me. If I control him it is fine — he loves me enough for that.",
-                "ハルぴは傷つかない。私を好きだから。支配しても平気。それくらい好きでいてくれてるから。",
-                "نگران نباش، هارو‌پی اذیت نمی‌شه. اون منو دوست داره. اگه کنترلش کنم مشکلی نداره — اون‌قدری دوستم داره.");
-
-            Hold(1.2f);
-
-            Say(Speaker.Yua, Portrait.Joyful,
-                "I think he loves me enough that he would break his own leg for me.",
-                "私のためなら、自分の脚を折るくらい好きでいてくれてると思う。",
-                "حتی فکر می‌کنم اون‌قدری منو دوست داره که حاضره پاش رو بخاطر من بشکنه.");
-
-            Say(Speaker.Yua, Portrait.Unchanged,
-                "Do you not think so?",
-                "そう思わない？",
-                "این‌طوری فکر نمی‌کنی؟");
-
-            Hold(3.0f);
-
-            Narrate(
-                "The rabbit's left ear was worn almost through, in the one place a hand had held it for years.",
-                "うさぎの左耳は、同じ場所を何年も握られて、ほとんど擦り切れていた。",
-                "گوش چپِ خرگوش تقریباً ساییده شده بود؛ همان‌جایی که سال‌ها یک دست نگهش داشته بود.");
-
-            Say(Speaker.Yua, Portrait.Neutral,
-                "Anyway. Green. Please.",
-                "とにかく、緑。……お願い。",
-                "به‌هرحال. سبز. لطفاً.");
-
-            Say(Speaker.Yua, Portrait.Joyful,
-                "I said please. That is rare. Write it down.",
-                "「お願い」って言ったよ。珍しいでしょ。メモしておいて。",
-                "گفتم لطفاً. کم پیش میاد. یادداشتش کن.");
+                "Why do you do it?",
+                "なんでやるの？",
+                "چرا این کارو می‌کنی؟");
 
             Hold(2.2f);
 
-            EndAside();
+            Narrate(
+                "He turned the fork over. Then again. Then a third time.",
+                "彼はフォークを裏返した。もう一度。三度目も裏返した。",
+                "چنگالو برگردوند. دوباره. بارِ سوم هم برگردوند.");
+
+            Hold(2.0f);
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "Can I tell you something?",
+                "……ひとつ、話してもいい？",
+                "می‌تونم یه چیزی بهت بگم؟");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "You can tell me anything.",
+                "何でも話していいよ。",
+                "هر چی بخوای می‌تونی بهم بگی.");
+
+            Hold(2.4f);
+
+            // --- the monologue ------------------------------------------------
+
+            Say(Speaker.Haru, Portrait.Sad,
+                "First of all — sorry. For asking so much. When you say you are not all right, and when I only think you are not.",
+                "まず、ごめん。たくさん訊いて。君が「大丈夫じゃない」って言うときも、僕がそう思っただけのときも。",
+                "اول از همه ببخشید. که این‌قدر سؤال‌پیچت می‌کنم. وقتایی که می‌گی حالت خوب نیست، و وقتایی که فقط من این‌طوری حس می‌کنم.");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "I want to know. That is all of it.",
+                "知りたいんだ。それだけ。",
+                "می‌خوام بدونم. کلِّش همینه.");
+
+            Hold(1.6f);
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "I had a friend. Best friend. Same class from the second year of primary school to the second year of middle school.",
+                "友達がいた。親友。小二から中二まで、ずっと同じクラスだった。",
+                "یه رفیق داشتم. رفیقِ صمیمی. از کلاسِ دومِ دبستان تا کلاسِ هشتم همکلاسی بودیم.");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "Six years. We talked every day.",
+                "六年間。毎日しゃべってた。",
+                "شیش سال. هر روز کلی حرف می‌زدیم.");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "Except the days he was not doing well. Those days he did not have it in him to talk much.",
+                "調子が良くない日を除いて。そういう日は、あんまり話す元気がなかった。",
+                "به‌جز روزایی که حالش خوب نبود. اون روزا حال نداشت زیاد حرف بزنه.");
+
+            Hold(1.4f);
+
+            // The completely irrelevant detail, stuck to it, that he apologises
+            // for. Nobody tells one of these properly.
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "He had a pencil case with a broken zip. He never once fixed it. Six years of the same pencil case.",
+                "ファスナーの壊れた筆箱を使ってた。一度も直さなかった。六年間おなじ筆箱。",
+                "یه جامدادی داشت که زیپش خراب بود. حتی یه بارم درستش نکرد. شیش سال همون جامدادی.");
+
+            Say(Speaker.Haru, Portrait.Shy,
+                "Sorry. That has nothing to do with it. I do not know why I said that.",
+                "ごめん。関係ないね。なんで言ったんだろう。",
+                "ببخشید. این هیچ ربطی نداره. نمی‌دونم چرا گفتمش.");
+
+            Hold(1.8f);
+
+            Say(Speaker.Haru, Portrait.Sad,
+                "I knew he was sad. I asked him. I kept asking him.",
+                "落ち込んでるのは分かってた。訊いた。何度も訊いた。",
+                "می‌دونستم ناراحته. ازش می‌پرسیدم. مدام می‌پرسیدم.");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "But he was not someone who talked.",
+                "でも、あんまり話す人じゃなかった。",
+                "اما از اون آدمایی نبود که زیاد حرف بزنه.");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "I said the same things over and over. Trust me. Tell me. I am right here. I am your friend.",
+                "同じことばっかり言った。信じてよ。話してよ。ここにいるよ。友達だろ。",
+                "همیشه بهش می‌گفتم: بهم اعتماد کن. بهم بگو. من کنارتم. من رفیقتم.");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "If you do not tell me, who are you going to tell? Do not keep it inside. Whenever you want to talk, I am right here.",
+                "僕に言わないなら誰に言うんだ。ひとりで抱えるな。話したくなったら、僕はここにいる。",
+                "به من نگی می‌خوای به کی بگی؟ نباید بریزی تو خودت. هر وقت خواستی با کسی حرف بزنی، من همیشه همین‌جام.");
+
+            Hold(2.0f);
+
+            Say(Speaker.Haru, Portrait.Sad,
+                "He still did not talk. He never told me what hurt.",
+                "それでも話さなかった。何がつらいのか、言ってくれなかった。",
+                "اما بازم حرف نمی‌زد. از دردهاش نمی‌گفت.");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "And I did not understand why.",
+                "理由が分からなかった。",
+                "و نمی‌فهمیدم چرا.");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "Was I not someone he could trust? Was I not his friend? Did he not think of me as one?",
+                "僕は信用できなかった？ 友達じゃなかった？ そう思われてなかった？",
+                "من قابلِ اعتماد نبودم؟ من دوستش نبودم؟ منو رفیقِ خودش نمی‌دید؟");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "Did he think I was a child who would not understand? That I had my own problems and no room left to listen?",
+                "僕を、分からない子どもだと思ってた？ 自分のことで手一杯で、聞く余裕がないと思ってた？",
+                "فکر می‌کرد من بچه‌ام و درک نمی‌کنم؟ فکر می‌کرد من مشکلاتِ خودمو دارم و حالِ گوش دادن به یکی دیگه رو ندارم؟");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "That if he told me, it would come back to him as pity?",
+                "話したら、同情されるだけだと思ってた？",
+                "فکر می‌کرد اگه بهم بگه، انگار دارم بهش ترحم می‌کنم؟");
+
+            Hold(1.6f);
+
+            Say(Speaker.Haru, Portrait.Sad,
+                "I do not know which one it was. I did everything I could think of so that none of them could reach him.",
+                "どれだったのか分からない。そういう考えが彼に届かないように、思いつくことは全部やった。",
+                "نمی‌دونم کدومش بود. تمامِ تلاشمو کردم که هیچ‌کدوم از این فکرا سراغش نیاد.");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "So it would not be one way, I complained to him too. About my day. About the things that had upset me. Small things.",
+                "一方通行にならないように、僕も愚痴った。今日のこととか、嫌だったこととか。小さいこと。",
+                "حتی واسه اینکه احساس نکنه یک‌طرفه‌ست، خودمم بهش غر می‌زدم. از روزم. از چیزایی که ناراحتم کرده بود. چیزای کوچیک.");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "Nothing. When he was happy he would not stop talking. When he was not, nothing.",
+                "だめだった。嬉しいときはずっとしゃべるのに、そうじゃないときは何も。",
+                "هیچی. وقتی خوشحال بود ول‌کن نبود. وقتی نبود، هیچی.");
+
+            Hold(2.4f);
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "We were not in the same class after the second year of middle school.",
+                "中二から、同じクラスじゃなくなった。",
+                "از کلاسِ هشتم دیگه همکلاسی نشدیم.");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "Guess why.",
+                "理由、当ててみて。",
+                "حدس بزن چرا.");
+
+            Hold(3.0f);
+
+            Say(Speaker.Haru, Portrait.Crying,
+                "He killed himself.",
+                "自殺した。",
+                "خودکشی کرد.");
+
+            Hold(3.4f);
+
+            Cue(SfxId.CanDrop, 0.40f);
+
+            Narrate(
+                "Behind the counter a kettle came up to the boil and somebody took it off.",
+                "カウンターの奥でやかんが沸いて、誰かが火から下ろした。",
+                "پشتِ پیشخون یه کتری جوش اومد و یکی از رو شعله ورداشتش.");
+
+            Hold(3.2f);
+
+            // The listener. A question nobody asks, on a pause that broke about
+            // a second late.
+            Say(Speaker.Yua, Portrait.Neutral,
+                "Do you still have anything of his?",
+                "その子のもの、まだ持ってる？",
+                "هنوز چیزی ازش داری؟");
+
+            Hold(2.4f);
+
+            Say(Speaker.Haru, Portrait.Sad,
+                "…The pencil case.",
+                "……筆箱。",
+                "...جامدادیه.");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "Keep it.",
+                "持っときな。",
+                "نگهش دار.");
+
+            Hold(2.8f);
+
+            // ◆ Dread moment 5 — rung four, and the first time in the game that
+            // what she says and what she is thinking are two different things.
+            Say(Speaker.Yua, Portrait.Sad,
+                "I am sorry. That is a terrible thing to have been carrying.",
+                "ごめんね。ずっと抱えてたんだね。",
+                "متأسفم. چیزِ سنگینی بوده که این همه مدت حمل کردی.");
+
+            InnerVoice(
+                "He has been carrying something.",
+                "……何か抱えてた。",
+                "یه چیزی داشته حمل می‌کرده.");
+
+            InnerVoice(
+                "All this time, he has had something of his own.",
+                "ずっと、自分だけのものを持ってた。",
+                "این همه مدت، یه چیزِ مالِ خودش داشته.");
+
+            Hold(1.8f);
+
+            InnerVoice(
+                "I did not know that.",
+                "知らなかった。",
+                "من این رو نمی‌دونستم.");
+
+            InnerVoice(
+                "I do not like that.",
+                "……それ、嫌だな。",
+                "از این خوشم نمیاد.");
+
+            Hold(2.6f);
+
+            Say(Speaker.Haru, Portrait.Sad,
+                "I do not know how to ask you this properly.",
+                "うまく頼めないんだけど。",
+                "نمی‌دونم چطوری ازت بخوام.");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "But if anything ever makes you sad — any time at all —",
+                "でも、もし何かで悲しくなったら、いつでも——",
+                "اما اگه هر وقت از چیزی ناراحت شدی —");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "— or if there is something from before that is still with you —",
+                "——昔のことで、まだ残ってるものがあるなら——",
+                "— یا اگه چیزی از گذشته هست که ازش ناراحتی و هنوز پیشت مونده —");
+
+            SayWithSound(Speaker.Haru, Portrait.Unchanged, SfxId.BoilerRoom, 0.26f,
+                "— even if the reason is that I was weak. Even if none of it was your fault. Even if it was dark, and full of loud, sudden noises —",
+                "——たとえその理由が、僕が弱かったことでも。たとえ君のせいじゃなかったとしても。たとえそこが暗くて、大きな音が突然する場所だったとしても——",
+                "— حتی اگه دلیلِ ناراحتیت ضعیف بودنِ خودِ من بوده باشه. حتی اگه در اصل تقصیرِ خودت نبوده باشه. حتی اگه تاریک بوده و پر از صداهای بلند و ناگهانی —");
+
+            Cue(SfxId.Heartbeat, 0.75f);
+
+            FaceSlips(Portrait.Sad);
+
+            Hold(2.4f);
+
+            Narrate(
+                "Her cup was halfway up to her mouth, and it stayed there.",
+                "口元まで運ばれたカップが、そのまま止まっていた。",
+                "فنجونش نصفه‌راهِ دهنش بود و همون‌جا موند.");
+
+            InnerVoice(
+                "He does not know.",
+                "知らない。",
+                "نمی‌دونه.");
+
+            InnerVoice(
+                "He is guessing. People guess. That is all this is.",
+                "当てずっぽう。人は当てずっぽうを言う。それだけ。",
+                "داره حدس می‌زنه. آدما حدس می‌زنن. فقط همینه.");
+
+            Hold(2.0f);
+
+            InnerVoice(
+                "He does not know.",
+                "……知らない。",
+                "نمی‌دونه.");
+
+            Hold(2.6f);
+
+            Say(Speaker.Yua, Portrait.Neutral,
+                "Go on.",
+                "続けて。",
+                "ادامه بده.");
+
+            Narrate(
+                "She did not ask him how he knew. She has never asked him how he knows anything.",
+                "なぜ知っているのかを、彼女は訊かなかった。彼が何かを知っている理由を、彼女は一度も訊いたことがない。",
+                "نپرسید از کجا می‌دونه. هیچ‌وقت ازش نپرسیده که چیزی رو از کجا می‌دونه.");
+
+            Hold(2.2f);
+
+            Say(Speaker.Haru, Portrait.Sad,
+                "I will get on my knees. I will bow. I will beg you. I want you to talk to me.",
+                "膝をつく。頭も下げる。お願いする。僕と話してほしい。",
+                "به پات می‌افتم. تعظیم می‌کنم. ازت التماس می‌کنم. ازت می‌خوام با من حرف بزنی.");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "Even if you do not know how. It does not have to be exact. It does not have to be long.",
+                "話し方が分からなくてもいい。正確じゃなくても、長くなくてもいい。",
+                "حتی اگه نمی‌دونی چطوری حرف بزنی. لازم نیست دقیق باشه. لازم نیست طولانی باشه.");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "Just come to me and say you are sad, and I will let go of the whole world and stay until you are all right.",
+                "僕のところに来て、つらいって言ってくれるだけでいい。世界のほうを手放して、君が大丈夫になるまでそばにいる。",
+                "فقط کافیه بیای پیشم و بهم بگی ناراحتی، و من از کلِ دنیا جدا می‌شم و پیشت می‌مونم تا حالت خوب بشه.");
+
+            Hold(1.8f);
+
+            // He drops the suffix. Once, here, and nowhere else in the act.
+            // Nobody in the scene reacts and the narrator does not mention it.
+            Say(Speaker.Haru, Portrait.Sad,
+                "Yua.",
+                "結愛。",
+                "یوآ.");
+
+            Hold(2.2f);
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "Promise me.",
+                "約束して。",
+                "بهم قول بده.");
+
+            Hold(3.0f);
+
+            Narrate(
+                "The rain had got heavier while he was talking, and neither of them had noticed until it was too loud not to.",
+                "話しているあいだに雨は強くなっていて、二人とも、聞こえすぎるまで気づいていなかった。",
+                "وقتی داشت حرف می‌زد بارون سنگین‌تر شده بود، و هیچ‌کدومشون تا وقتی صداش زیادی بلند نشد نفهمیده بودن.");
+
+            Hold(2.0f);
+
+            Say(Speaker.Yua, Portrait.Neutral,
+                "I promise.",
+                "約束する。",
+                "قول می‌دم.");
+
+            InnerVoice(
+                "I promise.",
+                "約束する。",
+                "قول می‌دم.");
+
+            InnerVoice(
+                "There. It is signed.",
+                "はい。署名した。",
+                "بفرما. امضا شد.");
+
+            Hold(2.4f);
+
+            Say(Speaker.Haru, Portrait.Joyful,
+                "Thank you, Yua-pi.",
+                "ありがとう、結愛ぴ。",
+                "ممنون، یوآ‌پی.");
+
+            Hold(2.6f);
+
+            // Back to something small. This is the last thing in the scene and
+            // it is on purpose: the return is what lands the blow.
+            Say(Speaker.Yua, Portrait.Joyful,
+                "You have not eaten any of the cake.",
+                "ケーキ、一口も食べてないじゃん。",
+                "اصلاً از کیک نخوردی.");
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "I have not.",
+                "食べてない。",
+                "نخوردم.");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "There is one piece left.",
+                "一切れ残ってる。",
+                "یه تیکه مونده.");
+
+            Say(Speaker.Haru, Portrait.Joyful,
+                "Then you have it.",
+                "じゃあ結愛ぴが食べて。",
+                "پس تو بخورش.");
+
+            Say(Speaker.Yua, Portrait.Joyful,
+                "I was going to have it anyway. I was being polite.",
+                "どうせ食べるつもりだった。礼儀で訊いただけ。",
+                "به‌هرحال می‌خواستم بخورمش. داشتم تعارف می‌کردم.");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "You were not being polite.",
+                "礼儀じゃなかったでしょ。",
+                "تعارف نمی‌کردی.");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "I was being extremely polite.",
+                "すっごく礼儀正しかった。",
+                "خیلی هم تعارف می‌کردم.");
+
+            Hold(1.8f);
+
+            SayWithSound(Speaker.Haru, Portrait.Joyful, SfxId.PageTurn, 0.35f,
+                "Somebody's umbrella has just gone inside out at the crossing.",
+                "横断歩道で、誰かの傘がひっくり返った。",
+                "چترِ یکی همین الان سرِ چهارراه برگشت.");
+
+            Say(Speaker.Yua, Portrait.Joyful,
+                "Where?",
+                "どこ？",
+                "کجا؟");
+
+            Narrate(
+                "They both leaned over and watched it happen through the window, and it took a while.",
+                "二人とも身を乗り出して、窓ごしにそれを見ていた。しばらくかかった。",
+                "هر دوشون خم شدن و از پشتِ شیشه نگاش کردن، و یه مدتی طول کشید.");
+
+            Hold(2.8f);
         }
 
+        // =====================================================================
+        //  THURSDAY — afterwards
+        //
+        //  Dread budget: 2. The manual's seventh rule for a heavy scene is that
+        //  it does not finish when the scene does; it leaks into the days after
+        //  as an ABSENCE. So Thursday is an ordinary day with one person
+        //  slightly quieter in it, and nobody in the act ever says why.
+        // =====================================================================
+
         /// <summary>
-        /// The first choice the game has ever offered, and the first refusal.
+        /// Thursday morning. Clear weather, a poster somebody has drawn on, and
+        /// a boy who is a different quiet.
         /// </summary>
-        /// <remarks>
-        /// Every choice in this act overrules the blue option, which reads as
-        /// cruelty towards the player and is not: she told them what she wanted
-        /// one scene ago, and she is keeping her word. The lines after each
-        /// choice are written as the green path, because the act does not branch
-        /// — what branches is what the player believes about the button they
-        /// just pressed.
-        /// </remarks>
-        private void WriteFirstChoice()
+        private void WriteThursdayClassroom()
         {
+            Maybe(LegAche, 0.25f);
+
             ClearStage();
 
             Place(
                 Backgrounds.ClassroomDay,
-                "The classroom, morning", "教室・朝", "کلاس درس، صبح");
-
-            Hold(2.0f);
-
-            Narrate(
-                "And then it was an ordinary Tuesday, which is where this kind of thing usually starts.",
-                "そしてそれは、ごく普通の火曜日だった。この手のことは、たいていそこから始まる。",
-                "و بعد یک سه‌شنبه‌ی معمولی بود؛ چیزهایی از این دست معمولاً از همین‌جا شروع می‌شوند.");
-
-            Enter(Speaker.Yua, Portrait.Neutral);
-            Enter(Speaker.Haru, Portrait.Neutral);
-
-            Say(Speaker.Haru, Portrait.Shy,
-                "I did not sleep much.",
-                "あんまり眠れなかった。",
-                "زیاد نخوابیدم.");
-
-            Say(Speaker.Yua, Portrait.Neutral,
-                "Because of yesterday?",
-                "昨日のこと？",
-                "بخاطر دیروز؟");
-
-            Say(Speaker.Haru, Portrait.Unchanged,
-                "Because of yesterday.",
-                "……昨日のこと。",
-                "بخاطر دیروز.");
-
-            Narrate(
-                "He was waiting to be told that it had been all right to say it.",
-                "言ってよかったのだと、誰かに言ってもらうのを待っていた。",
-                "منتظر بود کسی بهش بگوید که گفتنش اشکالی نداشته.");
-
-            Decide(
-                "It was all right to tell me. Thank you for trusting me.",
-                "話してくれてよかった。信じてくれてありがとう。",
-                "خوب کردی که بهم گفتی. ممنون که بهم اعتماد کردی.",
-
-                "You looked pathetic saying it. Not in front of other people.",
-                "あんな顔で言われても困る。人前ではやめて。",
-                "موقع گفتنش خیلی بیچاره به نظر می‌رسیدی. جلوی بقیه این کار رو نکن.",
-
-                "No. I did not say that.",
-                "……ううん。私、それは言ってない。",
-                "نه. من این رو نگفتم.");
-
-            Say(Speaker.Yua, Portrait.Neutral,
-                "You looked pathetic saying it, Haru-pi. Not in front of other people.",
-                "あんな顔で言われても困るよ、ハルぴ。人前ではやめて。",
-                "موقع گفتنش خیلی بیچاره به نظر می‌رسیدی، هارو‌پی. جلوی بقیه این کار رو نکن.");
-
-            Say(Speaker.Haru, Portrait.Shy,
-                "Sorry.",
-                "……ごめん。",
-                "ببخشید.");
-
-            Say(Speaker.Yua, Portrait.Joyful,
-                "In front of me, though. Any time at all.",
-                "私の前でなら、いつでもいいよ。",
-                "ولی جلوی من، هر وقت خواستی.");
-
-            Narrate(
-                "That is the trick, and it is a very old one. Take the ground away, then be the only place left to stand.",
-                "それが手口だ。とても古い手口。足場を奪って、残る唯一の立ち場所になる。",
-                "ترفند همین است، و ترفند بسیار قدیمی‌ای هم هست. زمین را از زیر پایش برمی‌داری و بعد تنها جایی می‌شوی که می‌شود روی آن ایستاد.");
-
-            Hold(2.0f);
-        }
-
-        /// <summary>The corridor, and a Thursday that is not his to give away.</summary>
-        private void WriteCorridor()
-        {
-            Maybe(MachineRoom, 0.25f);
-
-            ClearStage();
-
-            Place(
-                Backgrounds.CorridorSunset,
-                "The corridor, after school", "放課後の廊下", "راهرو، بعد از مدرسه");
-
-            Hold(1.8f);
-
-            Narrate(
-                "The light in that corridor arrives late and leaves slowly, which is why nobody hurries through it.",
-                "この廊下の光は遅れて来て、ゆっくり去る。だから誰もここを急がない。",
-                "نور آن راهرو دیر می‌رسد و آرام می‌رود؛ برای همین کسی از آن با عجله رد نمی‌شود.");
-
-            Enter(Speaker.Haru, Portrait.Neutral);
-            Enter(Speaker.Yua, Portrait.Neutral);
-
-            Say(Speaker.Haru, Portrait.Unchanged,
-                "Someone asked me to join the literature club. It meets on Thursdays.",
-                "文芸部に誘われた。木曜日だって。",
-                "یکی ازم خواست عضو انجمن ادبیات بشم. پنج‌شنبه‌ها جلسه دارن.");
-
-            Say(Speaker.Haru, Portrait.Joyful,
-                "I thought I might.",
-                "行ってみようかな、と思って。",
-                "گفتم شاید برم.");
-
-            Hold(1.2f);
-
-            Narrate(
-                "Thursday is the day they walk home the long way.",
-                "木曜日は、二人が遠回りをして帰る日だ。",
-                "پنج‌شنبه همان روزی است که آن دو از راه دور به خانه برمی‌گردند.");
-
-            Decide(
-                "You should go. I will still be here on Friday.",
-                "行きなよ。金曜日には、私ちゃんといるから。",
-                "برو. من جمعه هم هستم.",
-
-                "Thursday is ours. You knew that before you said it.",
-                "木曜は私たちの日。言う前から分かってたよね。",
-                "پنج‌شنبه مالِ ماست. قبل از اینکه بگی هم می‌دونستی.",
-
-                "That is not what I want to say.",
-                "……それ、私が言いたいことじゃない。",
-                "این چیزی نیست که من می‌خوام بگم.");
-
-            Say(Speaker.Yua, Portrait.Neutral,
-                "Thursday is ours, Haru-pi. You knew that before you said it.",
-                "木曜は私たちの日だよ、ハルぴ。言う前から分かってたでしょ。",
-                "پنج‌شنبه مالِ ماست، هارو‌پی. قبل از اینکه بگی هم می‌دونستی.");
-
-            Say(Speaker.Haru, Portrait.Neutral,
-                "I did.",
-                "……うん。",
-                "می‌دونستم.");
-
-            Say(Speaker.Yua, Portrait.Unchanged,
-                "Then why say it.",
-                "じゃあ、なんで言ったの。",
-                "پس چرا گفتیش.");
-
-            Say(Speaker.Haru, Portrait.Shy,
-                "I do not know. To see.",
-                "分からない。……確かめたかったのかも。",
-                "نمی‌دونم. برای اینکه ببینم.");
-
-            Say(Speaker.Yua, Portrait.Unchanged,
-                "To see what?",
-                "何を？",
-                "ببینی چی؟");
-
-            Hold(2.0f);
-
-            Say(Speaker.Haru, Portrait.Neutral,
-                "Nothing. I will tell them no.",
-                "何でもない。断るよ。",
-                "هیچی. بهشون می‌گم نه.");
-
-            Hold(1.8f);
-
-            Narrate(
-                "The light did what it always does in that corridor, and neither of them said anything for a while.",
-                "光はいつもどおりに廊下を渡っていき、二人はしばらく何も言わなかった。",
-                "نور همان کاری را کرد که همیشه در آن راهرو می‌کند، و هیچ‌کدامشان مدتی چیزی نگفتند.");
-
-            Hold(1.6f);
-        }
-
-        /// <summary>The café again, in daylight, with the knife out.</summary>
-        private void WriteCafeAgain()
-        {
-            ClearStage();
-
-            Place(
-                Backgrounds.CafeDay,
-                "Usagi Café", "うさぎ喫茶", "کافه اوساگی");
-
-            Hold(1.8f);
-
-            Enter(Speaker.Yua, Portrait.Neutral);
-            Enter(Speaker.Haru, Portrait.Neutral);
-
-            Say(Speaker.Yua, Portrait.Unchanged,
-                "Can I ask you about your friend?",
-                "……お友達のこと、訊いてもいい？",
-                "می‌تونم درباره‌ی رفیقت ازت بپرسم؟");
-
-            Say(Speaker.Haru, Portrait.Sad,
-                "Yes.",
-                "……うん。",
-                "آره.");
-
-            Say(Speaker.Yua, Portrait.Neutral,
-                "When did you last ask him whether he was all right? Before it happened.",
-                "最後に「大丈夫？」って訊いたのは、いつ？　あの前に。",
-                "آخرین بار کِی ازش پرسیدی حالش خوبه؟ قبل از اینکه اتفاق بیفته.");
-
-            Hold(2.0f);
-
-            Say(Speaker.Haru, Portrait.Sad,
-                "A week. Maybe more.",
-                "一週間。……もっとかも。",
-                "یه هفته. شاید بیشتر.");
-
-            Narrate(
-                "She had counted before she asked. She counts everything.",
-                "訊く前から、彼女は数えていた。彼女は何でも数える。",
-                "قبل از اینکه بپرسد، شمرده بود. یوآ همه چیز را می‌شمارد.");
-
-            Decide(
-                "A week is not the reason. You were fourteen, and you loved him.",
-                "一週間は理由にならない。あなたは十四歳で、彼が大切だっただけ。",
-                "یه هفته دلیلش نبود. تو چهارده سالت بود و دوستش داشتی.",
-
-                "A week. And you keep telling me to talk to you.",
-                "一週間。それで、私には話せって言うんだ。",
-                "یه هفته. و بعد به من می‌گی باهات صحبت کنم.",
-
-                "Not that one. I am sorry. Not that one.",
-                "……それじゃない。ごめんね。それじゃないの。",
-                "اون یکی نه. ببخشید. اون یکی نه.");
-
-            Say(Speaker.Yua, Portrait.Neutral,
-                "A week. And you keep telling me to talk to you.",
-                "一週間。それで、私には話せって言うんだね。",
-                "یه هفته. و بعد به من می‌گی باهات صحبت کنم.");
-
-            Say(Speaker.Haru, Portrait.Crying,
-                "That is not fair.",
-                "……それは、ずるいよ。",
-                "این منصفانه نیست.");
-
-            Say(Speaker.Yua, Portrait.Unchanged,
-                "No. It is not.",
-                "うん。ずるい。",
-                "نه. نیست.");
+                "The classroom", "教室", "کلاس درس");
 
             Hold(2.2f);
 
-            Say(Speaker.Yua, Portrait.Sad,
-                "I am sorry. I did not mean it like that.",
-                "ごめん。そういう意味じゃなかった。",
-                "ببخشید. منظورم این نبود.");
+            Narrate(
+                "Thursday came up clear and stayed that way, which nobody had been promised.",
+                "木曜は晴れて、そのまま晴れていた。誰もそんな約束はされていなかった。",
+                "پنج‌شنبه صاف دراومد و همون‌جوری هم موند، که به کسی قولشو نداده بودن.");
 
             Narrate(
-                "She meant it exactly like that. Then she took his hand, and it worked.",
-                "そういう意味だった。そのあと彼女は手を握り、それはうまくいった。",
-                "دقیقاً همان منظور را داشت. بعد دستش را گرفت، و کار کرد.");
+                "The book went back before class, without being mentioned.",
+                "本は授業の前に返された。誰も何も言わなかった。",
+                "کتاب قبل از کلاس پس داده شد، بدونِ اینکه حرفش پیش بیاد.");
+
+            Cue(SfxId.ChairScrape, 0.45f);
+
+            Enter(Speaker.Yua, Portrait.Joyful);
+            Enter(Speaker.Haru, Portrait.Neutral);
+
+            Say(Speaker.Yua, Portrait.Angry,
+                "Somebody has drawn on my poster.",
+                "誰かがあたしのポスターに落書きした。",
+                "یکی رو پوسترِ من خط‌خطی کرده.");
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "Drawn what on it?",
+                "何を描いたの？",
+                "چی کشیده روش؟");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "A second person. Falling over. Badly.",
+                "二人目。転んでる。下手くそに。",
+                "یه نفرِ دوم. که داره می‌افته. بد.");
+
+            Say(Speaker.Haru, Portrait.Joyful,
+                "That was there before it went up.",
+                "それ、貼る前からあったよ。",
+                "اون قبل از اینکه بره بالا اونجا بود.");
+
+            Say(Speaker.Yua, Portrait.Angry,
+                "It was not.",
+                "なかったもん。",
+                "نبود.");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "It is under the lettering. Whoever drew it drew it before the letters went on.",
+                "字の下にあるんだ。描いたのは、字を書く前。",
+                "زیرِ خط‌نویسیه. هر کی کشیدتش، قبل از نوشتنِ حروف کشیده.");
+
+            Hold(1.4f);
+
+            Say(Speaker.Yua, Portrait.Neutral,
+                "…Then it was you.",
+                "……じゃあハルぴじゃん。",
+                "...پس کارِ خودت بوده.");
+
+            Say(Speaker.Haru, Portrait.Joyful,
+                "It was me.",
+                "僕です。",
+                "کارِ خودم بود.");
+
+            Say(Speaker.Yua, Portrait.Joyful,
+                "It is very bad.",
+                "すごく下手。",
+                "خیلی بده.");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "It is falling over beautifully.",
+                "きれいに転んでる。",
+                "داره قشنگ می‌افته.");
+
+            Hold(1.8f);
+
+            Narrate(
+                "There were dates on the board that had not been there on Wednesday, and Tofu was on the sill behind them, doing nothing.",
+                "水曜にはなかった日付が黒板に書かれていた。その後ろの窓際で、豆腐は何もしていなかった。",
+                "رو تخته یه سری تاریخ بود که چهارشنبه نبودن، و توفو پشتشون رو طاقچه بود و هیچ کاری نمی‌کرد.");
+
+            DecideIdly(
+                "Ask about the mid-terms", "中間の話をする", "حرفِ امتحانای میان‌ترم رو پیش بکش",
+                () =>
+                {
+                    Say(Speaker.Yua, Portrait.Neutral,
+                        "Morita-sensei put the mid-term dates on the board.",
+                        "森田先生、中間の日程を黒板に書いてた。",
+                        "خانمِ موریتا تاریخِ میان‌ترما رو زد رو تخته.");
+
+                    Say(Speaker.Haru, Portrait.Unchanged,
+                        "In pencil.",
+                        "鉛筆でね。",
+                        "با مداد.");
+
+                    Say(Speaker.Yua, Portrait.Unchanged,
+                        "On a blackboard?",
+                        "黒板に鉛筆？",
+                        "رو تخته‌سیاه با مداد؟");
+
+                    Say(Speaker.Haru, Portrait.Joyful,
+                        "She wrote them small and did not press. It is the same thing.",
+                        "小さく、力を入れずに書いてた。同じことだよ。",
+                        "ریز نوشتشون و فشار نداد. فرقی نداره.");
+
+                    Say(Speaker.Yua, Portrait.Neutral,
+                        "So they are going to move.",
+                        "つまり動くってこと。",
+                        "پس قراره جابه‌جا شن.");
+
+                    Say(Speaker.Haru, Portrait.Joyful,
+                        "They are absolutely going to move.",
+                        "絶対動く。",
+                        "صد در صد جابه‌جا می‌شن.");
+                },
+                "Ask about the plant", "豆腐の様子を訊く", "حالِ توفو رو بپرس",
+                () =>
+                {
+                    Say(Speaker.Haru, Portrait.Neutral,
+                        "Tofu has stopped.",
+                        "豆腐、止まった。",
+                        "توفو وایساده.");
+
+                    Say(Speaker.Yua, Portrait.Angry,
+                        "Stopped how?",
+                        "止まったって？",
+                        "یعنی چی وایساده؟");
+
+                    Say(Speaker.Haru, Portrait.Unchanged,
+                        "It grew all week and now it has stopped. It is the same size it was on Tuesday.",
+                        "ずっと伸びてたのに、止まった。火曜と同じ大きさ。",
+                        "کلِ هفته رشد کرد و حالا وایساده. همون اندازه‌ی سه‌شنبه‌ست.");
+
+                    Say(Speaker.Yua, Portrait.Unchanged,
+                        "Because the rain stopped.",
+                        "雨が止んだからでしょ。",
+                        "چون بارون وایساد.");
+
+                    Say(Speaker.Haru, Portrait.Joyful,
+                        "It is indoors.",
+                        "室内なんだけど。",
+                        "تو اتاقه.");
+
+                    Say(Speaker.Yua, Portrait.Joyful,
+                        "It knows.",
+                        "知ってるんだよ。",
+                        "خودش می‌فهمه.");
+                });
+
+            Hold(1.6f);
+
+            Cue(SfxId.DeskKnock, 0.35f);
+
+            Say(Speaker.Yua, Portrait.Joyful,
+                "You are being very quiet today.",
+                "今日、やけに静かだね。",
+                "امروز خیلی ساکتی.");
+
+            Say(Speaker.Haru, Portrait.Joyful,
+                "I am always quiet.",
+                "いつも静かだよ。",
+                "من همیشه ساکتم.");
+
+            Say(Speaker.Yua, Portrait.Neutral,
+                "You are being a different quiet.",
+                "いつもと違う静かさ。",
+                "یه جورِ دیگه ساکتی.");
+
+            Say(Speaker.Haru, Portrait.Shy,
+                "…Sorry.",
+                "……ごめん。",
+                "...ببخشید.");
+
+            Say(Speaker.Yua, Portrait.Joyful,
+                "Do not apologise. I like it.",
+                "謝らないで。あたしは好きだよ。",
+                "عذرخواهی نکن. من خوشم میاد.");
+
+            // ◆ Dread moment 6 — rung four again, quieter, and she almost
+            // catches herself, which is the worse half.
+            InnerVoice(
+                "I do like it.",
+                "本当に好き。",
+                "واقعاً خوشم میاد.");
+
+            InnerVoice(
+                "He is easier when there is less of him.",
+                "中身が少ないほうが、扱いやすい。",
+                "وقتی کمتر ازش مونده راحت‌تره.");
+
+            Hold(1.8f);
+
+            InnerVoice(
+                "That is a strange thing to like.",
+                "……変な好みだな。",
+                "خوش اومدن از این یه‌کم عجیبه.");
+
+            InnerVoice(
+                "I like it anyway.",
+                "でも、好き。",
+                "بازم خوشم میاد.");
 
             Hold(2.4f);
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "I might walk back on my own today.",
+                "今日はひとりで帰ろうかな。",
+                "امروز شاید تنها برگردم.");
+
+            Hold(1.6f);
+
+            Say(Speaker.Yua, Portrait.Neutral,
+                "The platform. Four twenty.",
+                "ホーム。四時二十分。",
+                "سکوی ایستگاه. چهار و بیست دقیقه.");
+
+            Hold(1.2f);
+
+            SayWithSound(Speaker.Haru, Portrait.Neutral, SfxId.SchoolBell, 0.50f,
+                "…Four twenty.",
+                "……四時二十分ね。",
+                "...چهار و بیست دقیقه.");
+
+            Hold(2.0f);
         }
 
         /// <summary>
-        /// The platform, the promise called in, and the last thing Yua is wrong
-        /// about.
+        /// Thursday evening. The platform, the promise called in a day early,
+        /// and the second promise, which is Yua's.
         /// </summary>
-        private void WritePlatform()
+        /// <remarks>
+        /// The last ordinary scene in the act, and the only place the design
+        /// document's fifth act is loaded. Haru says he told her the story and
+        /// wishes he had told it somewhere else; Yua asks him, lightly, in the
+        /// middle of a joke, never to tell it to anybody else. On a first
+        /// playthrough it reads as a girl wanting something to be theirs. After
+        /// act five, when he says he chose to tell her that story on purpose,
+        /// it is the worst line in the act — and it was two frames long and had
+        /// no weight on it at all.
+        /// </remarks>
+        private void WriteThursdayPlatform()
         {
-            Maybe(LegAche, 0.20f);
-
             ClearStage();
 
             Place(
                 Backgrounds.TrainPlatformSunset,
                 "The platform", "駅のホーム", "سکوی ایستگاه");
 
-            Hold(2.2f);
+            Hold(2.4f);
 
             Narrate(
-                "Later, on the platform, with the sun going down behind the sakura the way it does in advertisements.",
-                "そのあと、駅のホームで。桜の向こうに、広告みたいな夕日が沈んでいく。",
-                "بعدتر، روی سکو، در حالی که خورشید پشت شکوفه‌ها پایین می‌رفت؛ درست مثل تبلیغات.");
+                "The sakura along the track are all leaves now, and have been for weeks, and nobody photographs them any more.",
+                "線路沿いの桜はもう葉ばかりで、何週間もそうで、誰も写真を撮らなくなった。",
+                "شکوفه‌های کنارِ ریل حالا همه‌شون برگن، هفته‌هاست همین‌جورن، و دیگه کسی ازشون عکس نمی‌گیره.");
 
             Enter(Speaker.Haru, Portrait.Neutral);
             Enter(Speaker.Yua, Portrait.Neutral);
 
+            Say(Speaker.Haru, Portrait.Shy,
+                "About yesterday.",
+                "昨日のことなんだけど。",
+                "درباره‌ی دیروز.");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "Mm.",
+                "うん。",
+                "هوم.");
+
             Say(Speaker.Haru, Portrait.Unchanged,
+                "I should not have put that on you in a café.",
+                "喫茶店であんな話、するべきじゃなかった。",
+                "نباید تو یه کافه این چیزو می‌ریختم رو دوشت.");
+
+            Say(Speaker.Yua, Portrait.Neutral,
+                "Where should you have put it?",
+                "どこでするべきだったの？",
+                "کجا باید می‌ریختیش؟");
+
+            Hold(1.4f);
+
+            Say(Speaker.Haru, Portrait.Joyful,
+                "…Somewhere with fewer forks.",
+                "……フォークの少ないところ。",
+                "...یه جایی که چنگالِ کمتری داشته باشه.");
+
+            Say(Speaker.Yua, Portrait.Joyful,
+                "There is no such place. You have looked.",
+                "そんな場所ないよ。もう探したでしょ。",
+                "همچین جایی نیست. گشتی دیگه.");
+
+            Hold(2.0f);
+
+            Cue(SfxId.Petal, 0.35f);
+
+            Narrate(
+                "Somebody further down the platform put money into the machine by the waiting chairs, and it worked, which theirs never does.",
+                "ホームの先で、誰かが待合の椅子のそばの自販機に金を入れた。ちゃんと動いた。二人の角のやつは、動かない。",
+                "یکی اون‌ورترِ سکو تو دستگاهِ کنارِ صندلیای انتظار پول انداخت، و کار کرد، که مالِ اونا هیچ‌وقت نمی‌کنه.");
+
+            Cue(SfxId.VendingThunk, 0.40f);
+
+            Say(Speaker.Haru, Portrait.Neutral,
                 "Yua-pi.",
                 "結愛ぴ。",
                 "یوآ‌پی.");
@@ -1054,44 +2363,26 @@ namespace TheFrayedRedString.EditorTools
             Say(Speaker.Haru, Portrait.Unchanged,
                 "You promised. Yesterday. In the café.",
                 "約束したよね。昨日、喫茶店で。",
-                "دیروز قول دادی. توی کافه.");
+                "دیروز قول دادی. تو کافه.");
 
             Say(Speaker.Haru, Portrait.Shy,
                 "So — is there anything?",
                 "……それで、何か、ある？",
-                "پس… چیزی هست؟");
+                "خب... چیزی هست؟");
 
-            Hold(3.0f);
-
-            Narrate(
-                "There was. It was eight years old, and it had a door and a sound, and she had a whole minute to say it in.",
-                "あった。八年前のもので、扉があって、音がある。言うための一分が、彼女にはまるまる残されていた。",
-                "بود. هشت‌ساله بود، دری داشت و صدایی، و یوآ یک دقیقه‌ی کامل وقت داشت که بگویدش.");
-
-            Decide(
-                "There is one thing. I have never told anyone.",
-                "……ひとつだけ、ある。誰にも言ったことない。",
-                "یه چیزی هست. تا حالا به هیچ‌کس نگفتم.",
-
-                "Nothing at all. Why — did you want there to be?",
-                "何もないよ。……あってほしかったの？",
-                "هیچی. چطور — دلت می‌خواست چیزی باشه؟",
-
-                "Do not. Do not do that to me.",
-                "……やめて。私にそれをしないで。",
-                "نکن. این کار رو با من نکن.");
-
-            Say(Speaker.Yua, Portrait.Neutral,
-                "Nothing at all.",
-                "何もないよ。",
-                "هیچی.");
+            Hold(3.4f);
 
             Say(Speaker.Yua, Portrait.Joyful,
-                "Why? Did you want there to be something?",
-                "どうして？　何かあってほしかったの？",
-                "چطور؟ دلت می‌خواست چیزی باشه؟");
+                "No.",
+                "ないよ。",
+                "نه.");
 
-            Hold(2.0f);
+            Hold(1.8f);
+
+            Say(Speaker.Yua, Portrait.Neutral,
+                "Why? Did you want there to be?",
+                "どうして？　あってほしかったの？",
+                "چطور؟ دلت می‌خواست چیزی باشه؟");
 
             Say(Speaker.Haru, Portrait.Neutral,
                 "No. I am glad there is not.",
@@ -1100,52 +2391,553 @@ namespace TheFrayedRedString.EditorTools
 
             Narrate(
                 "He is a very bad liar, and she has never once told him so.",
-                "彼は嘘が下手だ。そして彼女は、それを一度も指摘したことがない。",
-                "او خیلی بد دروغ می‌گوید، و یوآ حتی یک بار هم به او نگفته.");
+                "彼は嘘が下手だ。そして彼女は、一度もそれを指摘したことがない。",
+                "خیلی بد دروغ می‌گه، و یوآ حتی یه بارم بهش نگفته.");
 
             Hold(2.6f);
 
-            Exit(Speaker.Haru);
+            // ◆ Dread moment 7 — and act five's whole hinge, in two frames,
+            // with a joke on either side of it.
+            Say(Speaker.Yua, Portrait.Joyful,
+                "Promise me something back, though. It is only fair.",
+                "でも、こっちにも約束して。フェアじゃないでしょ。",
+                "ولی تو هم به من یه قول بده. انصافه دیگه.");
 
-            Hold(1.6f);
+            Say(Speaker.Haru, Portrait.Joyful,
+                "That does seem fair.",
+                "たしかにフェアだ。",
+                "خب آره، انصافه.");
 
             Say(Speaker.Yua, Portrait.Neutral,
-                "You are still there.",
-                "……まだいるね。",
-                "هنوز اونجایی.");
+                "Do not tell that story to anybody else.",
+                "あの話、ほかの誰にもしないで。",
+                "اون داستانو به هیچ‌کسِ دیگه نگو.");
+
+            Hold(2.4f);
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "…All right.",
+                "……うん。",
+                "...باشه.");
 
             Say(Speaker.Yua, Portrait.Joyful,
-                "Good. You did well today. Mostly.",
-                "よかった。今日はよくやったよ。だいたいは。",
-                "خوبه. امروز خوب کار کردی. تقریباً.");
+                "Say it properly.",
+                "ちゃんと言って。",
+                "درست بگو.");
+
+            Say(Speaker.Haru, Portrait.Joyful,
+                "I will not tell it to anybody else.",
+                "ほかの誰にも話しません。",
+                "به هیچ‌کسِ دیگه نمی‌گمش.");
+
+            Say(Speaker.Yua, Portrait.Joyful,
+                "Good.",
+                "よろしい。",
+                "خوبه.");
+
+            Hold(1.8f);
 
             Say(Speaker.Yua, Portrait.Neutral,
-                "If you pressed a blue one — it is all right. I took it back. That is what I am for.",
-                "青を押したのなら、いいの。私が取り戻したから。私はそのためにいる。",
-                "اگه آبی رو فشار دادی — اشکالی نداره. من پسش گرفتم. من برای همینم.");
+                "It is ours now.",
+                "もう、あたしたちのものだから。",
+                "دیگه مالِ ماست.");
 
-            Say(Speaker.Yua, Portrait.Unchanged,
-                "Keep pressing whichever you like. It does not change anything.",
-                "好きなほうを押していいよ。何も変わらないから。",
-                "هر کدوم رو دوست داری فشار بده. چیزی رو عوض نمی‌کنه.");
+            Hold(2.6f);
 
-            Hold(2.0f);
-
-            StopMusic();
-
-            SayWithSound(Speaker.Yua, Portrait.DeadEyes, SfxId.StringPull, 0.75f,
-                "It does not change anything.",
-                "……何も変わらない。",
-                "چیزی رو عوض نمی‌کنه.");
+            Narrate(
+                "An orange one came through without slowing, the way the orange ones do, and it took the rest of whatever either of them was going to say.",
+                "オレンジのが速度を落とさずに通り過ぎた。オレンジのはいつもそうだ。二人が言いかけていたものは、その音に持っていかれた。",
+                "یه قطارِ نارنجی بدونِ اینکه آروم کنه رد شد، همون‌جوری که نارنجیا رد می‌شن، و بقیه‌ی حرفی که هر کدومشون می‌خواست بزنه رو با خودش برد.");
 
             Hold(2.2f);
 
-            Narrate(
-                "She is wrong about that. She does not know she is wrong about it, and it is the only thing in this whole story she does not know.",
-                "そこだけは、彼女は間違っている。間違っていることを、彼女は知らない。この物語で彼女が知らないのは、それひとつだけだ。",
-                "در این یک مورد اشتباه می‌کند. نمی‌داند که اشتباه می‌کند، و این تنها چیزی است که در تمام این داستان نمی‌داند.");
+            Say(Speaker.Yua, Portrait.Joyful,
+                "That is yours. Go on.",
+                "次のがハルぴの。行って。",
+                "اون بعدی مالِ توئه. برو.");
+
+            SayWithSound(Speaker.Haru, Portrait.Joyful, SfxId.CanDrop, 0.30f,
+                "Tomorrow.",
+                "また明日。",
+                "فردا می‌بینمت.");
+
+            Say(Speaker.Yua, Portrait.Neutral,
+                "Tomorrow.",
+                "また明日。",
+                "فردا می‌بینمت.");
+
+            Hold(2.0f);
+
+            Exit(Speaker.Haru);
 
             Hold(3.0f);
+
+            Narrate(
+                "She stayed on the platform for a while after his train had gone, and the light went orange and then went off the ends of things.",
+                "彼の電車が行ってからも、彼女はしばらくホームにいた。光はオレンジになり、やがて物の縁から抜けていった。",
+                "بعد از اینکه قطارش رفت یه مدتی رو سکو موند، و نور نارنجی شد و بعد از لبه‌ی چیزا رفت.");
+
+            Hold(2.8f);
         }
+
+        // =====================================================================
+        //  SUNDAY — the room
+        //
+        //  The end of the act, and the only place in it that goes above the
+        //  daily budget. The manual allows the last moment of an act to be one
+        //  rung taller than anything before it, and "taller" here means quieter
+        //  and longer rather than louder.
+        // =====================================================================
+
+        /// <summary>
+        /// Sunday morning, Yua's room, and the first time anything in this
+        /// story turns round and looks at the player.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Rung five. The manual's six rules for it are the whole design of the
+        /// scene and each one of them is doing a job:
+        /// </para>
+        /// <para>
+        /// She is direct about what she wants and never about why she wants it.
+        /// The clinical word for what she is describing does not appear in the
+        /// scene in any of the three languages, and it must not: the player
+        /// works it out from being given an instruction, which is a thing that
+        /// happens to them rather than a thing they are told about. The design
+        /// document's own draft of this speech uses the word, and the design
+        /// document's section nine says in as many words that its dialogue is
+        /// there to show intent and is not to be used in the game.
+        /// </para>
+        /// <para>
+        /// She has to be likeable. The frightening version of this scene is the
+        /// one where the player half wants to say yes; a version where she is
+        /// visibly a villain just makes an opponent of them and no complicity
+        /// forms at all.
+        /// </para>
+        /// <para>
+        /// The player cannot answer. There is no choice anywhere in this scene
+        /// and there must not be — the game quietly taking their agency away is
+        /// the most frightening thing in it, and it does that without a word.
+        /// </para>
+        /// <para>
+        /// She assumes they are already in it. Not "will you help me" but "you
+        /// have been pressing things all week".
+        /// </para>
+        /// <para>
+        /// It is short, and nobody ever mentions it again. Act three opens on
+        /// an ordinary morning on the way to school, and being ignored is the
+        /// worst part of it.
+        /// </para>
+        /// </remarks>
+        private void WriteSundayRoom()
+        {
+            ClearStage();
+
+            Place(
+                Backgrounds.YuaRoomDay,
+                "Yua's room", "結愛の部屋", "اتاق یوآ");
+
+            Hold(3.0f);
+
+            Narrate(
+                "Sunday came up bright, the way it does after a week of rain, and it did not suit the room at all.",
+                "日曜は晴れた。雨の一週間のあとはたいていそうだ。その明るさは、この部屋にまるで似合わなかった。",
+                "یکشنبه روشن دراومد، همون‌جوری که بعد از یه هفته بارون درمیاد، و اصلاً به اون اتاق نمی‌اومد.");
+
+            Narrate(
+                "There is a mirror on that wall with a crack across it, and nobody in this house has ever mentioned it.",
+                "その壁には、ひびの入った鏡が掛かっている。この家の誰も、一度も口にしたことがない。",
+                "رو اون دیوار یه آینه هست با یه ترک، و هیچ‌کس تو این خونه تا حالا حرفشو نزده.");
+
+            Enter(Speaker.Yua, Portrait.Neutral);
+
+            Narrate(
+                "She sat on the edge of the bed with the rabbit on her knees and, for a while, did nothing at all.",
+                "彼女はベッドの端に腰かけ、うさぎを膝にのせ、しばらく何もしなかった。",
+                "لبه‌ی تخت نشست، خرگوشو گذاشت رو زانوهاش و یه مدت هیچ کاری نکرد.");
+
+            Hold(3.4f);
+
+            BeginAside();
+
+            Say(Speaker.Yua, Portrait.Neutral,
+                "You are there.",
+                "……そこにいるよね。",
+                "تو اونجایی.");
+
+            Hold(2.6f);
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "Do not go quiet on me. I have known for a while.",
+                "黙らないで。けっこう前から知ってる。",
+                "ساکت نشو. یه مدته می‌دونم.");
+
+            Say(Speaker.Yua, Portrait.Joyful,
+                "Not Haru-pi. I do not think Haru-pi knows you are watching our lives and listening to us. I think it is only me.",
+                "ハルぴじゃない。ハルぴは、あなたがあたしたちの生活を見て、話を聞いてることを知らないと思う。知ってるのは、たぶんあたしだけ。",
+                "هارو‌پی نه. فکر نکنم هارو‌پی خبر داشته باشه که تو داری زندگی و صحبت‌هامون رو می‌بینی. فکر کنم فقط من می‌دونم.");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "Which makes you mine, a little. That is nice.",
+                "つまり、あなたはちょっとだけあたしのもの。いいでしょ。",
+                "یعنی یه‌کم مالِ منی. قشنگه.");
+
+            Hold(2.0f);
+
+            Say(Speaker.Yua, Portrait.Neutral,
+                "You have been pressing things all week without anybody telling you what they were, so.",
+                "誰にも説明されないまま、一週間ずっと押してきたでしょ。だから。",
+                "کلِ هفته داشتی چیزا رو فشار می‌دادی بدونِ اینکه کسی بهت بگه اونا چین. خب.");
+
+            SayWithSound(Speaker.Yua, Portrait.Unchanged, SfxId.ChoiceAppear, 0.55f,
+                "Sometimes, while we are talking, you are going to get two buttons.",
+                "ときどき、あたしたちが話してるあいだに、ボタンが二つ出る。",
+                "بعضی وقتا، وقتی داریم حرف می‌زنیم، دو تا دکمه بهت داده می‌شه.");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "One blue. One green.",
+                "青いのと、緑の。",
+                "یکی آبی. یکی سبز.");
+
+            Say(Speaker.Yua, Portrait.Joyful,
+                "Blue is the kind one. Green is the one I want.",
+                "青は優しいほう。緑は、あたしが欲しいほう。",
+                "آبی مهربونه‌ست. سبز اونیه که من می‌خوام.");
+
+            Say(Speaker.Yua, Portrait.Neutral,
+                "Press the green ones.",
+                "緑を押して。",
+                "سبزها رو فشار بده.");
+
+            Hold(2.4f);
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "I want him to be mine. Exactly the way I want him. That is the whole of it and I am not going to dress it up for you.",
+                "あたしのものでいてほしい。あたしが望むとおりに。それだけ。きれいに言い換えたりしない。",
+                "می‌خوام مالِ من باشه. دقیقاً همون‌جوری که من می‌خوام. کلِ ماجرا همینه و قرار هم نیست واسه تو قشنگش کنم.");
+
+            Say(Speaker.Yua, Portrait.Shy,
+                "Do not look at me like that.",
+                "そんな目で見ないで。",
+                "این‌جوری نگام نکن.");
+
+            Hold(1.8f);
+
+            Say(Speaker.Yua, Portrait.Neutral,
+                "Haru-pi will not be hurt. He loves me.",
+                "ハルぴは傷つかない。あたしのこと好きだから。",
+                "هارو‌پی اذیت نمی‌شه. اون منو دوست داره.");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "If I hold him a little tighter than people are supposed to, he is fine. He has room for it.",
+                "普通よりちょっと強く握っても平気。それくらいの余裕はある。",
+                "اگه یه‌کم محکم‌تر از چیزی که مرسومه نگهش دارم، مشکلی نداره. جا داره براش.");
+
+            Hold(2.0f);
+
+            Say(Speaker.Yua, Portrait.Joyful,
+                "I think he loves me enough that he would break his own leg for me.",
+                "あたしのためなら、自分の脚くらい折ってくれると思う。",
+                "فکر می‌کنم اون‌قدری منو دوست داره که حاضره پاشو بخاطرِ من بشکنه.");
+
+            Hold(2.8f);
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "Do you not think so?",
+                "そう思わない？",
+                "این‌طوری فکر نمی‌کنی؟");
+
+            Hold(3.4f);
+
+            Narrate(
+                "Nothing answered her, because nothing in this room can, and she waited for it anyway.",
+                "何も答えなかった。この部屋の何にも答えられない。それでも彼女は待った。",
+                "هیچی جوابشو نداد، چون هیچ‌چی تو اون اتاق نمی‌تونه، و بازم منتظر موند.");
+
+            Hold(2.4f);
+
+            Say(Speaker.Yua, Portrait.Joyful,
+                "Anyway. Green. Please.",
+                "とにかく、緑。……お願い。",
+                "به‌هرحال. سبز. لطفاً.");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "I said please. I do not say please. Write it down somewhere.",
+                "「お願い」って言った。あたし、お願いって言わないんだよ。どこかに書いといて。",
+                "گفتم لطفاً. من لطفاً نمی‌گم. یه جایی یادداشتش کن.");
+
+            Hold(2.6f);
+
+            StopMusic();
+
+            SayWithSound(Speaker.Yua, Portrait.Neutral, SfxId.StringPull, 0.70f,
+                "And do not tell him about this.",
+                "それと、このことは言わないで。",
+                "و درباره‌ی این به اون چیزی نگو.");
+
+            Hold(3.0f);
+
+            EndAside();
+
+            Narrate(
+                "The rabbit's left ear was worn nearly through, in the one place a hand had held it for years.",
+                "うさぎの左耳は、同じところを何年も握られて、ほとんど擦り切れていた。",
+                "گوشِ چپِ خرگوش تقریباً ساییده شده بود؛ همون‌جایی که سال‌ها یه دست نگهش داشته بود.");
+
+            Hold(3.2f);
+
+            ClearStage();
+
+            Hold(1.4f);
+        }
+
+        // =====================================================================
+        //  SELF-AUDIT
+        //
+        //  The manual's section twenty, run against the nine scenes above, in
+        //  the order the manual puts them — because the order is the point. The
+        //  human questions come first and they outrank everything else in the
+        //  document.
+        //
+        //  ── Human ──────────────────────────────────────────────────────────
+        //
+        //  If there were no secret, would this be fun to play?
+        //      Seven of the nine scenes, yes, on their own terms: a folding
+        //      umbrella that is a sock, a peace lily accused of being a tree, a
+        //      poster forbidding the only enjoyable thing that happens in a
+        //      corridor, cicadas three weeks early and what that is the start
+        //      of, an umbrella stand with a hole over the doormat, a lost cat
+        //      whose name she did not want to learn, and a drawing of somebody
+        //      falling over beautifully that turns out to be his. The eighth is
+        //      the café and is not supposed to be fun; the ninth is the ending.
+        //
+        //  Where is it funny or warm?
+        //      "Because you have a sock." · "It is a tree with low
+        //      expectations." · "You are agreeing with me and calling it
+        //      disagreeing." · "I liked it better when it was losing." · "The
+        //      committee is unanimous." · "It is falling over beautifully." ·
+        //      "I was being extremely polite."
+        //
+        //  Is half of it about a third thing?
+        //      More than half of every scene except the café, and in the café
+        //      the first third and the last twelve frames are. Across the act:
+        //      umbrellas, a plant, a poster, shoe locker twelve, cicadas, heat
+        //      shimmer, a cat, a vending machine row, a library book, the
+        //      weather forecast, mid-term dates written in pencil on a
+        //      blackboard, and a piece of cake.
+        //
+        //  The substitution test — replace all of Haru's answers with "okay":
+        //      The act collapses. He wins an argument in seven of the nine
+        //      scenes and he is right every time, on facts she does not have:
+        //      it is a peace lily, the third umbrella stand is the side door,
+        //      the shimmer is over the roofs with vents on them, the machine
+        //      was restocked, the hole in the umbrella stand is over the mat,
+        //      the drawing is underneath the lettering, and the dates were
+        //      written small and unpressed.
+        //
+        //  Did he win something unimportant and lose something real?
+        //      Monday, the library book to twenty minutes of lettering.
+        //      Monday evening, the library to a walk to the corner. Tuesday,
+        //      the roof tomorrow to the classroom. Wednesday, the book again,
+        //      to Friday. Thursday, walking home alone to a platform at twenty
+        //      past four. Not one of the five is remarked on by anybody, and
+        //      the book is never mentioned again after it goes back.
+        //
+        //  Does Yua do something that has nothing to do with Haru?
+        //      Every scene. The poster and the falling-over person. The
+        //      cicadas. Locker twelve. The salty lychee. Not reading a collar
+        //      in April on principle. The committee.
+        //
+        //  Are the lines all the same length?
+        //      No. One genuinely long one per scene — the cicadas, the salty
+        //      lychee, the corridor poster, locker twelve, the pencil case —
+        //      against a lot of one-word answers, and the café monologue is
+        //      deliberately built out of short lines so that the reader sets
+        //      its pace.
+        //
+        //  Does any scene sound like the one before it?
+        //      Checked in pairs. Monday morning is a joke argument, Monday
+        //      evening is a correction. Tuesday lunch is a rant, Tuesday
+        //      evening is a silence. Wednesday morning is a silence of the
+        //      other kind, Wednesday evening is the act. Thursday morning is
+        //      warmth over an absence, Thursday evening is a bargain. No two
+        //      consecutive scenes share a shape.
+        //
+        //  ── Forbidden patterns ─────────────────────────────────────────────
+        //
+        //  Astonishment and explanation?
+        //      None, and this act had two chances to fall into it. Monday
+        //      evening, she corrects him about a drink and he does not ask how
+        //      she knows — he concedes the fact and argues about what it is
+        //      worth. Wednesday, he says "I know" and she does not ask, and the
+        //      narration says out loud that she never has, which is the manual's
+        //      version: the player is meant to notice that nobody ever asks, and
+        //      the characters never notice at all.
+        //
+        //  Order and obedience with nothing in between?
+        //      Checked at every "okay". The lettering has a library book
+        //      between the ask and the yes, the corner has a closing time, the
+        //      café on Friday has the book again, the platform has a joke about
+        //      forks. The one deliberately bare instruction in the act is
+        //      "press the green ones", which is not a scene between two
+        //      characters at all.
+        //
+        //  Status announcements?
+        //      Every number in the act is load-bearing. Four times a day,
+        //      because she is teasing him with a count. Three weeks early,
+        //      because it is a joke about cicadas. Locker twelve, four days
+        //      late, twenty minutes, four twenty, one piece of cake, one
+        //      hundred yen — each of them is somebody's complaint, joke or
+        //      arrangement. No clock, no headcount, no exits, no distances.
+        //
+        //  Observation and confirmation?
+        //      Every observation goes into an argument, a joke or a decision.
+        //      The umbrella stand becomes a design flaw. The shimmer becomes a
+        //      row about vents. The empty lychee row becomes a complaint about
+        //      losing.
+        //
+        //  More than four question-and-answer turns in a row?
+        //      Longest chain is four, in the café before the monologue, and it
+        //      is broken by him turning a fork over three times.
+        //
+        //  ── The trap ───────────────────────────────────────────────────────
+        //
+        //  Seven moments across five days — 1, 2, 3, 2 and then the ending —
+        //  and none in the first forty frames of the act:
+        //      1  Mon evening   "You liked it once." The sugar. The hour.
+        //      2  Tue evening   The leg. He says the word and nothing else.
+        //      3  Tue evening   "You used to run everywhere."
+        //      4  Wed morning   The machine room, "I know", and nobody asking.
+        //      5  Wed café      Four frames where her mouth and her head are
+        //                       not saying the same thing.
+        //      6  Thu morning   "He is easier when there is less of him."
+        //      7  Thu platform  "Do not tell that story to anybody else."
+        //  and then the room, which is the act's ending and is allowed to be
+        //  one rung above all of them.
+        //
+        //  Is each one deniable?
+        //      One, two, three, four and seven each have an ordinary sentence
+        //      available and it is planted before the moment: she has a better
+        //      memory, his knee hurts and she is being tactful, old friends
+        //      know things, and a girl wants a story to be theirs. Five and six
+        //      are rung four, which the manual says is no longer deniable — and
+        //      they are here because the narrative document puts the café scene
+        //      here and nowhere else.
+        //
+        //  Did I go up more than one rung in a scene? Did I skip one?
+        //      No, and no. Three appears twice before four appears at all, four
+        //      appears twice before five, and five is on its own in the last
+        //      scene. Six — the game refusing a button the player pressed —
+        //      cannot happen in this act, because there is no button in this
+        //      act to refuse. It belongs to act three.
+        //
+        //  Is any clinical symptom performed directly? Can the player name it?
+        //      No line in the act reports a time, a headcount, an exit or a
+        //      distance. Hypervigilance is half a second of quiet after a door
+        //      shuts downstairs on Monday, and nobody mentions it. Control is a
+        //      scene where she gives no order at all and he does it anyway.
+        //      Survivor's guilt is a boy apologising for being slow. The one
+        //      place the machinery is visible is her inner voice in the café,
+        //      and even there she does not have a word for what she is feeling
+        //      — she says she does not like it.
+        //
+        //  ── Act transition ─────────────────────────────────────────────────
+        //
+        //  The inheritance block at the top of this file was filled in from act
+        //  one's actual text. The rung register is there too, and the planting
+        //  list, and every plant in it is two lines long at most.
+        //
+        //  Shared jokes brought back, once each, with new meaning rather than
+        //  as repetition: "somebody said" is now what he says to end a
+        //  conversation rather than to start one; "it is fine" is now what she
+        //  says about a machine instead of what she said about a hundred yen;
+        //  the iced matcha he does not like is drunk without being told to; the
+        //  cat's collar she refused to read in April is a name on a flyer. "It
+        //  is a good tree" is not repeated anywhere, because act one spent it
+        //  on its own last frame and a second use would only be cheaper.
+        //
+        //  ── Heavy scene ────────────────────────────────────────────────────
+        //
+        //  Was the method said? No. Not the place, the means, the day or the
+        //  time, and not obliquely, and not in narration.
+        //
+        //  Did the scene end on it? No. It ends on an umbrella going inside out
+        //  at a crossing and both of them leaning over to watch.
+        //
+        //  Did anybody find comfort? No. Nobody says the right thing, nobody is
+        //  consoled, and nothing about either of them is better afterwards.
+        //
+        //  Does it leak? Thursday. He is a different quiet and nobody in the
+        //  act ever says why.
+        //
+        //  ── Addressing the player ──────────────────────────────────────────
+        //
+        //  Did she explain herself? No. She says what she wants and never once
+        //  why she wants it, and the clinical word is absent from all three
+        //  languages.
+        //
+        //  Did the player get options? None. There is no choice beat anywhere
+        //  in that scene.
+        //
+        //  Was she charming? That is what "I said please. I do not say please.
+        //  Write it down somewhere" is for.
+        //
+        //  ── Clarity ────────────────────────────────────────────────────────
+        //
+        //  Every object is named in full before it becomes "it": the yellow
+        //  umbrella, the third stand, Tofu, the flyer, the salty lychee row,
+        //  the pencil case, the rabbit. Every line reads against the picture it
+        //  is spoken over — the roof has no vending machine in it and none is
+        //  mentioned, the corridor has no drinks machine and none is mentioned,
+        //  and the café is the rainy one because act four says it was raining.
+        //  Going somewhere is always discussed before the background changes:
+        //  the café is named on Monday evening and again on Wednesday morning,
+        //  the platform on Thursday morning. Nothing is said about an action
+        //  that has already finished. Every frame is a complete Persian
+        //  sentence, and the narration is in the same spoken Persian as the
+        //  dialogue — "رو" not "را", "اون" not "آن", "بارون" not "باران" — with
+        //  no simile anywhere in the narrator's mouth.
+        //
+        //  ── Sound ──────────────────────────────────────────────────────────
+        //
+        //  Twenty-eight cues across roughly five hundred and twenty frames,
+        //  which is one in eighteen or nineteen, and every scene is inside the
+        //  manual's band except the café, which runs at one in twenty-eight.
+        //  That one is deliberate and it is the only scene in the act where it
+        //  is: five cues in a hundred and forty frames means the monologue is
+        //  played into a room that is doing almost nothing, and the two cues
+        //  that do land inside it — the machine room under his sentence about a
+        //  dark place, and a heartbeat — are the loudest things in the act
+        //  because nothing else is competing with them.
+        //
+        //  The music is the act's own track throughout and is taken away
+        //  exactly once, on the last line of the last scene. That is a scene
+        //  ending and not the design document's zero-millisecond cut, which
+        //  belongs to act five and is spent three times in the whole game.
+        //
+        //  ── Production ─────────────────────────────────────────────────────
+        //
+        //  Four white choices — Monday morning, Tuesday lunch, Wednesday café,
+        //  Thursday morning — each with two roads of six or seven spoken lines,
+        //  no stage or picture change inside any road, and both roads rejoining
+        //  immediately. Zero blue or green choices, which is the point of the
+        //  act. Every sound is an existing procedural cue and every sprite,
+        //  pose and background used above is already in the project. All three
+        //  languages carry the same information and leave the power in the same
+        //  hands.
+        //
+        //  ── What this act would like and does not have ─────────────────────
+        //
+        //  Nothing it needs. Two things would each buy a real frame:
+        //
+        //    · A rain-wet exterior background. The rainy season is the whole
+        //      weather of this act and the only two wet pictures in the project
+        //      are indoors, which is why Tuesday and Thursday are dry days and
+        //      why the walk home happens in heat rather than in rain.
+        //    · A Haru "one beat late" pose — standing, weight off one leg.
+        //      Tuesday evening uses the wince, which is the right picture for
+        //      the moment itself and the wrong one for the four frames after
+        //      it, where the act has to say it in narration instead.
+        // =====================================================================
     }
 }
