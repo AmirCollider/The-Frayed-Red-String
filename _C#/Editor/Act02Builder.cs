@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 //  The Frayed Red String
 //  Act02Builder.cs  (Editor only)
 //
@@ -447,8 +447,6 @@ namespace TheFrayedRedString.EditorTools
                 "それは認める。",
                 "این یکی رو قبول دارم.");
 
-            Cue(SfxId.PageTurn, 0.35f);
-
             Hold(1.6f);
 
             // Yua, doing something that has nothing to do with Haru.
@@ -726,8 +724,6 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(1.6f);
 
-            Cue(SfxId.Petal, 0.35f);
-
             Narrate(
                 "The light in that corridor arrives late and leaves slowly, which is why nobody hurries through it.",
                 "この廊下の光は遅れて来て、ゆっくり去る。だから誰もここを急がない。",
@@ -747,8 +743,6 @@ namespace TheFrayedRedString.EditorTools
                 "It shuts at five.",
                 "五時まで。",
                 "پنج می‌بنده.");
-
-            Cue(SfxId.SchoolBell, 0.40f);
 
             Say(Speaker.Yua, Portrait.Joyful,
                 "Then walk me to the corner first.",
@@ -1029,7 +1023,7 @@ namespace TheFrayedRedString.EditorTools
             Enter(Speaker.Yua, Portrait.Neutral);
             Enter(Speaker.Haru, Portrait.Neutral);
 
-            SayWithSound(Speaker.Yua, Portrait.Angry, SfxId.VendingThunk, 0.50f,
+            Say(Speaker.Yua, Portrait.Angry,
                 "It is gone.",
                 "……なくなってる。",
                 "نیست.");
@@ -1366,7 +1360,7 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(1.4f);
 
-            SayWithSound(Speaker.Yua, Portrait.Neutral, SfxId.SchoolBell, 0.50f,
+            Say(Speaker.Yua, Portrait.Neutral,
                 "Do not run in the corridor. There is a poster.",
                 "廊下は走らないこと。ポスターあるよ。",
                 "تو راهرو ندو. پوستر هست.");
@@ -1427,6 +1421,19 @@ namespace TheFrayedRedString.EditorTools
         /// is a wall the player clicks through. Broken at the places he would
         /// actually stop, it is paced by the person reading it — which is the
         /// only way its last line lands.
+        /// </para>
+        /// <para>
+        /// It is also trimmed against Haru's voice rather than against length.
+        /// A first draft ran four rhetorical questions back to back and then
+        /// had him say he complained to his friend "so it would not be one
+        /// way", and both of those are him analysing himself — which is the one
+        /// thing his character sheet says he never does, about anybody,
+        /// including himself. A rehearsed grief really does come out smoother
+        /// than an unrehearsed one, so it was defensible, and it was still the
+        /// only place in the act where he did not sound like himself. Two of
+        /// the questions are gone and the strategy is gone; he still complains
+        /// to his friend about his day, he just no longer explains why he did
+        /// it.
         /// </para>
         /// </remarks>
         private void WriteWednesdayCafe()
@@ -1740,11 +1747,6 @@ namespace TheFrayedRedString.EditorTools
                 "من قابلِ اعتماد نبودم؟ من دوستش نبودم؟ منو رفیقِ خودش نمی‌دید؟");
 
             Say(Speaker.Haru, Portrait.Unchanged,
-                "Did he think I was a child who would not understand? That I had my own problems and no room left to listen?",
-                "僕を、分からない子どもだと思ってた？ 自分のことで手一杯で、聞く余裕がないと思ってた？",
-                "فکر می‌کرد من بچه‌ام و درک نمی‌کنم؟ فکر می‌کرد من مشکلاتِ خودمو دارم و حالِ گوش دادن به یکی دیگه رو ندارم؟");
-
-            Say(Speaker.Haru, Portrait.Unchanged,
                 "That if he told me, it would come back to him as pity?",
                 "話したら、同情されるだけだと思ってた？",
                 "فکر می‌کرد اگه بهم بگه، انگار دارم بهش ترحم می‌کنم؟");
@@ -1757,9 +1759,9 @@ namespace TheFrayedRedString.EditorTools
                 "نمی‌دونم کدومش بود. تمامِ تلاشمو کردم که هیچ‌کدوم از این فکرا سراغش نیاد.");
 
             Say(Speaker.Haru, Portrait.Unchanged,
-                "So it would not be one way, I complained to him too. About my day. About the things that had upset me. Small things.",
-                "一方通行にならないように、僕も愚痴った。今日のこととか、嫌だったこととか。小さいこと。",
-                "حتی واسه اینکه احساس نکنه یک‌طرفه‌ست، خودمم بهش غر می‌زدم. از روزم. از چیزایی که ناراحتم کرده بود. چیزای کوچیک.");
+                "I complained to him too. About my day. About things that had annoyed me. Small things.",
+                "僕も愚痴った。今日のこととか、嫌だったこととか。小さいこと。",
+                "خودمم بهش غر می‌زدم. از روزم. از چیزایی که حرصم داده بود. چیزای کوچیک.");
 
             Say(Speaker.Haru, Portrait.Unchanged,
                 "Nothing. When he was happy he would not stop talking. When he was not, nothing.",
@@ -1786,8 +1788,6 @@ namespace TheFrayedRedString.EditorTools
                 "خودکشی کرد.");
 
             Hold(3.4f);
-
-            Cue(SfxId.CanDrop, 0.40f);
 
             Narrate(
                 "Behind the counter a kettle came up to the boil and somebody took it off.",
@@ -2200,8 +2200,6 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(1.6f);
 
-            Cue(SfxId.DeskKnock, 0.35f);
-
             Say(Speaker.Yua, Portrait.Joyful,
                 "You are being very quiet today.",
                 "今日、やけに静かだね。",
@@ -2456,7 +2454,7 @@ namespace TheFrayedRedString.EditorTools
                 "次のがハルぴの。行って。",
                 "اون بعدی مالِ توئه. برو.");
 
-            SayWithSound(Speaker.Haru, Portrait.Joyful, SfxId.CanDrop, 0.30f,
+            Say(Speaker.Haru, Portrait.Joyful,
                 "Tomorrow.",
                 "また明日。",
                 "فردا می‌بینمت.");
@@ -2629,9 +2627,9 @@ namespace TheFrayedRedString.EditorTools
                 "هارو‌پی اذیت نمی‌شه. اون منو دوست داره.");
 
             Say(Speaker.Yua, Portrait.Unchanged,
-                "If I hold him a little tighter than people are supposed to, he is fine. He has room for it.",
-                "普通よりちょっと強く握っても平気。それくらいの余裕はある。",
-                "اگه یه‌کم محکم‌تر از چیزی که مرسومه نگهش دارم، مشکلی نداره. جا داره براش.");
+                "If I asked him, he would say it was fine. I am not going to ask him.",
+                "訊いたら、平気だよって言うと思う。訊かないけど。",
+                "اگه ازش بپرسم، می‌گه اشکالی نداره. ولی نمی‌پرسم.");
 
             Hold(2.0f);
 
@@ -2876,6 +2874,17 @@ namespace TheFrayedRedString.EditorTools
         //  why she wants it, and the clinical word is absent from all three
         //  languages.
         //
+        //  One line in this scene had to go for failing that. It was "if I hold
+        //  him a little tighter than people are supposed to, he is fine", and
+        //  the tell is "than people are supposed to": she was describing her own
+        //  behaviour as outside the normal range and then excusing it, which is
+        //  self-diagnosis with the clinical word filed off. It reads as a want
+        //  and it is not one. What stands in its place is a claim about him —
+        //  "if I asked him, he would say it was fine. I am not going to ask
+        //  him" — which says the same thing about the situation, says nothing
+        //  at all about her, and is worse to read, because the second sentence
+        //  is a decision rather than an excuse.
+        //
         //  Did the player get options? None. There is no choice beat anywhere
         //  in that scene.
         //
@@ -2900,20 +2909,73 @@ namespace TheFrayedRedString.EditorTools
         //
         //  ── Sound ──────────────────────────────────────────────────────────
         //
-        //  Twenty-eight cues across roughly five hundred and twenty frames,
-        //  which is one in eighteen or nineteen, and every scene is inside the
-        //  manual's band except the café, which runs at one in twenty-eight.
-        //  That one is deliberate and it is the only scene in the act where it
-        //  is: five cues in a hundred and forty frames means the monologue is
-        //  played into a room that is doing almost nothing, and the two cues
-        //  that do land inside it — the machine room under his sentence about a
-        //  dark place, and a heartbeat — are the loudest things in the act
-        //  because nothing else is competing with them.
+        //  These are counted, not estimated. An earlier draft of this block
+        //  reported "twenty-eight cues across roughly five hundred and twenty
+        //  frames", and both halves of that were wrong in a way worth writing
+        //  down: the denominator was every beat kind in the act — a hundred and
+        //  fourteen of which are silent held pictures — rather than frames, and
+        //  the ratio it produced flattered a script that was in fact running
+        //  well ABOVE the manual's ceiling. An audit that reports a number
+        //  nobody counted is not an audit. Count the beats.
+        //
+        //  Counting rule used here, so the next person gets the same answer: a
+        //  frame is a Line beat, which is Say, SayWithSound, Narrate, Listen,
+        //  InnerVoice and ChildVoice. A cue is a Sound beat or a sound carried
+        //  on a line, which is Cue and SayWithSound. Choice roads are counted
+        //  once, not twice, because one playthrough only walks one of them.
+        //
+        //      frames on one playthrough   313
+        //      cues                         20
+        //      overall                      one in 15.7
+        //
+        //  Which is inside the manual's fifteen-to-twenty-five. Four scenes sit
+        //  under fifteen and every cue in them is load-bearing rather than
+        //  texture: the leg on Tuesday, the machine room and the heartbeat on
+        //  Wednesday, and in the last scene the buttons arriving and the music
+        //  being taken off. There is no scene where a cue is there to make a
+        //  ratio look right — eight of those were written and then cut once the
+        //  denominator was counted properly.
+        //
+        //  The café runs at one in twenty-four and that is the point of it:
+        //  four cues in ninety-five frames means the monologue plays into a
+        //  room doing almost nothing, so the two that do land inside it — the
+        //  machine room under his sentence about a dark place, and a heartbeat
+        //  — are the loudest things in the act.
         //
         //  The music is the act's own track throughout and is taken away
         //  exactly once, on the last line of the last scene. That is a scene
         //  ending and not the design document's zero-millisecond cut, which
         //  belongs to act five and is spent three times in the whole game.
+        //
+        //  ── The ambient layer, which does not exist ─────────────────────────
+        //
+        //  Section seventeen of the manual asks for three independent layers,
+        //  and one of them cannot be written from this file or from any other
+        //  act. There is no ambient bed in this game and no way for a script to
+        //  ask for one:
+        //
+        //    · AudioService plays one-shots and sets loop = false on every
+        //      source it owns.
+        //    · MusicService loops exactly one named track, chosen per act on
+        //      the asset rather than per scene, so it cannot carry a room.
+        //    · StoryBeatKind has Sound and Music and nothing between them.
+        //    · SceneAudioInstaller, despite the name, only hangs click and
+        //      hover sounds on UI controls.
+        //
+        //  So every scene in this act opens with no bed under it, and that is
+        //  an engine gap and not a writing decision. Saying so here is the
+        //  manual's own instruction — if you cannot do it, say so, do not write
+        //  round it — and the alternative was to keep quiet and let the next
+        //  act inherit the same silence with nothing on the record.
+        //
+        //  What it would take, roughly, in the order it would have to happen:
+        //  an Ambience beat kind; a looping synthesised source in AudioService
+        //  that survives a scene change and crossfades over about a second and
+        //  a half; a bed named on each Place beat so that a change of location
+        //  changes the room; and the ten recipes in section seventeen, which
+        //  are already written as synth parameters and need no audio files.
+        //  Until that exists, every act in this game is a dialogue box in a
+        //  vacuum, and this act would use it in all nine scenes.
         //
         //  ── Production ─────────────────────────────────────────────────────
         //
