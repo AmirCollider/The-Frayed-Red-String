@@ -192,6 +192,131 @@ namespace TheFrayedRedString.Presentation
             return sprite;
         }
 
+        /// <summary>
+        /// A filled circle with an optional outline.
+        /// </summary>
+        /// <remarks>
+        /// Not a <see cref="RoundedRect"/> with a large radius: that one is
+        /// built for nine-slicing, and a nine-sliced circle stretched to a
+        /// non-square rect comes out as a capsule with the corners of a circle.
+        /// This one is drawn at its own size and left un-sliced, so it is round
+        /// or it is nothing.
+        /// </remarks>
+        /// <param name="radius">Radius in pixels. The texture is twice this.</param>
+        /// <param name="fill">Interior colour, alpha included.</param>
+        /// <param name="border">Outline colour. Pass a transparent colour for no outline.</param>
+        /// <param name="borderWidth">Outline thickness in pixels.</param>
+        public static Sprite Circle(int radius, Color fill, Color border = default, float borderWidth = 0f)
+        {
+            radius = Mathf.Clamp(radius, 2, 256);
+            borderWidth = Mathf.Max(0f, borderWidth);
+
+            string key = $"ci:{radius}:{Key(fill)}:{Key(border)}:{borderWidth:0.##}";
+            if (Cache.TryGetValue(key, out Sprite cached) && cached != null)
+            {
+                return cached;
+            }
+
+            int size = radius * 2;
+            Texture2D texture = NewTexture(size, size, $"UI_Circle_{radius}");
+
+            Color[] pixels = new Color[size * size];
+            Vector2 centre = new Vector2(size * 0.5f, size * 0.5f);
+
+            for (int y = 0; y < size; y++)
+            {
+                for (int x = 0; x < size; x++)
+                {
+                    Vector2 point = new Vector2(x + 0.5f, y + 0.5f) - centre;
+
+                    // Half a pixel in from the texture edge, so the antialiased
+                    // rim has somewhere to live instead of being clipped flat.
+                    float distance = point.magnitude - (radius - 0.5f);
+
+                    pixels[y * size + x] = Blend(distance, fill, border, borderWidth);
+                }
+            }
+
+            texture.SetPixels(pixels);
+            texture.Apply(false, false);
+
+            Sprite sprite = Sprite.Create(
+                texture,
+                new Rect(0f, 0f, size, size),
+                new Vector2(0.5f, 0.5f),
+                PixelsPerUnit,
+                0,
+                SpriteMeshType.FullRect);
+
+            sprite.name = key;
+            Cache[key] = sprite;
+            return sprite;
+        }
+
+        /// <summary>
+        /// A soft round halo: <paramref name="colour"/> at the centre, fading to
+        /// nothing at the rim.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Drawn as a texture rather than faked with a stack of translucent
+        /// circles, because a stack of circles has edges — six of them — and the
+        /// banding is exactly what a glow is supposed to not have.
+        /// </para>
+        /// <para>
+        /// The falloff is squared. A linear ramp reads as a flat disc with a
+        /// blurry edge; squaring it puts most of the alpha near the centre and
+        /// lets the outside trail off, which is what light actually does.
+        /// </para>
+        /// </remarks>
+        /// <param name="radius">Radius in pixels. The texture is twice this.</param>
+        /// <param name="colour">Colour at the centre. Its alpha is the peak.</param>
+        public static Sprite RadialGlow(int radius, Color colour)
+        {
+            radius = Mathf.Clamp(radius, 2, 256);
+
+            string key = $"gl:{radius}:{Key(colour)}";
+            if (Cache.TryGetValue(key, out Sprite cached) && cached != null)
+            {
+                return cached;
+            }
+
+            int size = radius * 2;
+            Texture2D texture = NewTexture(size, size, $"UI_Glow_{radius}");
+
+            Color[] pixels = new Color[size * size];
+            Vector2 centre = new Vector2(size * 0.5f, size * 0.5f);
+
+            for (int y = 0; y < size; y++)
+            {
+                for (int x = 0; x < size; x++)
+                {
+                    Vector2 point = new Vector2(x + 0.5f, y + 0.5f) - centre;
+
+                    float t = Mathf.Clamp01(1f - point.magnitude / radius);
+                    Color pixel = colour;
+                    pixel.a = colour.a * t * t;
+
+                    pixels[y * size + x] = pixel;
+                }
+            }
+
+            texture.SetPixels(pixels);
+            texture.Apply(false, false);
+
+            Sprite sprite = Sprite.Create(
+                texture,
+                new Rect(0f, 0f, size, size),
+                new Vector2(0.5f, 0.5f),
+                PixelsPerUnit,
+                0,
+                SpriteMeshType.FullRect);
+
+            sprite.name = key;
+            Cache[key] = sprite;
+            return sprite;
+        }
+
         /// <summary>A flat, fully opaque single-pixel sprite.</summary>
         public static Sprite Solid(Color color)
         {

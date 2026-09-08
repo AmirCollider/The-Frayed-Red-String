@@ -82,10 +82,26 @@ namespace TheFrayedRedString.Scenes
                 return;
             }
 
-            if (InputService.ConfirmPressedThisFrame || PromptWasClicked())
+            if (InputService.ConfirmPressedThisFrame || PromptWasClicked() || ScreenWasTapped())
             {
                 Confirm();
             }
+        }
+
+        /// <summary>
+        /// True when the player accepted the warning by touch.
+        /// </summary>
+        /// <remarks>
+        /// Anywhere on the screen, not on the prompt. On a desktop the prompt is
+        /// one of two ways past this screen and the keyboard is the other, so a
+        /// click that has to land on the sprite costs nothing. On a phone it is
+        /// the only way past, and the sprite it has to land on says "Enter" and
+        /// is the size of a key — the very first thing a mobile player touches
+        /// would be a small target with no second chance behind it.
+        /// </remarks>
+        private static bool ScreenWasTapped()
+        {
+            return GamePlatform.IsMobile && InputService.PointerPressedThisFrame;
         }
 
         /// <summary>

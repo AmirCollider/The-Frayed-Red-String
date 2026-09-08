@@ -117,6 +117,19 @@ namespace TheFrayedRedString.Core
         /// </remarks>
         public const int FilmCanvasOrder = 700;
 
+        /// <summary>
+        /// Draw order of the letterbox bars, above every canvas the game plays
+        /// on.
+        /// </summary>
+        /// <remarks>
+        /// Well above the film at 700, because the bars are not part of the
+        /// game's picture at all — they are the shape of the screen the picture
+        /// is not filling, and nothing the game draws is allowed into them. Well
+        /// below the fade curtain at 30000, because a fade is meant to take the
+        /// whole window, bars included.
+        /// </remarks>
+        public const int LetterboxCanvasOrder = 20000;
+
         /// <summary>Characters revealed per second while reading normally.</summary>
         public const float TypeSpeedNormal = 45f;
 

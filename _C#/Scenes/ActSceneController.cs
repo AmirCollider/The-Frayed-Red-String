@@ -49,6 +49,7 @@ namespace TheFrayedRedString.Scenes
         private StoryOverlayView _overlay;
         private ChoicePanelView _choices;
         private PauseMenuView _pause;
+        private MobilePauseButton _pauseButton;
         private LoadPanelController _loadPanel;
         private StoryDirector _director;
 
@@ -169,13 +170,21 @@ namespace TheFrayedRedString.Scenes
             Transform found = UnityUtility.FindInScene(ObjectNames.BackgroundCanvas);
             Canvas canvas = found != null ? found.GetComponent<Canvas>() : null;
 
-            RectTransform layer = canvas != null
-                ? (RectTransform)canvas.transform
-                : CreateCanvas("StoryBackgroundCanvas", GameConfig.BackgroundCanvasOrder);
+            RectTransform layer;
 
             if (canvas != null)
             {
                 canvas.sortingOrder = GameConfig.BackgroundCanvasOrder;
+
+                // Already framed by SceneInstaller, which runs before this; the
+                // call is here so the background layer is asked for the framed
+                // rect by the same route as every other layer rather than by
+                // remembering that this one is a special case.
+                layer = SafeFrame.ContentOf(canvas);
+            }
+            else
+            {
+                layer = CreateCanvas("StoryBackgroundCanvas", GameConfig.BackgroundCanvasOrder);
             }
 
             authoredBackground = UnityUtility.FindDeep<Image>(layer, ObjectNames.StoryBackground);
@@ -337,6 +346,30 @@ namespace TheFrayedRedString.Scenes
             AdoptOldMenuCanvas(layer);
             EnsureSavePanel(layer);
             EnsureLanguageButton();
+            EnsurePauseButton(layer);
+        }
+
+        /// <summary>
+        /// Gives a phone a way into the pause menu.
+        /// </summary>
+        /// <remarks>
+        /// Escape opens the menu, and a phone has no Escape. Without this the
+        /// entire menu — Save, Load, the language cycle, the way back to the
+        /// title — is unreachable for the whole of a mobile playthrough, and the
+        /// only way out of the game is the task switcher.
+        /// </remarks>
+        private void EnsurePauseButton(RectTransform layer)
+        {
+            if (!GamePlatform.IsMobile)
+            {
+                return;
+            }
+
+            GameObject host = new GameObject("[TFRS] Pause Button", typeof(RectTransform));
+
+            _pauseButton = host.AddComponent<MobilePauseButton>();
+            _pauseButton.Initialize(layer);
+            _pauseButton.Pressed += () => SetPaused(true);
         }
 
         /// <summary>
@@ -546,12 +579,21 @@ namespace TheFrayedRedString.Scenes
             // Matched on height. The game is authored at 16:9 and every
             // background is exactly that; matching width instead would grow the
             // interface on an ultrawide monitor while the art stayed put.
+            //
+            // SafeFrame takes the match over from here, because which side the
+            // interface should be measured against depends on the screen: on a
+            // phone held in portrait the picture is limited by width, and a
+            // match on height would scale it off the top and bottom.
             scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
             scaler.matchWidthOrHeight = 1f;
 
             host.AddComponent<GraphicRaycaster>();
 
-            return (RectTransform)host.transform;
+            // The framed rect rather than the canvas. Everything built into it
+            // is laid out in the 1920×1080 the game is authored in, on any
+            // screen, and nothing downstream has to know the screen was a
+            // different shape.
+            return SafeFrame.ContentOf(canvas);
         }
 
         // ---------------------------------------------------------------------
@@ -574,6 +616,10 @@ namespace TheFrayedRedString.Scenes
                 _loadPanel?.Close(false);
                 _pause.Close();
             }
+
+            // The menu has a Resume button of its own; a second control in the
+            // corner that also closes it would be two answers to one question.
+            _pauseButton?.SetVisible(!paused);
 
             if (_director != null)
             {

@@ -101,6 +101,14 @@ namespace TheFrayedRedString.Core
             Light2DAmbientPulse.InstallAll(scene);
             SceneAudioInstaller.Install(scene);
 
+            // After the motion sweep and before the controller, and it has to be
+            // both. The sweep decides what is allowed to breathe by walking the
+            // hierarchy, so it should see the scene as it was authored rather
+            // than the extra rect this inserts; the controller then finds every
+            // authored canvas already framed and builds its own inside the same
+            // 16:9 area.
+            SafeFrame.InstallInto(scene);
+
             // Last: the controller's Start runs after everything above exists,
             // so it can assume motion channels and sounds are already in place.
             AttachSceneController(scene);

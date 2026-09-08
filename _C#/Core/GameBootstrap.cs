@@ -69,6 +69,7 @@ namespace TheFrayedRedString.Core
             ProceduralSfxLibrary.Clear();
             ProceduralUiSprites.Clear();
             ProceduralBackgrounds.Clear();
+            SafeFrame.ResetStatics();
         }
 
         /// <summary>
@@ -85,6 +86,12 @@ namespace TheFrayedRedString.Core
 
             _initialized = true;
 
+            // First of everything, because it decides the shape of the screen
+            // the rest of this is measured against. A phone that is still
+            // rotating out of portrait while the first canvas is built lays that
+            // canvas out for a screen the player is not going to be looking at.
+            GamePlatform.ConfigureDevice();
+
             LocalizationService.Initialize();
 
             ServiceHost = new GameObject(ServiceHostName);
@@ -97,6 +104,11 @@ namespace TheFrayedRedString.Core
             ScreenFader.Install(ServiceHost);
             GlobalPointerSfx.Install(ServiceHost);
             LocalizationRefresher.Install(ServiceHost);
+
+            // Built with the services rather than with a scene: the bars belong
+            // to the window, not to whatever happens to be playing in it, and a
+            // scene load must not be able to blink them off for a frame.
+            SafeFrame.EnsureBars();
 
             SceneInstaller.Enable();
         }
