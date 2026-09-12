@@ -104,13 +104,23 @@ enum ها روی **احساس** نام‌گذاری شده‌اند، نه رو�
 
 مالِ او تمام شده و هارو تازه دارد ماچایی را که دوست ندارد شروع می‌کند. آخرش هر دو راضی‌اند، به دو دلیلِ متفاوت.
 
+### چهره‌های کمدی و مکالمه (افزوده‌شده در فاز ۳)
+
+این چهره‌ها برای پر کردن فاصله‌ی عاطفی بین «لبخند معمولی» و «چهره‌های سنگین» اضافه شده‌اند تا پویایی طنز و لجبازی‌های روزمره در پرده‌های ۱ تا ۴ زنده شود.
+
+| # | `Portrait` | یوآ | هارو | کاربرد و حالت در دیالوگ |
+|---|---|---|---|---|
+| ۲۳ | `Pout` | `YuaPoutTsundere` | — به `Frown/Angry` می‌افتد — | دست‌به‌سینه، لپ‌های بادکرده و اخمِ کیوت؛ وقتی هارو مچش را می‌گیرد، سر به سرش می‌گذارد یا در کافه لجبازی می‌کند. |
+| ۲۴ | `Smug` | `YuaSmugMischievousSmile` | — به `Joyful` می‌افتد — | لبخند موذیانه، با اعتمادبه‌نفس و چشم‌های نیمه‌بسته؛ وقتی یوآ تصمیم را برده، هارو تسلیم شده، یا دارد او را مدیریت می‌کند. |
+| ۲۵ | `Surprised` | `YuaSurprisedTakenAback` | — به `Neutral` می‌افتد — | دست روی سینه، چشم‌های گرد و دهان نیمه‌باز؛ وقتی هارو یک فکت پیش‌بینی‌نشده می‌آورد یا خلاف انتظار عمل می‌کند. |
+| ۲۶ | `Bored` | `YuaBoredUnamused` | — به `Neutral` می‌افتد — | دست‌به‌سینه، چشم‌های بسته/بی‌تفاوت و لب‌های خط‌شده؛ برای غر زدن سرِ کلاس، بی‌حوصلگی و مسخره کردن قیمت‌ها. |
+| ۲۷ | `Thinking` | `YuaThinkingLookingUp` | — به `Neutral` می‌افتد — | انگشت اشاره به بالا، نگاه متفکر و لبخند ملایم؛ وقتی در حال وضع قوانین جدید است یا ایده‌ای در سر دارد. |
+
 ---
 
 ## ۴. کاراکترهای بچه — پرده‌ی ششم
 
 اسمِ فایل‌ها **از الآن قفل است**: دقیقاً اسمِ بزرگسال با `Child` بعد از اسمِ کاراکتر.
-
-```
 YuaChildNeutralGentleSmile.png     HaruChildNeutralGentleSmile.png
 YuaChildJoyfulHappyLaugh.png       HaruChildJoyfulHappyLaugh.png
 YuaChildShyBlushingLookDown.png    HaruChildShyBlushingLookAway.png
@@ -118,8 +128,7 @@ YuaChildSadImploringTearful.png    HaruChildSadImploringTearful.png
 YuaChildAnnoyedAngryGlare.png      HaruChildSeriousAngryFrown.png
 YuaChildDeadEyesPokerFace.png      HaruChildDeadEyesPokerFace.png
 YuaChildSorrowfulCryingTears.png   HaruChildSorrowfulCryingTears.png
-                                   HaruChildInjuredKneeGrimace.png
-```
+HaruChildInjuredKneeGrimace.png
 
 **هیچ‌کدام هنوز کشیده نشده‌اند** و پرده‌ی ششم بدونشان هم اجرا می‌شود (اسپرایتِ غایب = یک سایه). همین باعث می‌شود بشود پرده را امروز نوشت و قضاوت کرد.
 
@@ -140,6 +149,8 @@ YuaChildSorrowfulCryingTears.png   HaruChildSorrowfulCryingTears.png
 | `Manic` | پرده‌ی پنجم به بعد |
 
 **یک چهره‌ی امضا که دو بار بیاید، نصف می‌شود. سه بار بیاید، صفر می‌شود.**
+
+> **نکته:** چهره‌های کمدی و مکالمه (`Pout`، `Smug`، `Surprised`، `Bored`، `Thinking`) **جیره‌ی محدود ندارند** و می‌توانند آزادانه در صحنه‌های روزمره و بحث‌های بامزه استفاده شوند تا ریتم بازی از یکنواختی خارج شود.
 
 استثنا: `DeadEyes` یوآ در لحظه‌ی اورراید کردنِ گزینه‌ی آبی جیره ندارد — آن یک مکانیک است، نه یک انتخابِ کارگردانی. بعد از اورراید، صورتش **پوکر می‌ماند** و عمداً همان‌جا رها می‌شود؛ بیتِ بعدی حتماً باید یک `Portrait` بدهد.
 
