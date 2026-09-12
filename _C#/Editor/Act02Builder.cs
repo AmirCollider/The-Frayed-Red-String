@@ -9,9 +9,14 @@
 //  already there so nothing pointing at it breaks, and then hands over to the
 //  Story Editor.
 //
-//  This is a complete rewrite against the dialogue manual, version five
-//  (AboutProject/دستورنامه-دیالوگ-نخ-قرمز-پوسیده-v5.md) and the narrative
-//  document 3.1.2, which give act two four jobs and no others:
+//  STALE AGAINST THE CURRENT DOCUMENTS. This act was written against version
+//  five of the dialogue manual and narrative document 3.1.2; they are now at
+//  version eight and 3.1.7. It is due a rewrite against both, and the work is
+//  written up as defect 6 in AboutProject/Roadmap.md. Read that before changing
+//  anything here.
+//
+//  This is a complete rewrite against the dialogue manual, version five, and
+//  the narrative document 3.1.2, which give act two four jobs and no others:
 //
 //    • Go deeper than act one, and go slower doing it. The manual is exact
 //      about what "slower" means and it is not "shorter": a deeper scene has

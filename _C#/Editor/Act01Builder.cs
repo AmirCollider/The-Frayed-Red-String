@@ -8,11 +8,16 @@
 //  Document. It writes Assets/Story/Acts/Act01.asset, reusing the asset already
 //  at that path if there is one, and then hands over to the Story Editor.
 //
-//  This is a complete rewrite against the dialogue manual, version four
-//  (AboutProject/دستورنامه-دیالوگ-نخ-قرمز-پوسیده-v4.md). The draft it replaces
-//  is quoted in that manual's calibration section as the example of what a
-//  scene must not be, and it is worth writing down why, at the top of the file,
-//  so that it is not written a fourth time:
+//  STALE AGAINST THE CURRENT DOCUMENTS. This act was written against version
+//  four of the dialogue manual; the manual is now at version eight and the
+//  narrative document at 3.1.7. It is due a rewrite against both, and the work
+//  is written up as defect 1 and defect 6 in AboutProject/Roadmap.md. Read that
+//  before changing anything here.
+//
+//  This is a complete rewrite against the dialogue manual, version four. The
+//  draft it replaces is quoted in that manual's calibration section as the
+//  example of what a scene must not be, and it is worth writing down why, at
+//  the top of the file, so that it is not written a fourth time:
 //
 //      The old act one opened with a girl announcing the time, the minutes
 //      left until the bell, the number of people at the gate, the number of
