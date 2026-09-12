@@ -61,6 +61,18 @@ namespace TheFrayedRedString.EditorTools
         /// <summary>Music that starts when the act does.</summary>
         protected virtual string MusicTrack => MusicTracks.ForAct(ActNumber);
 
+        /// <summary>
+        /// The day the act opens on, shown under its name on the title card.
+        /// </summary>
+        /// <remarks>
+        /// Left at the default — three zeroes — the card looks exactly as it did
+        /// before dates existed, which is what every act that has not been dated
+        /// yet wants. Take the value from <see cref="StoryCalendar"/> rather
+        /// than typing three numbers: the constants there are the same ones
+        /// AboutProject/Acts.md lists, and the weekday is computed from them.
+        /// </remarks>
+        protected virtual StoryDate StartDate => default;
+
         /// <summary>Appends the whole act, in order.</summary>
         protected abstract void Write();
 
@@ -261,6 +273,7 @@ namespace TheFrayedRedString.EditorTools
             act.ActNumber = ActNumber;
             act.Title = Title;
             act.MusicTrack = MusicTrack;
+            act.StartDate = StartDate;
             act.GeneratedSignature = SignatureOf(Script);
             // An act with no number is an interlude or an ending: it is played
             // inside somebody else's scene and has no business naming itself
