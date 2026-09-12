@@ -1,71 +1,153 @@
-# Character Visual & Technical Specifications (Characters.md)
-**Project:** The Frayed Red String  
-**Engine:** Unity (2D / Visual Novel)
+# کاراکترها و آرتشان
+
+**نخِ قرمزِ پوسیده** · یونیتی (2D / ویژوال ناول)
+
+فایل‌های واقعی در `AboutProject/Characters/<Name>/` هستند. در پروژه‌ی یونیتی جایشان `Assets/Images/Characters/<Name>/` است.
 
 ---
 
-## 1. Technical & Canvas Specifications
+## ۱. مشخصاتِ فنی
 
-* **Sprite Dimensions (Native Resolution):** `1200 × 2400 px` (All character sprites share identical canvas bounds).
-* **Character Heights:**
-  * **Haru:** 173 cm
-  * **Yua:** 165 cm
-* **Unity Scaling & Transform Rule:**
-  * The 8 cm height delta is pre-baked into the image canvas (Yua has built-in top margin and does not occupy the full 2400 px vertical extent).
-  * **In-Engine Scale:** Set `Transform.localScale = Vector3(1, 1, 1)` for both Haru and Yua.
-  * **No manual downscaling** (e.g., `0.95` for Yua) is required in Unity.
+* **اندازه‌ی بوم:** `1200 × 2400 px` — همه‌ی اسپرایت‌ها، بدونِ استثنا. فرمت `PNG` با آلفا.
+* **قد:** هارو ۱۷۳ سانتی‌متر · یوآ ۱۶۵ سانتی‌متر.
+* **اختلافِ ۸ سانتی داخلِ خودِ تصویر پخته شده** — یوآ حاشیه‌ی بالای بوم دارد و کلِ ۲۴۰۰ پیکسل را پر نمی‌کند.
+* **در موتور هیچ مقیاسِ دستی‌ای اعمال نمی‌شود.** `Transform.localScale = (1, 1, 1)` برای هر دو.
 
----
+### جای ایستادن
 
-## 2. Character: Yua (Height: 165 cm)
+عددها در `_C#/Narrative/StageSettings.cs` (`Placement`) و در `StageSettings.asset` هستند. مختصاتِ **world**، نه canvas.
 
-| Sprite File Name | Visual Description |
-| :--- | :--- |
-| `YuaNeutralGentleSmile.png` | Soft and calm smile, direct forward gaze, arms relaxed at her sides. |
-| `YuaPeacefulClosedEyesSmile.png` | Serene and relaxed smile with eyes closed, arms resting at her sides. |
-| `YuaBobaSipFullCup.png` | Eyes closed in satisfaction while sipping through the straw of a full boba tea cup held at chest level. |
-| `YuaBobaHoldEmptyCup.png` | Gentle smile looking forward, holding the finished/empty boba tea cup with both hands at chest level. |
-| `YuaJoyfulHappyLaugh.png` | Bright open-mouthed laugh with eyes closed, hands clasped together at chest level. |
-| `YuaShyBlushingLookDown.png` | Heavily blushed cheeks, downcast eyes, hands brought up to cover her mouth and nose in bashfulness. |
-| `YuaSadImploringTearful.png` | Glistening tearful eyes, furrowed worried brows, hands tightly clasped over her chest in an imploring stance. |
-| `YuaAnnoyedAngryGlare.png` | Cold, sharp, annoyed glare with narrowed eyes, flat straight mouth, and arms down at sides. |
-| `YuaDeadEyesPokerFace.png` | Completely desaturated, hollow, and lifeless eyes (dead-eyes poker face), void of any emotion. |
-| `YuaInsaneManicSmile.png` | Wide unhinged grin showing teeth, dilated golden eyes, hands clasped over chest with red strings taut. |
-| `YuaSorrowfulCryingTears.png` | Heavy streaming tears running down blushing cheeks, hands covering her trembling mouth in grief. |
-| `YuaBento01HoldClosedBox.png` | Soft smile, holding closed wooden bento with both hands at chest level. |
-| `YuaBento02ShowFullFood.png` | Cheerful smile, displaying fully packed bento (6 sushi, 4 octopus sausages). |
-| `YuaBento03SharedMostlyEmpty.png` | Gentle smile, bento mostly shared with Haru (2 sushi, 1 octopus remaining). |
-| `YuaBento04LiftFirstSushi.png` | Open smile, lifting first sushi with chopsticks to eat (1 sushi, 1 octopus left in box). |
-| `YuaBento05SavorFirstSushi.png` | Closed eyes, puffed cheeks chewing first sushi (1 sushi, 1 octopus left in box). |
-| `YuaBento06LiftLastSushi.png` | Open smile, lifting second sushi with chopsticks (left side empty, 1 octopus left in box). |
-| `YuaBento07SavorLastSushi.png` | Closed eyes, chewing second sushi (left side empty, 1 octopus left in box). |
-| `YuaBento08LiftLastOctopus.png` | Open smile, lifting final octopus sausage (box interior completely empty). |
-| `YuaBento09SavorLastOctopus.png` | Closed eyes, chewing final octopus sausage (box interior completely empty). |
-| `YuaBento10ClosedFinishedSmile.png` | Closed-eye blissful smile, holding finished bento closed again with both hands. |
+| | X | Y | Scale |
+|---|---|---|---|
+| یوآ | `-4.55` | `-1.50` | `0.48` |
+| هارو | `4.70` | `-1.50` | `0.50` |
+| یوآ (۹ ساله) | `-4.55` | `-1.50` | `0.335` |
+| هارو (۹ ساله) | `4.70` | `-1.50` | `0.350` |
+
+> بازی **فقط** `StageSettings.asset` را می‌خواند. Marker های داخلِ Scene خوانده نمی‌شوند.
+> جزئیات و تاریخچه‌ی خرابی‌هایش: `Guide-Engine.md` بخش «جای کاراکترها».
 
 ---
 
-## 3. Character: Haru (Height: 173 cm)
+## ۲. گوینده‌ها — `Speaker`
 
-| Sprite File Name | Visual Description |
-| :--- | :--- |
-| `HaruNeutralGentleSmile.png` | Mild, warm everyday smile, calm direct gaze, relaxed standing posture with arms at his sides. |
-| `HaruJoyfulHappyLaugh.png` | Cheerful laugh with open mouth, smiling closed eyes, and a slight blush on his cheeks. |
-| `HaruShyBlushingLookAway.png` | Flustered blushing face looking sideways, right hand gripping his left upper arm. |
-| `HaruSadImploringTearful.png` | Glossy tearful eyes, worried raised eyebrows, hands clasped together over chest in a pleading gesture. |
-| `HaruSeriousAngryFrown.png` | Serious and angry frown with heavy shading over the eyes, intense downward glare, rigid stance. |
-| `HaruDeadEyesPokerFace.png` | Blank, lifeless, and empty gaze (dead eyes), completely flat and emotionless facial expression. |
-| `HaruInsaneManicSmile.png` | Head sharply tilted sideways, wide manic grin, crazed wide eyes, right hand clutching chest, left hand tensed. |
-| `HaruSorrowfulCryingTears.png` | Deep weeping with closed eyes, streaming tears, both hands brought up to cover his mouth. |
-| `HaruInjuredKneeGrimace.png` | Painful grimace with gritted teeth and visible sweat, right fist clenched at his side, left hand resting tensely on his thigh above the knee. |
-| `HaruMatchaHoldFullCup.png` | Gentle, polite smile, holding a full glass of iced matcha latte with straw in his raised hand while trying to look pleased. |
-| `HaruMatchaSipReluctant.png` | Sipping matcha through straw with subtle nervous sweat and conflicted sideways glance, forcing himself to drink despite disliking the taste. |
-| `HaruMatchaHoldEmptyCup.png` | Peaceful closed-eye smile with blushing cheeks, relieved after finishing the drink, holding the empty glass with straw residue. |
-| `HaruBento01HoldEmptyLid.png` | Gentle smile looking forward, holding empty wooden bento lid tray at chest level with left hand, chopsticks in right hand. |
-| `HaruBento02FoodReceived.png` | Warm grateful smile looking down, wooden lid loaded with food shared by Yua (4 sushi rolls, 3 octopus sausages). |
-| `HaruBento03LiftFirstOctopus.png` | Happy eager smile, lifting the first octopus sausage toward mouth with chopsticks (4 sushi, 2 octopus sausages left in tray). |
-| `HaruBento04SavorFirstOctopus.png` | Serene closed-eye smile, cheeks slightly puffed savoring the first octopus sausage (4 sushi, 2 octopus sausages left in tray). |
-| `HaruBento05LiftFirstSushi.png` | Open cheerful smile, lifting the first sushi roll toward mouth with chopsticks (3 sushi, 2 octopus sausages left in tray). |
-| `HaruBento06SavorFirstSushi.png` | Content closed-eye smile, chewing and savoring the first sushi roll (3 sushi, 2 octopus sausages left in tray). |
-| `HaruBento07LiftSecondOctopus.png` | Happy eager smile, lifting the second octopus sausage toward mouth with chopsticks (3 sushi, 1 octopus sausage left in tray). |
-| `HaruBento08SavorSecondOctopus.png` | Peaceful closed-eye blissful smile, savoring the second octopus sausage (3 sushi, 1 octopus sausage left in tray). |
+`_C#/Narrative/CharacterArt.cs`. عددها ثابت‌اند و داخلِ asset ها ذخیره می‌شوند — **هیچ‌وقت وسطِ enum اضافه نکن.**
+
+| # | `Speaker` | پلاکِ اسم | اسپرایت | توضیح |
+|---|---|---|---|---|
+| ۰ | `Narrator` | ندارد | ندارد | توصیف، فضاسازی، کنشِ فیزیکی |
+| ۱ | `Yua` | یوآ / ユア / Yua | دارد | شخصیتِ بازیکن، و کسی که بازی را می‌گرداند |
+| ۲ | `Haru` | هارو / ハル / Haru | دارد | |
+| ۳ | `Player` | دارد | ندارد | خطاب به کسی که کنترلر دستش است. از پرده‌ی دوم |
+| ۴ | `YuaChild` | دارد | **هنوز کشیده نشده** | یوآی نُه‌ساله، پرده‌ی ششم |
+| ۵ | `HaruChild` | دارد | **هنوز کشیده نشده** | هاروی نُه‌ساله، پرده‌ی ششم |
+| ۶ | `Classmate` | دارد | **عمداً ندارد** | دختری از کلاسشان. صدایی از کنارِ صحنه |
+
+### چرا `Classmate` بدن ندارد
+
+او فقط برای **یک کار** وجود دارد: در ژاپنی `ぴ` اسلنگِ واقعیِ صمیمیت است و بازیکنِ ژاپنی بارش را بارِ اول می‌گیرد؛ بازیکنِ فارسی و انگلیسی فقط یک لقب می‌شنود. پس کسی از بیرونِ آن دو نفر باید **یک بار** بلند به آن اشاره کند و جوابِ «به تو ربطی ندارد» بگیرد — و پسوند همان بارِ زبانی را بگیرد که در یکی از سه زبان از اول داشت.
+
+بدون اسپرایت، `VisualNovelStage` خودش کارِ درست را می‌کند: هیچ‌کدام از دو جایگاه او را ندارند، پس یوآ و هارو هر دو یک قدم عقب می‌روند — دقیقاً همان چیزی که در یک راهرو وقتی نفرِ سوم حرف می‌زند اتفاق می‌افتد.
+
+> ⚠️ **نقصِ فعلی:** صحنه‌ی این گفت‌وگو در پرده‌ی اول نوشته شده ولی پسوند در آن شنیده نمی‌شود. نگاه کن به `Roadmap.md` نقصِ ۱.
+
+---
+
+## ۳. حالت‌های چهره — `Portrait`
+
+enum ها روی **احساس** نام‌گذاری شده‌اند، نه روی فایل، چون دو کاراکتر یک احساس را جور دیگری املا می‌کنند: یوآ وقتی خجالت می‌کشد سرش را **پایین** می‌اندازد و هارو **رویش را برمی‌گرداند**، عصبانیتِ او یک **glare** است و مالِ هارو یک **frown**. اسکریپت نباید این را بداند.
+
+### چهره‌های پایه
+
+| # | `Portrait` | یوآ | هارو |
+|---|---|---|---|
+| ۰ | `Unchanged` | — هرچه روی صفحه است می‌ماند — | |
+| ۱ | `Neutral` | `YuaNeutralGentleSmile` | `HaruNeutralGentleSmile` |
+| ۲ | `Joyful` | `YuaJoyfulHappyLaugh` | `HaruJoyfulHappyLaugh` |
+| ۳ | `Shy` | `YuaShyBlushingLookDown` | `HaruShyBlushingLookAway` |
+| ۴ | `Sad` | `YuaSadImploringTearful` | `HaruSadImploringTearful` |
+| ۵ | `Angry` | `YuaAnnoyedAngryGlare` | `HaruSeriousAngryFrown` |
+| ۶ | `DeadEyes` | `YuaDeadEyesPokerFace` | `HaruDeadEyesPokerFace` |
+| ۷ | `Manic` | `YuaInsaneManicSmile` | `HaruInsaneManicSmile` |
+| ۸ | `Crying` | `YuaSorrowfulCryingTears` | `HaruSorrowfulCryingTears` |
+| ۹ | `Injured` | — ندارد، به `Neutral` می‌افتد — | `HaruInjuredKneeGrimace` |
+
+### بنتو — ده فریم، یک کنشِ مشترک
+
+یک اسمِ `Portrait`، دو نقاشیِ متفاوت از **یک لحظه**. اسکریپت یک بار `LunchFirstLift` می‌گوید و هر دو را یعنی.
+
+| # | `Portrait` | یوآ | هارو |
+|---|---|---|---|
+| ۱۰ | `LunchOpen` | `YuaBento01HoldClosedBox` | — |
+| ۱۱ | `LunchOffer` | `YuaBento02ShowFullFood` | `HaruBento01HoldEmptyLid` |
+| ۱۲ | `LunchShared` | `YuaBento03SharedMostlyEmpty` | `HaruBento02FoodReceived` |
+| ۱۳ | `LunchFirstLift` | `YuaBento04LiftFirstSushi` | `HaruBento03LiftFirstOctopus` |
+| ۱۴ | `LunchFirstBite` | `YuaBento05SavorFirstSushi` | `HaruBento04SavorFirstOctopus` |
+| ۱۵ | `LunchSecondLift` | `YuaBento06LiftLastSushi` | `HaruBento05LiftFirstSushi` |
+| ۱۶ | `LunchSecondBite` | `YuaBento07SavorLastSushi` | `HaruBento06SavorFirstSushi` |
+| ۱۷ | `LunchThirdLift` | `YuaBento08LiftLastOctopus` | `HaruBento07LiftSecondOctopus` |
+| ۱۸ | `LunchThirdBite` | `YuaBento09SavorLastOctopus` | `HaruBento08SavorSecondOctopus` |
+| ۱۹ | `LunchFinished` | `YuaBento10ClosedFinishedSmile` | — به `Neutral` می‌افتد — |
+
+**هارو یک تصویر عقب‌تر است، در تمامِ توالی.** یوآ باید جعبه را باز کند تا او چیزی برای نگه‌داشتن داشته باشد، پس اولین نقاشیِ او روی دومینِ او می‌افتد؛ و وقتی جعبه بسته می‌شود، دستِ هارو خالی است و تصویری ندارد — که همان چهره‌ی خنثایش است.
+
+> **عدد در دیالوگ = عدد در فریم.** اگر متن می‌گوید «شش تا سوشی، چهار تا سوسیس»، توالی باید ده بار برداشتن داشته باشد — یا عدد گفته نشود.
+> محتوای جعبه در آرت: یوآ ۶ سوشی + ۴ سوسیسِ اختاپوسی؛ ۴ سوشی + ۳ سوسیس سهمِ هارو می‌شود.
+
+### نوشیدنی — سه فریم
+
+| # | `Portrait` | یوآ (بابل‌تی) | هارو (ماچا) |
+|---|---|---|---|
+| ۲۰ | `DrinkFull` | `YuaBobaSipFullCup` | `HaruMatchaHoldFullCup` |
+| ۲۱ | `DrinkReluctant` | `YuaBobaHoldEmptyCup` | `HaruMatchaSipReluctant` |
+| ۲۲ | `DrinkFinished` | `YuaPeacefulClosedEyesSmile` | `HaruMatchaHoldEmptyCup` |
+
+مالِ او تمام شده و هارو تازه دارد ماچایی را که دوست ندارد شروع می‌کند. آخرش هر دو راضی‌اند، به دو دلیلِ متفاوت.
+
+---
+
+## ۴. کاراکترهای بچه — پرده‌ی ششم
+
+اسمِ فایل‌ها **از الآن قفل است**: دقیقاً اسمِ بزرگسال با `Child` بعد از اسمِ کاراکتر.
+
+```
+YuaChildNeutralGentleSmile.png     HaruChildNeutralGentleSmile.png
+YuaChildJoyfulHappyLaugh.png       HaruChildJoyfulHappyLaugh.png
+YuaChildShyBlushingLookDown.png    HaruChildShyBlushingLookAway.png
+YuaChildSadImploringTearful.png    HaruChildSadImploringTearful.png
+YuaChildAnnoyedAngryGlare.png      HaruChildSeriousAngryFrown.png
+YuaChildDeadEyesPokerFace.png      HaruChildDeadEyesPokerFace.png
+YuaChildSorrowfulCryingTears.png   HaruChildSorrowfulCryingTears.png
+                                   HaruChildInjuredKneeGrimace.png
+```
+
+**هیچ‌کدام هنوز کشیده نشده‌اند** و پرده‌ی ششم بدونشان هم اجرا می‌شود (اسپرایتِ غایب = یک سایه). همین باعث می‌شود بشود پرده را امروز نوشت و قضاوت کرد.
+
+بچه‌ها **لوازم ندارند** — نه بنتو، نه نوشیدنی. `WithoutProps()` در کد این را تضمین می‌کند: فلش‌بک یک حیاطِ مدرسه و یک موتورخانه است.
+
+---
+
+## ۵. جیره‌ی چهره — قانونِ دستورنامه
+
+> **یک چهره برای همه‌ی تک‌گویی‌ها یعنی ترسناک‌ترین تصویرِ پروژه تبدیل می‌شود به کاغذدیواری.**
+
+| چهره | جیره در هر پرده |
+|---|---|
+| `DeadEyes` | **یک بار** — و برای همان یک حالتی که مالِ اوست |
+| `Sad` (چهره‌ی نگران) | **یک بار** — برای بلندترین لحظه |
+| `Crying` | فقط جایی که هیچ‌کس در داستان اجازه‌ی دیدنش را ندارد |
+| `Joyful` | برای انکار و برای لذت — نه برای شادیِ معمولی در تک‌گویی |
+| `Manic` | پرده‌ی پنجم به بعد |
+
+**یک چهره‌ی امضا که دو بار بیاید، نصف می‌شود. سه بار بیاید، صفر می‌شود.**
+
+استثنا: `DeadEyes` یوآ در لحظه‌ی اورراید کردنِ گزینه‌ی آبی جیره ندارد — آن یک مکانیک است، نه یک انتخابِ کارگردانی. بعد از اورراید، صورتش **پوکر می‌ماند** و عمداً همان‌جا رها می‌شود؛ بیتِ بعدی حتماً باید یک `Portrait` بدهد.
+
+---
+
+## ۶. اضافه کردنِ کاراکترِ جدید
+
+پنج جای کد باید عوض شود و صحنه فقط **دو** جایگاه دارد. مراحلِ دقیق: `Guide-Engine.md` بخش «اضافه کردن یک کاراکتر جدید».
+
+کاراکترهایی که DLC ها لازم دارند و هنوز هیچ‌کدام وجود ندارند:
+**میزوکی (水月)** · **کایتو (海斗)** · **میناتو (湊)** · **یوما (結真)** · شخصیتِ دایی · شخصیتِ دکتر.

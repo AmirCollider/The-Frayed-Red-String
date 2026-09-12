@@ -1,36 +1,107 @@
-# Background Visual & Technical Specifications (Backgrounds.md)
-**Project:** The Frayed Red String  
-**Engine:** Unity (2D / Visual Novel)
+# پس‌زمینه‌ها
+
+**نخِ قرمزِ پوسیده** · یونیتی (2D / ویژوال ناول)
+
+فایل‌های واقعی در `AboutProject/Backgrounds/` هستند. در پروژه‌ی یونیتی جایشان `Assets/Images/Backgrounds/` است.
 
 ---
 
-## 1. Technical & Engine Specifications
+## ۱. مشخصاتِ فنی
 
-* **Native Resolution:** `1920 × 1080 px` (Full HD)
-* **Native Aspect Ratio:** `16:9`
-* **Unity Setup & Rendering:**
-  * Texture Type: `Sprite (2D and UI)`
-  * Texture Wrap Mode: `Clamp`
-  * Implemented via Fullscreen Canvas UI `Image` component (Stretch Anchor) or world-space `Sprite Renderer` assigned to the `Background` sorting layer.
+* **رزولوشن:** `1920 × 1080 px` — همه، بدونِ استثنا. فرمت `PNG`.
+* **نسبت:** `16:9`
+* **تنظیماتِ یونیتی:** `Texture Type: Sprite (2D and UI)` · `Wrap Mode: Clamp`
+* روی یک `Image` تمام‌صفحه در `BackgroundCanvas` (sortingOrder 0) کشیده می‌شود.
+* **اسم در کد هیچ‌وقت رشته‌ی خام نیست.** همیشه از ثابت‌های `Backgrounds` در `_C#/Narrative/CharacterArt.cs` بیاید.
+
+> **فایلِ غایب بازی را نمی‌شکند.** `ProceduralBackgrounds` از روی خودِ اسم یک تصویرِ جانشین می‌سازد، پس یک پرده را می‌شود امروز نوشت و پخش کرد و قضاوت کرد، وقتی هنوز آرتش وجود ندارد.
 
 ---
 
-## 2. Background Assets & Environmental Descriptions
+## ۲. پس‌زمینه‌های موجود
 
-| Background File Name | Visual & Environmental Description |
-| :--- | :--- |
-| `CherryBlossomSchoolAlleyDay.jpg` | Paved school pathway lined with blooming pink cherry blossom trees in bright daylight, traditional school building facade on the right, wooden benches, and ground lanterns. |
-| `AutumnSchoolAlleyDay.png` | Paved school pathway lined with vibrant autumn foliage (fiery red maple trees on the left, golden yellow foliage on the right) with scattered fallen leaves across the stone pavement in crisp daylight, traditional school building facade on the right, wooden benches, and ground lanterns. |
-| `SunnyClassroomDay.jpg` | Japanese high school classroom bathed in warm sunny daylight, wooden desks neatly arranged with pastel stationery and pencil pouches, chalkboard, and pink curtains by an open window. |
-| `OvercastClassroomRainy.jpg` | Japanese classroom on an overcast rainy day, gentle breeze swaying pink curtains by an open window, wooden student desks, chalkboard, and a bookshelf. |
-| `SchoolCorridorSunset.jpg` | Quiet, empty school hallway bathed in golden sunset light with long shadows stretching across the floor, floor-to-ceiling windows looking out at sakura trees, and student lockers. |
-| `SchoolRooftopSunnyDay.jpg` | School rooftop framed by chainlink wire mesh fencing and potted plants, wooden rest bench with a cushion and schoolbag under bright sunlight and fluffy cumulus clouds overlooking the city. |
-| `UsagiBakeryStreetDay.jpg` | Cobblestone street outside "Usagi Bakery" on a sunny day with pastel aesthetics, shop window displays filled with pastries and breads, a wooden bench with sleeping cats, and potted flowers. |
-| `PastelStreetVendingDay.jpg` | Pastel suburban residential street in bright daylight, pink beverage vending machine on the left, parked bicycle, vibrant blooming flowerbeds, and cherry blossom trees in the background. |
-| `PastelStreetVendingNight.jpg` | Modern pastel suburban street under a starry night sky with a crescent moon, glowing pink beverage vending machine, parked bicycle, warm streetlamps, and rich flower beds. |
-| `TraditionalAlleywayNight.jpg` | Traditional paved Japanese alleyway at night under a crescent moon, warm glowing paper lantern outside the entrance, lit residential windows, and potted hydrangeas along the sidewalk. |
-| `CozyCafeDay.jpg` | Cozy pastel pink cafe interior bathed in bright daylight, fairy string lights, strawberry parfaits, and tea sets arranged on polished wooden tables. |
-| `CozyCafeDimRainy.jpg` | Same pastel cafe interior under dim, overcast rainy lighting, raindrops sliding down the large windows, warm indoor ambient lights, matcha cake, and dango tea set on the foreground table. |
-| `PastelPlaygroundDay.jpg` | Cheerful pastel neighborhood playground in bright daylight, central stone angel fountain, swing set and slide with playing children, surrounded by manicured flowers and residential houses. |
-| `TrainPlatformSunset.jpg` | Train station platform illuminated by a warm golden-pink sunset glow, pink beverage vending machine, colored passenger waiting chairs, and blooming sakura trees alongside the tracks. |
-| `YuaRoomSunnyDay.jpg` | Character Yua's bedroom in warm daylight with pastel aesthetics, patchwork bed with stuffed animals (prominent floppy-eared bunny doll), a cracked decorative mirror on the wall, desk with laptop, and bookshelves. |
+| فایل | ثابتِ کد | کجا استفاده می‌شود | توصیف |
+|---|---|---|---|
+| `AutumnSchoolAlleyDay.png` | ← `SchoolAlleyDay` **باید بشود** | پرده ۱ (۲ بار)، پرده ۳ | مسیرِ سنگ‌فرشِ مدرسه با افراهای سرخ در چپ و برگ‌های طلایی در راست، برگ‌های ریخته روی سنگ‌فرش، نمای ساختمانِ سنتیِ مدرسه در راست، نیمکت‌های چوبی و فانوس‌های زمینی |
+| `CherryBlossomSchoolAlleyDay.png` | `SchoolAlleyDay` (فعلی) | — **باید کنار گذاشته شود** | همان مسیر با شکوفه‌های صورتیِ گیلاس در روزِ روشن ← نقصِ ۲ |
+| `SunnyClassroomDay.png` | `ClassroomDay` | پرده ۱ (۴)، ۲، ۳، ۴ | کلاسِ دبیرستانِ ژاپنی در آفتابِ گرم، میزهای چوبی، لوازم‌التحریرِ پاستلی، تخته‌سیاه، پرده‌های صورتی کنارِ پنجره‌ی باز |
+| `OvercastClassroomRainy.png` | `ClassroomRainy` | پرده ۱، ۲ (۲) | همان کلاس در روزِ ابری و بارانی، نسیم در پرده‌های صورتی، قفسه‌ی کتاب |
+| `SchoolCorridorSunset.png` | `CorridorSunset` | پرده ۱ (۲)، ۲، ۴، ۵ | راهروی خالیِ مدرسه در نورِ طلاییِ غروب، سایه‌های کشیده، پنجره‌های سرتاسری رو به درخت‌های ساکورا، کمدِ دانش‌آموزها |
+| `SchoolRooftopSunnyDay.png` | `RooftopDay` | پرده ۱، ۲، ۳، ۴ | پشت‌بامِ مدرسه با توریِ سیمی، گلدان‌ها، نیمکتِ چوبی با کوسن و کیف، آفتابِ روشن و ابرهای پنبه‌ای، شهر در دوردست |
+| `UsagiBakeryStreetDay.png` | `BakeryStreetDay` | پرده ۱، ۳، ۴ | خیابانِ سنگ‌فرشِ بیرونِ «نانواییِ اوساگی» در آفتاب، ویترینِ پر از نان و شیرینی، نیمکتِ چوبی با گربه‌های خوابیده، گلدان‌های گل |
+| `PastelStreetVendingDay.png` | `VendingStreetDay` | پرده ۱ (۳)، ۲، ۳ | خیابانِ مسکونیِ پاستلی در روزِ روشن، دستگاهِ نوشیدنیِ صورتی در چپ، دوچرخه‌ی پارک‌شده، باغچه‌ی پرگل، **درخت‌های شکوفه‌ی گیلاس در پس‌زمینه** ← نقصِ ۳ |
+| `PastelStreetVendingNight.png` | `VendingStreetNight` | پرده ۱، ۴ | همان خیابان زیرِ آسمانِ پرستاره با هلالِ ماه، دستگاهِ صورتیِ روشن، چراغ‌های گرمِ خیابان |
+| `TraditionalAlleywayNight.png` | `AlleywayNight` | پرده ۱، ۳، ۴، ۵، ۶ (۳) | کوچه‌ی سنگ‌فرشِ سنتیِ ژاپنی در شب زیرِ هلالِ ماه، فانوسِ کاغذیِ روشن کنارِ در، پنجره‌های روشن، گلدان‌های ادریسی |
+| `CozyCafeDay.png` | `CafeDay` | پرده ۱ | کافه‌ی پاستلیِ صورتی در روشناییِ روز، ریسه‌ی چراغ، پارفه‌ی توت‌فرنگی، ست‌های چای روی میزهای چوبی |
+| `CozyCafeDimRainy.png` | `CafeRainy` | پرده ۱، ۲، ۴ | همان کافه در نورِ کمِ روزِ بارانی، قطره‌های باران روی پنجره‌ی بزرگ، کیکِ ماچا و ست دانگو روی میزِ جلو |
+| `PastelPlaygroundDay.png` | `PlaygroundDay` | پرده ۱، ۳، ۴ | زمینِ بازیِ محله در روزِ روشن، فواره‌ی سنگیِ فرشته در وسط، تاب و سرسره با بچه‌های در حال بازی، خانه‌های مسکونی |
+| `TrainPlatformSunset.png` | `TrainPlatformSunset` | پرده ۱، ۲ | سکوی ایستگاهِ قطار در نورِ طلایی-صورتیِ غروب، دستگاهِ نوشیدنیِ صورتی، صندلی‌های رنگی، **درخت‌های شکوفه‌ی ساکورا کنارِ ریل** ← نقصِ ۳ |
+| `YuaRoomSunnyDay.png` | `YuaRoomDay` | پرده ۲، ۳، ۴ | اتاقِ یوآ در نورِ روز، تختِ چهل‌تکه با عروسک‌ها (عروسکِ خرگوشِ گوش‌افتاده در جلو)، **آینه‌ی ترک‌خورده‌ی روی دیوار**، میز با لپ‌تاپ، قفسه‌ی کتاب |
+
+---
+
+## ۳. پس‌زمینه‌هایی که هنوز کشیده نشده‌اند
+
+اسمشان در کد قفل شده است. فایل را با همین اسم داخل `Assets/Images/Backgrounds` بینداز و بدونِ هیچ تغییرِ کدی جایگزین می‌شود.
+
+### پرده‌ی ششم — فلش‌بک
+
+| ثابتِ کد | اسمِ فایل | چیست |
+|---|---|---|
+| `ElementaryClassroomDay` | `ElementaryClassroomDay.png` | کلاسِ دبستان، هشت سال قبل‌تر |
+| `ElementaryHallwayDay` | `ElementaryHallwayDay.png` | راهروی بیرونش |
+| `ElementaryYardDay` | `ElementaryYardDay.png` | حیاطی که شش سال هر روز در آن بازی کردند. **۷ بار استفاده می‌شود — پرکاربردترین پس‌زمینه‌ی پرده** |
+| `RiverbankChildhoodDusk` | `RiverbankChildhoodDusk.png` | کنارِ رودخانه در راهِ برگشت |
+| `SpiderLilyGardenDusk` | `SpiderLilyGardenDusk.png` | **باغچه‌ی سوسنِ عنکبوتیِ قرمز.** مهم‌ترین پس‌زمینه‌ی بازی — کلِ پرده‌ی سوم به آن اشاره می‌کند و دو نفر دو بار از گفتنِ دلیلش طفره می‌روند |
+| `BackLaneDusk` | `BackLaneDusk.png` | کوچه‌ای که او را از آن بردند |
+| `MachineRoomDoorDusk` | `MachineRoomDoorDusk.png` | بیرونِ درِ موتورخانه — جایی که پای هارو شکست |
+| `MachineRoomDark` | `MachineRoomDark.png` | داخلش. یک بار، در تاریکی، **بدونِ هیچ چیزی در کادر** |
+
+### بقیه
+
+| ثابتِ کد | اسمِ فایل | چیست |
+|---|---|---|
+| `AlleywayAftermath` | `TraditionalAlleywayAftermath.png` | تنها پس‌زمینه‌ای که نسخه‌ی دیگری از یک پس‌زمینه است. همان دیوار و همان فانوس، با اینکه چیزی جلویشان اتفاق افتاده |
+| — | `MainMenuChildhoodImage.png` | عکسِ بچگی‌شان کنارِ عروسکِ سالم. بعد از **هر** پایانی جای تصویرِ منوی اصلی می‌نشیند |
+| **نداریم** | `HaruRoomDay` یا مشابهش | **اتاقِ هارو با کمد** — نگاه کن به نقصِ ۴ |
+
+---
+
+## ۴. فصل و برگ‌ریزان
+
+بازی **از ۱ سپتامبر ۲۰۲۴ تا ۲۴ مارس ۲۰۲۵** می‌گذرد: پاییز، زمستان، اولِ بهار. **هیچ‌وقت فصلِ شکوفه‌ی گیلاس نیست.**
+
+این تصادفی نیست و اسمِ پرده‌ی اول خودش آن را می‌گوید: **«سرابِ شکوفه‌های گیلاس».** شکوفه‌ای در کار نیست. شکوفه‌ها فقط در انتظارِ بازیکن از این ژانر وجود دارند.
+
+### فصلِ هر پرده
+
+| پرده | تاریخ | فصل | افکتِ ریزش |
+|---|---|---|---|
+| ۱ | سپتامبر ۲۰۲۴ | اوایلِ پاییز | برگِ پاییزی، **کم و پراکنده** |
+| ۲ | اکتبر تا دسامبر ۲۰۲۴ | پاییزِ عمیق ← اوایلِ زمستان | برگِ پاییزی، پرتر · آخرِ پرده تقریباً هیچ |
+| ۳ | از ۲۵ دسامبر ۲۰۲۴ | زمستان | بدونِ ریزش (یا برفِ خیلی سبک) |
+| ۴ | از ۴ ژانویه ۲۰۲۵ | زمستان | بدونِ ریزش |
+| ۵ | مارس ۲۰۲۵ | اولِ بهار | بدونِ ریزش تا قبل از شکستنِ قاب |
+| ۶ | ژانویه ۲۰۱۷ | زمستان | بدونِ ریزش |
+| **فلش‌بک‌های شاد / پایانِ رویا** | — | — | **شکوفه‌ی گیلاس** — تنها جایی که مجاز است |
+
+### قانون
+
+> **شکوفه‌ی گیلاس در این بازی یک دروغ است، نه یک فصل.**
+> هر جا شکوفه ریخت، بازیکن دارد چیزی را می‌بیند که وجود ندارد — خاطره، رویا، یا سرابِ پرده‌ی اول.
+> **هیچ‌کس هیچ‌وقت درباره‌ی این اشاره نمی‌کند.**
+
+مشخصاتِ پیاده‌سازیِ افکت (هنوز ساخته نشده): `Roadmap.md` بخش «فاز ۲».
+
+---
+
+## ۵. نقص‌های شناخته‌شده‌ی آرت
+
+خلاصه‌شان اینجاست؛ شرحِ کامل و ترتیبِ کارشان در `Roadmap.md`.
+
+| # | نقص |
+|---|---|
+| ۲ | `Backgrounds.SchoolAlleyDay` هنوز به `CherryBlossomSchoolAlleyDay` اشاره می‌کند. باید `AutumnSchoolAlleyDay` شود |
+| ۳ | `PastelStreetVendingDay` و `TrainPlatformSunset` شکوفه‌ی گیلاس دارند و در سپتامبر تا دسامبر استفاده می‌شوند |
+| ۴ | **اتاقِ هارو وجود ندارد.** پرده‌ی پنجم الآن در `AlleywayNight` تمام می‌شود، در حالی که سند روایی ۳.۱.۷ آن را داخلِ خانه‌ی هارو می‌برد |
+| ۵ | هیچ‌کدام از هشت پس‌زمینه‌ی پرده‌ی ششم، و هیچ‌کدام از اسپرایت‌های بچه، هنوز کشیده نشده‌اند |
