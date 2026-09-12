@@ -176,6 +176,49 @@ namespace TheFrayedRedString.Narrative
         /// </remarks>
         ExitCinema = 20,
 
+        /// <summary>
+        /// Puts a date on screen.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Act two runs from the 3rd of October to the 21st of December and, on
+        /// screen, reads as five days in a row. Act four's 7/8/9 is three
+        /// arbitrary numbers unless the player has been shown enough of the
+        /// calendar to do the subtraction. The 26th of January 2025 only lands
+        /// because the 26th of January 2017 is coming.
+        /// </para>
+        /// <para>
+        /// A date is interface, not dialogue: no character ever says one out
+        /// loud. "It's the twenty-first today" is not a line, it is a status
+        /// announcement, which the dialogue manual forbids outright.
+        /// </para>
+        /// <para>
+        /// Does not wait for the player. It uses the same corner plate a
+        /// <see cref="Caption"/> does, and for the same reason — somebody who
+        /// already knows what day it is should not have to click past being
+        /// told.
+        /// </para>
+        /// </remarks>
+        DateCard = 25,
+
+        /// <summary>
+        /// Changes what is falling through the air, and how much of it.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// A beat rather than a property of the background, because weather in
+        /// this game tracks the scene and not the place: the wind gets up as a
+        /// conversation turns, and it stops entirely when somebody starts
+        /// talking to the player.
+        /// </para>
+        /// <para>
+        /// Cherry petals are never weather here. The game runs from September
+        /// to March and it is never blossom season; anywhere petals fall,
+        /// somebody is looking at something that is not there.
+        /// </para>
+        /// </remarks>
+        Fall = 26,
+
         /// <summary>End of the act.</summary>
         End = 14
     }

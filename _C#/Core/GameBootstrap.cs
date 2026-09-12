@@ -68,6 +68,7 @@ namespace TheFrayedRedString.Core
             SceneInstaller.ResetStatics();
             ProceduralSfxLibrary.Clear();
             ProceduralUiSprites.Clear();
+            FallSprites.Clear();
             ProceduralBackgrounds.Clear();
             SafeFrame.ResetStatics();
         }

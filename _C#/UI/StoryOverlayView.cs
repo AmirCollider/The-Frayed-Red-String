@@ -54,6 +54,17 @@ namespace TheFrayedRedString.UI
         private static readonly Color SeasonColour = new Color(0.98f, 0.78f, 0.86f, 1f);
         private static readonly Color TitleColour = new Color(1f, 0.98f, 0.99f, 1f);
 
+        /// <summary>
+        /// Dimmer and cooler than the season line above the title.
+        /// </summary>
+        /// <remarks>
+        /// A date is the quietest thing on the card and has to stay that way.
+        /// Given the same weight as the act's name it reads as a subtitle, and
+        /// the player starts looking for meaning in it before the act has had a
+        /// chance to earn any.
+        /// </remarks>
+        private static readonly Color DateColour = new Color(0.95f, 0.90f, 0.93f, 0.72f);
+
         private static readonly Color CaptionFill = new Color(0.12f, 0.08f, 0.12f, 0.62f);
         private static readonly Color CaptionBorder = new Color(0.98f, 0.71f, 0.80f, 0.55f);
         private static readonly Color CaptionText = new Color(1f, 0.97f, 0.98f, 1f);
@@ -63,6 +74,7 @@ namespace TheFrayedRedString.UI
         private CanvasGroup _cardGroup;
         private TMP_Text _seasonLabel;
         private TMP_Text _titleLabel;
+        private TMP_Text _dateLabel;
         private AmbientMotion _titleMotion;
         private AmbientMotion _seasonMotion;
         private RectTransform _divider;
@@ -91,10 +103,14 @@ namespace TheFrayedRedString.UI
         /// </summary>
         /// <param name="seasonNumber">1-based act number, shown as "Season 01".</param>
         /// <param name="actName">The act's title, already in the player's language.</param>
+        /// <param name="date">
+        /// The day the act opens on, already in the player's language. Empty
+        /// leaves the card exactly as it was before dates existed.
+        /// </param>
         /// <param name="hold">Seconds the card stays at full opacity.</param>
-        public IEnumerator PlayTitleCard(int seasonNumber, string actName, float hold)
+        public IEnumerator PlayTitleCard(int seasonNumber, string actName, string date, float hold)
         {
-            ApplyCardText(seasonNumber, actName);
+            ApplyCardText(seasonNumber, actName, date);
             SetDividerVisible(true);
 
             AudioService.Play(SfxId.GiftBox, 0.9f);
@@ -124,6 +140,7 @@ namespace TheFrayedRedString.UI
         {
             StoryText.Set(_seasonLabel, string.Empty);
             StoryText.Set(_titleLabel, message);
+            SetDateText(string.Empty);
             SetDividerVisible(false);
 
             AudioService.Play(SfxId.WishStar, 0.8f);
@@ -374,6 +391,8 @@ namespace TheFrayedRedString.UI
             _seasonLabel = BuildCentredLabel(host.transform, "SeasonLabel", GameConfig.SeasonFontSize, SeasonColour, 96f);
             _divider = BuildDivider(host.transform);
             _titleLabel = BuildCentredLabel(host.transform, "ActTitleLabel", GameConfig.ActTitleFontSize, TitleColour, -20f);
+            _dateLabel = BuildCentredLabel(host.transform, "ActDateLabel", GameConfig.CaptionFontSize, DateColour, -122f);
+            _dateLabel.gameObject.SetActive(false);
 
             _titleMotion = AmbientMotion.GetOrAdd(_titleLabel.gameObject);
             _titleMotion.Configure(AmbientMotionProfile.Title, 0.4f);
@@ -479,10 +498,35 @@ namespace TheFrayedRedString.UI
             ApplyCaptionDirection();
         }
 
-        private void ApplyCardText(int seasonNumber, string actName)
+        private void ApplyCardText(int seasonNumber, string actName, string date)
         {
             StoryText.Set(_seasonLabel, LocalizationService.Format(LocKeys.LoadSlotSeason, seasonNumber));
             StoryText.Set(_titleLabel, actName);
+            SetDateText(date);
+        }
+
+        /// <summary>
+        /// Writes the date under the title, or takes the line away entirely.
+        /// </summary>
+        /// <remarks>
+        /// Hidden rather than left blank, so an act with no date set has the
+        /// same card it has always had rather than one with a gap under the
+        /// name where something is evidently missing.
+        /// </remarks>
+        private void SetDateText(string date)
+        {
+            if (_dateLabel == null)
+            {
+                return;
+            }
+
+            bool has = !string.IsNullOrEmpty(date);
+            _dateLabel.gameObject.SetActive(has);
+
+            if (has)
+            {
+                StoryText.Set(_dateLabel, date);
+            }
         }
 
         private void ApplyCaptionText()

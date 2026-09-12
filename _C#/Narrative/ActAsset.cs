@@ -288,6 +288,32 @@ namespace TheFrayedRedString.Narrative
         [Tooltip("What Yua says as she takes the blue option back. Left empty, she only pulls the face.")]
         public LocalizedLine OverrideLine;
 
+        /// <summary>The day this scene happens on, for a DateCard.</summary>
+        /// <remarks>
+        /// Three integers rather than typed-out text, so the day of the week is
+        /// computed rather than written down. The design document opens the game
+        /// on Monday the 1st of September 2024, and the 1st of September 2024 is
+        /// a Sunday — which is exactly the class of mistake nothing in a
+        /// playthrough would ever catch. See <see cref="StoryCalendar"/>.
+        /// </remarks>
+        [Tooltip("The day this scene happens on, for a Date beat.")]
+        public StoryDate Date;
+
+        /// <summary>What falls through the air from here, for a Fall beat.</summary>
+        [Tooltip("What falls through the air from here on.")]
+        public Presentation.FallKind Fall = Presentation.FallKind.None;
+
+        /// <summary>
+        /// How much of it, from nothing to a windy day.
+        /// </summary>
+        /// <remarks>
+        /// Act one and act two sit around a quarter. A layer dense enough to
+        /// read as weather takes the scene away from the two people standing in
+        /// it.
+        /// </remarks>
+        [Tooltip("0 is nothing, 1 is a windy day. Around 0.25 is a normal autumn afternoon.")]
+        [Range(0f, 1f)] public float FallDensity = 0.25f;
+
         [Tooltip("A note to yourself. Never shown to the player.")]
         [TextArea(1, 3)] public string Note;
     }
@@ -308,6 +334,16 @@ namespace TheFrayedRedString.Narrative
 
         [Tooltip("Music that starts when the act does. Empty leaves whatever is already playing.")]
         public string MusicTrack;
+
+        /// <summary>The day the act opens on. Shown under the title on its card.</summary>
+        /// <remarks>
+        /// Left unset, the card looks exactly as it always has. Set, it carries
+        /// the date with the weekday spelled out — which is the one place in the
+        /// game where the full form is used, because it is the only place the
+        /// player is not being asked to do anything else at the same time.
+        /// </remarks>
+        [Tooltip("The day this act opens on. Shown on the title card. Leave at zero for no date.")]
+        public StoryDate StartDate;
 
         [Tooltip("Show the title card when the act begins.")]
         public bool ShowTitleCard = true;

@@ -412,6 +412,22 @@ namespace TheFrayedRedString.Audio
                         reverbSeconds: 1.6f,
                         seed: 2907);
 
+                // Dry leaves. The same shape as the petals and none of the same
+                // numbers: shorter, higher, a tighter cluster of grains and far
+                // less room around them. Petals drift past; leaves go by.
+                case SfxId.LeafFall:
+                    return ProceduralAudioSynth.Render(
+                        "SFX_LeafFall",
+                        totalDuration: 1.10f,
+                        voices: null,
+                        sparkles: new[]
+                        {
+                            Sparkle(14, 0.00f, 0.55f, A5 * 2f, 2, 0.045f, 1f, 0.22f)
+                        },
+                        reverbMix: 0.18f,
+                        reverbSeconds: 0.7f,
+                        seed: 5153);
+
                 // Lub-dub. Two low thuds with the second softer and close behind,
                 // which is what makes it read as a heart rather than a drum.
                 case SfxId.Heartbeat:

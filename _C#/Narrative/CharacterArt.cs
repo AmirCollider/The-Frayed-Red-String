@@ -176,7 +176,94 @@ namespace TheFrayedRedString.Narrative
         DrinkReluctant = 21,
 
         /// <summary>Both empty, and both of them pleased about it for different reasons.</summary>
-        DrinkFinished = 22
+        DrinkFinished = 22,
+
+        // ---------------------------------------------------------------------
+        //  The middle register
+        //
+        //  Counted across acts one and two, ninety per cent of the game was
+        //  three faces: Unchanged, Joyful, Neutral. Not because the art was
+        //  missing — Sad, Crying and Manic all existed and went unused — but
+        //  because the signature faces are rationed on purpose and there was
+        //  nothing between an ordinary smile and dead eyes.
+        //
+        //  These eight are that middle. They are the faces a comedy needs:
+        //  somebody being caught out, somebody refusing to be impressed,
+        //  somebody pleased with themselves. Acts one to four have to genuinely
+        //  BE the sweet game, and a sweet game with three expressions is a
+        //  slideshow.
+        //
+        //  Unlike the signature faces, these are not rationed.
+        // ---------------------------------------------------------------------
+
+        /// <summary>
+        /// Arms folded, mouth set, refusing to find it funny. Yua's.
+        /// </summary>
+        /// <remarks>
+        /// The face for every argument she loses about something that does not
+        /// matter — which, per the manual, is one per scene. Haru has no half of
+        /// this and does not need one: he does not sulk, he concedes.
+        /// </remarks>
+        Pout = 23,
+
+        /// <summary>
+        /// Pleased with herself, and not hiding it. Yua's.
+        /// </summary>
+        /// <remarks>
+        /// The most load-bearing of the eight. This is her reward face — the
+        /// small warmth that arrives immediately after she has got the thing she
+        /// wanted. Joyful has been standing in for it, and Joyful means
+        /// something else entirely.
+        /// </remarks>
+        Smug = 24,
+
+        /// <summary>Caught off guard. Both of them have one.</summary>
+        Surprised = 25,
+
+        /// <summary>
+        /// Eyes shut, arms folded, declining to react.
+        /// </summary>
+        /// <remarks>
+        /// Not <see cref="DeadEyes"/> and must never be used where that one
+        /// belongs. This is a joke landing badly; that one is nobody being home.
+        /// They look alike enough that using this in the scene before a DeadEyes
+        /// moment spends the DeadEyes.
+        /// </remarks>
+        Bored = 26,
+
+        /// <summary>
+        /// One hand at her chest, the other raised with a finger up. Yua's.
+        /// </summary>
+        /// <remarks>
+        /// The file is called YuaThinkingLookingUp and she does not look up —
+        /// the drawing points instead, which is better: looking up is thinking,
+        /// and pointing is having already decided. The name stays because the
+        /// file does.
+        /// </remarks>
+        Thinking = 27,
+
+        /// <summary>
+        /// Smiling with a hand at his neck, and it is not working. Haru's.
+        /// </summary>
+        /// <remarks>
+        /// His whole character in one drawing, and the face for every line where
+        /// his leg has stopped him and he says something else. A real smile
+        /// there would be a lie the picture tells; this one is the truth the
+        /// picture tells while he lies.
+        /// </remarks>
+        StrainedSmile = 28,
+
+        /// <summary>Hand behind his head, caught out, apologising. Haru's.</summary>
+        Sheepish = 29,
+
+        /// <summary>
+        /// A hand at his hip, easy and certain. Haru's.
+        /// </summary>
+        /// <remarks>
+        /// For the unimportant argument he wins in every scene. Angry is far too
+        /// much for that, and Neutral does not look like somebody who is right.
+        /// </remarks>
+        CalmSerious = 30
     }
 
     /// <summary>Which half of the stage a character stands on.</summary>
@@ -343,6 +430,18 @@ namespace TheFrayedRedString.Narrative
 
                 // And her half of the café. She finishes first, and the last
                 // picture is her sitting with her eyes shut while he catches up.
+                case Portrait.Pout: return "PoutTsundere";
+                case Portrait.Smug: return "SmugMischievousSmile";
+                case Portrait.Surprised: return "SurprisedTakenAback";
+                case Portrait.Bored: return "BoredUnamused";
+                case Portrait.Thinking: return "ThinkingLookingUp";
+
+                // No drawing of her own, and none is wanted. She does not wear a
+                // smile that is not working, and she is never the one caught out.
+                case Portrait.StrainedSmile: return "SadImploringTearful";
+                case Portrait.Sheepish: return "ShyBlushingLookDown";
+                case Portrait.CalmSerious: return "NeutralGentleSmile";
+
                 case Portrait.DrinkFull: return "BobaSipFullCup";
                 case Portrait.DrinkReluctant: return "BobaHoldEmptyCup";
                 case Portrait.DrinkFinished: return "PeacefulClosedEyesSmile";
@@ -379,6 +478,18 @@ namespace TheFrayedRedString.Narrative
                 case Portrait.LunchThirdBite: return "Bento08SavorSecondOctopus";
 
                 // The matcha he was ordered and does not like.
+                case Portrait.Surprised: return "SurprisedTakenAback";
+                case Portrait.Bored: return "DeadpanFlat";
+                case Portrait.StrainedSmile: return "StrainedPainfulSmile";
+                case Portrait.Sheepish: return "SheepishHandBehindHead";
+                case Portrait.CalmSerious: return "CalmSerious";
+
+                // He does not sulk, he concedes; and he does not decide in front
+                // of anyone. Both fall through to faces he does have.
+                case Portrait.Pout: return "SeriousAngryFrown";
+                case Portrait.Smug: return "JoyfulHappyLaugh";
+                case Portrait.Thinking: return "NeutralGentleSmile";
+
                 case Portrait.DrinkFull: return "MatchaHoldFullCup";
                 case Portrait.DrinkReluctant: return "MatchaSipReluctant";
                 case Portrait.DrinkFinished: return "MatchaHoldEmptyCup";
@@ -393,7 +504,34 @@ namespace TheFrayedRedString.Narrative
     /// </summary>
     public static class Backgrounds
     {
-        public const string SchoolAlleyDay = "CherryBlossomSchoolAlleyDay";
+        /// <summary>
+        /// The paved path up to the school, in autumn.
+        /// </summary>
+        /// <remarks>
+        /// It used to be CherryBlossomSchoolAlleyDay, and that was wrong in a way
+        /// that mattered. The game opens on the 2nd of September and ends on the
+        /// 24th of March: blossom season is neither of those, and a path full of
+        /// flowering cherry trees in the first week of the second term is the
+        /// single most visible continuity error the project had.
+        ///
+        /// Replacing it also does something the old picture could not. Act one is
+        /// called Cherry Blossom Mirage. There are no blossoms in it. The
+        /// blossom is what the player brings with them from every other game
+        /// that opens on a school path in the sun — and the path they actually
+        /// walk down is covered in dead leaves. Nobody mentions it.
+        /// </remarks>
+        public const string SchoolAlleyDay = "AutumnSchoolAlleyDay";
+
+        /// <summary>
+        /// The same path in blossom.
+        /// </summary>
+        /// <remarks>
+        /// Kept, and deliberately not used by acts one to five. It is for the
+        /// flashback and for the ending named after a dream — the two places in
+        /// this game where something is allowed to be beautiful and untrue at
+        /// the same time.
+        /// </remarks>
+        public const string SchoolAlleySpring = "CherryBlossomSchoolAlleyDay";
         public const string ClassroomDay = "SunnyClassroomDay";
         public const string ClassroomRainy = "OvercastClassroomRainy";
         public const string CorridorSunset = "SchoolCorridorSunset";
@@ -407,6 +545,16 @@ namespace TheFrayedRedString.Narrative
         public const string PlaygroundDay = "PastelPlaygroundDay";
         public const string TrainPlatformSunset = "TrainPlatformSunset";
         public const string YuaRoomDay = "YuaRoomSunnyDay";
+
+        /// <summary>
+        /// Haru's room, and the last place in the story that is still a room.
+        /// </summary>
+        /// <remarks>
+        /// Act five ends here, not in an alleyway: he makes a poor excuse, walks
+        /// her home to his own house, shows her up, and goes to the kitchen for a
+        /// glass of water. The wardrobe is in shot the whole time.
+        /// </remarks>
+        public const string HaruRoomDay = "HaruRoomSunnyDay";
 
         // ---------------------------------------------------------------------
         //  Act six — the flashback

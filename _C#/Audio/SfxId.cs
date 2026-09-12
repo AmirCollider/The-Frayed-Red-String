@@ -193,6 +193,23 @@ namespace TheFrayedRedString.Audio
         /// settle. The scene where two of them come out at once plays this
         /// twice, and that is the entire punchline.
         /// </remarks>
-        CanDrop = 27
+        CanDrop = 27,
+
+        /// <summary>Dry leaves turning over in wind.</summary>
+        /// <remarks>
+        /// <para>
+        /// The autumn half of <see cref="Petal"/>, and it had to be a second
+        /// sound rather than a louder version of the first. A petal is soft and
+        /// wet and moves like cloth; a dead leaf is stiff and hollow and scrapes.
+        /// Higher, drier, shorter, and with the grains bunched rather than
+        /// spread — a gust rather than a drift.
+        /// </para>
+        /// <para>
+        /// Acts one and two are September to December and were playing
+        /// <see cref="Petal"/> under trees that have no blossom on them. This is
+        /// what those four cues should have been.
+        /// </para>
+        /// </remarks>
+        LeafFall = 28
     }
 }

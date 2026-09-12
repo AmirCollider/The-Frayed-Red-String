@@ -601,6 +601,22 @@ namespace TheFrayedRedString.EditorTools
             beat.FindPropertyRelative("Note").stringValue = string.Empty;
             beat.FindPropertyRelative("PlaySound").boolValue = kind == StoryBeatKind.Sound;
 
+            // A list insert copies its neighbour, and a date is the one field
+            // where inheriting the previous beat's value is worse than being
+            // empty: a wrong date looks exactly like a right one.
+            if (kind != StoryBeatKind.DateCard)
+            {
+                SerializedProperty date = beat.FindPropertyRelative("Date");
+                date.FindPropertyRelative("Year").intValue = 0;
+                date.FindPropertyRelative("Month").intValue = 0;
+                date.FindPropertyRelative("Day").intValue = 0;
+            }
+
+            if (kind != StoryBeatKind.Fall)
+            {
+                beat.FindPropertyRelative("Fall").intValue = (int)FallKind.None;
+            }
+
             RestoreDefaults(beat);
 
             if (kind != StoryBeatKind.Choice)
@@ -648,6 +664,12 @@ namespace TheFrayedRedString.EditorTools
             if (volume.floatValue <= 0f)
             {
                 volume.floatValue = 1f;
+            }
+
+            SerializedProperty fallDensity = beat.FindPropertyRelative("FallDensity");
+            if (fallDensity.floatValue <= 0f)
+            {
+                fallDensity.floatValue = 0.25f;
             }
         }
 
@@ -735,6 +757,7 @@ namespace TheFrayedRedString.EditorTools
 
                 case StoryBeatKind.Grade:
                 case StoryBeatKind.Stain:
+                case StoryBeatKind.Fall:
                     return StageTint;
 
                 default:
@@ -820,6 +843,23 @@ namespace TheFrayedRedString.EditorTools
                 {
                     Color tint = beat.FindPropertyRelative("Tint").colorValue;
                     return tint.a <= 0.001f ? "◼ clear the screen" : "◼ stain the screen";
+                }
+
+                case StoryBeatKind.DateCard:
+                {
+                    StoryDate date = ReadDate(beat);
+                    return date.IsSet ? "▤ " + StoryCalendar.Line(date).English : "▤ date (not set)";
+                }
+
+                case StoryBeatKind.Fall:
+                {
+                    // intValue, not enumValueIndex: see ResetBeat.
+                    FallKind kind = (FallKind)beat.FindPropertyRelative("Fall").intValue;
+                    float density = beat.FindPropertyRelative("FallDensity").floatValue;
+
+                    return kind == FallKind.None
+                        ? "❄ clear the air"
+                        : $"❄ {kind} at {density:P0}";
                 }
 
                 case StoryBeatKind.CutMusic:
@@ -920,6 +960,18 @@ namespace TheFrayedRedString.EditorTools
                 case StoryBeatKind.Stain:
                     return "Throw a colour across the screen and leave it there. An alpha of zero takes it "
                            + "off again. Zero seconds is a cut, which is what it is for.";
+
+                case StoryBeatKind.DateCard:
+                    return "Put the date in the corner. It does not wait for the player. Use it where time "
+                           + "has passed and nothing else would say so — act two runs from October to "
+                           + "December and reads as five days in a row without it. One per jump, not one "
+                           + "per scene, and no character ever says a date out loud.";
+
+                case StoryBeatKind.Fall:
+                    return "What falls through the air from here on, and how much of it. Around a quarter "
+                           + "is an ordinary afternoon. Cherry petals are never weather in this game: it "
+                           + "runs from September to March, so anywhere they fall, somebody is looking at "
+                           + "something that is not there.";
 
                 case StoryBeatKind.CutMusic:
                     return "Stop the music in a single frame, with no fade at all. A Music beat with an "
@@ -1025,6 +1077,8 @@ namespace TheFrayedRedString.EditorTools
                     case StoryBeatKind.PullDownDialogue: DrawSeconds(beat, "Takes"); break;
                     case StoryBeatKind.Grade: DrawGradeBeat(beat); break;
                     case StoryBeatKind.Stain: DrawStainBeat(beat); break;
+                    case StoryBeatKind.DateCard: DrawDateBeat(beat); break;
+                    case StoryBeatKind.Fall: DrawFallBeat(beat); break;
                     case StoryBeatKind.Video: DrawFilmField(beat); break;
                 }
 
@@ -1382,6 +1436,98 @@ namespace TheFrayedRedString.EditorTools
                 + "reimporting anything.\n\n"
                 + "Needs Unity's Video module. The Frayed Red String ▸ Check The Video Module says "
                 + "whether this project has it.",
+                MessageType.None);
+        }
+
+        /// <summary>Reads the three date fields off a beat.</summary>
+        private static StoryDate ReadDate(SerializedProperty beat)
+        {
+            SerializedProperty date = beat.FindPropertyRelative("Date");
+
+            return new StoryDate(
+                date.FindPropertyRelative("Year").intValue,
+                date.FindPropertyRelative("Month").intValue,
+                date.FindPropertyRelative("Day").intValue);
+        }
+
+        /// <summary>
+        /// Three number fields, and the day of the week underneath them.
+        /// </summary>
+        /// <remarks>
+        /// The weekday is shown because it is the thing nobody checks. The
+        /// design document opens the game on the 1st of September 2024 and calls
+        /// it a Monday; it is a Sunday, and no amount of playing the game would
+        /// ever have said so. Here it says so while the date is being typed.
+        /// </remarks>
+        private static void DrawDateBeat(SerializedProperty beat)
+        {
+            SerializedProperty date = beat.FindPropertyRelative("Date");
+
+            EditorGUILayout.PropertyField(date.FindPropertyRelative("Year"), GUILayout.Width(300f));
+            EditorGUILayout.PropertyField(date.FindPropertyRelative("Month"), GUILayout.Width(300f));
+            EditorGUILayout.PropertyField(date.FindPropertyRelative("Day"), GUILayout.Width(300f));
+
+            StoryDate value = ReadDate(beat);
+
+            if (!value.IsSet)
+            {
+                EditorGUILayout.HelpBox("No date set: this beat will show nothing.", MessageType.Warning);
+                return;
+            }
+
+            if (!StoryCalendar.TryWeekdayOf(value, out System.DayOfWeek weekday))
+            {
+                EditorGUILayout.HelpBox("That is not a real day.", MessageType.Error);
+                return;
+            }
+
+            EditorGUILayout.HelpBox(
+                $"{weekday}.
+
+"
+                + $"en   {StoryCalendar.Line(value, DateStyle.Full).English}
+"
+                + $"ja   {StoryCalendar.Line(value, DateStyle.Full).Japanese}
+"
+                + $"fa   {StoryCalendar.Line(value, DateStyle.Full).Persian}
+
+"
+                + "The corner plate uses the short form, without the weekday. The full form above is "
+                + "what an act's title card shows.",
+                MessageType.None);
+        }
+
+        private static void DrawFallBeat(SerializedProperty beat)
+        {
+            EditorGUILayout.PropertyField(
+                beat.FindPropertyRelative("Fall"),
+                new GUIContent("Falling", "What drifts down past the scenery."),
+                GUILayout.Width(300f));
+
+            EditorGUILayout.PropertyField(
+                beat.FindPropertyRelative("FallDensity"),
+                new GUIContent("How much", "0 is nothing, 1 is a windy day."),
+                GUILayout.Width(300f));
+
+            DrawSeconds(beat, "Over");
+
+            // intValue, not enumValueIndex: see ResetBeat.
+            FallKind kind = (FallKind)beat.FindPropertyRelative("Fall").intValue;
+
+            if (kind == FallKind.Sakura)
+            {
+                EditorGUILayout.HelpBox(
+                    "Cherry petals. The game runs from September to March, so this is never the weather — "
+                    + "it is a flashback, a dream, or act one's mirage. Nobody in the scene mentions it.",
+                    MessageType.Warning);
+
+                return;
+            }
+
+            EditorGUILayout.HelpBox(
+                "Weather tracks the scene rather than the place, so this is a beat and not a property of "
+                + "the background. Around a quarter is an ordinary afternoon; a layer dense enough to read "
+                + "as weather takes the scene away from the two people standing in it.",
                 MessageType.None);
         }
 

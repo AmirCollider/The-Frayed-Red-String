@@ -280,8 +280,13 @@ namespace TheFrayedRedString.EditorTools
 
         private void WriteMondayAlley()
         {
+            // SEASON: this scene is written as April and the picture has to
+            // agree with the words. Backgrounds.SchoolAlleyDay is the autumn
+            // path now — the correct one for the 2nd of September — and this
+            // call site flips to it in the same pass that rewrites the four
+            // blossom lines below. See AboutProject/Roadmap.md, defect 13.
             Place(
-                Backgrounds.SchoolAlleyDay,
+                Backgrounds.SchoolAlleySpring,
                 "The path to school", "通学路", "راهِ مدرسه");
 
             Hold(1.8f);
@@ -2726,8 +2731,9 @@ namespace TheFrayedRedString.EditorTools
         {
             ClearStage();
 
+            // SEASON: as above. Flips with the rewrite, not before it.
             Place(
-                Backgrounds.SchoolAlleyDay,
+                Backgrounds.SchoolAlleySpring,
                 "The path to school", "通学路", "راهِ مدرسه");
 
             Hold(1.8f);

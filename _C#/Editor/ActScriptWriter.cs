@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using TheFrayedRedString.Audio;
 using TheFrayedRedString.Narrative;
+using TheFrayedRedString.Presentation;
 using UnityEditor;
 using UnityEngine;
 
@@ -341,6 +342,74 @@ namespace TheFrayedRedString.EditorTools
                 Background = background,
                 FadeSeconds = 0f
             });
+        }
+
+        /// <summary>
+        /// Puts a date on screen, in the corner, without stopping anything.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Use it where time has passed and the player would otherwise assume it
+        /// had not. Act two runs from October to December in five scenes; with
+        /// no dates on it, that is five days in a row.
+        /// </para>
+        /// <para>
+        /// Not on every scene. A date on screen every few minutes is a clock,
+        /// and this game does not have one — one per jump, and nothing in
+        /// between.
+        /// </para>
+        /// <para>
+        /// The day of the week is worked out from the date, never written. Take
+        /// the date itself from <see cref="StoryCalendar"/> where the document
+        /// pins one: <c>Date(StoryCalendar.TheFriendStory)</c> is both shorter
+        /// and safer than three numbers.
+        /// </para>
+        /// </remarks>
+        protected void Date(StoryDate date)
+        {
+            Script.Add(new BeatData { Kind = StoryBeatKind.DateCard, Date = date });
+        }
+
+        /// <summary>Puts a date on screen, given as three numbers.</summary>
+        protected void Date(int year, int month, int day)
+        {
+            Date(new StoryDate(year, month, day));
+        }
+
+        /// <summary>
+        /// Changes what falls through the air, and how much of it.
+        /// </summary>
+        /// <param name="kind">Petals, leaves or snow. See <see cref="FallKind"/>.</param>
+        /// <param name="density">
+        /// 0 is nothing, 1 is a windy day. Around a quarter is an ordinary
+        /// afternoon, and that is where most scenes that have any should sit.
+        /// </param>
+        /// <param name="seconds">
+        /// How long the change takes. The default drifts it in; zero is a cut,
+        /// which only the act six montage should ever want.
+        /// </param>
+        /// <remarks>
+        /// <strong>Petals are never weather.</strong> The story runs from
+        /// September to March and it is never blossom season. Anywhere
+        /// <see cref="FallKind.Sakura"/> falls, somebody is looking at something
+        /// that is not there — a memory, a dream, or act one. Nobody ever
+        /// mentions it.
+        /// </remarks>
+        protected void Fall(FallKind kind, float density = 0.25f, float seconds = 2.5f)
+        {
+            Script.Add(new BeatData
+            {
+                Kind = StoryBeatKind.Fall,
+                Fall = kind,
+                FallDensity = density,
+                Seconds = seconds
+            });
+        }
+
+        /// <summary>Takes the weather back down to nothing.</summary>
+        protected void NoFall(float seconds = 2.5f)
+        {
+            Fall(FallKind.None, 0f, seconds);
         }
 
         /// <summary>Starts a music track by name.</summary>

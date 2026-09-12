@@ -37,6 +37,12 @@ namespace TheFrayedRedString.Narrative
         private StoryGrade _grade;
         private VideoScreenView _film;
 
+        /// <summary>
+        /// The petals and leaves. Optional: a scene without one simply has no
+        /// weather, exactly as every scene did before this existed.
+        /// </summary>
+        private SeasonalFall _fall;
+
         private ActAsset _act;
         private Coroutine _playback;
 
@@ -164,7 +170,8 @@ namespace TheFrayedRedString.Narrative
             ChoicePanelView choices,
             StoryFrameView frame,
             StoryGrade grade = null,
-            VideoScreenView film = null)
+            VideoScreenView film = null,
+            SeasonalFall fall = null)
         {
             _stage = stage;
             _dialogue = dialogue;
@@ -173,6 +180,7 @@ namespace TheFrayedRedString.Narrative
             _frame = frame;
             _grade = grade;
             _film = film;
+            _fall = fall;
         }
 
         /// <summary>
@@ -207,6 +215,12 @@ namespace TheFrayedRedString.Narrative
             _interludeDepth = 0;
             _cinema = false;
             _aside = false;
+
+            // An act opens with clear air. Interludes play through this same
+            // director and can set weather of their own, so without this the
+            // leaves from a café that may or may not have happened would still
+            // be falling in the next act.
+            _fall?.ResetLayer();
             _pendingEnding = null;
             GameEnded = false;
             _playback = StartCoroutine(PlayRoutine(Mathf.Clamp(fromBeat, 0, _act.Count - 1)));
@@ -384,6 +398,21 @@ namespace TheFrayedRedString.Narrative
                     _overlay.ShowCaption(beat.Caption, GameConfig.CaptionHoldDuration);
                     break;
 
+                case StoryBeatKind.DateCard:
+                    // The same corner plate a place name uses, and deliberately:
+                    // both answer a question the player has not asked out loud,
+                    // and neither should make them wait for the answer. The line
+                    // is handed over unresolved so that switching language while
+                    // it is on screen re-renders it.
+                    _overlay.ShowCaption(
+                        StoryCalendar.Line(beat.Date, DateStyle.Short),
+                        GameConfig.CaptionHoldDuration);
+                    break;
+
+                case StoryBeatKind.Fall:
+                    _fall?.Set(beat.Fall, beat.FallDensity, Mathf.Max(0f, beat.Seconds));
+                    break;
+
                 case StoryBeatKind.TitleCard:
                     yield return PlayTitleCard();
                     break;
@@ -514,6 +543,11 @@ namespace TheFrayedRedString.Narrative
 
             _dialogue.SetAsideMode(aside);
             _grade?.SetAttention(aside ? GameConfig.AsideDim : 0f, GameConfig.AsideDimDuration);
+
+            // Nothing moves in the room while she is looking at the player. A
+            // petal drifting past during that line is the one thing on screen
+            // that says this is still a scene in a game.
+            _fall?.Suspend(aside);
 
             yield return StoryClock.Wait(GameConfig.AsideDimDuration);
         }
@@ -684,6 +718,7 @@ namespace TheFrayedRedString.Narrative
             yield return _overlay.PlayTitleCard(
                 Mathf.Max(1, _act.ActNumber),
                 _act.Title.Current(),
+                StoryCalendar.Current(_act.StartDate, DateStyle.Full),
                 GameConfig.TitleCardHoldDuration);
         }
 
@@ -1260,6 +1295,8 @@ namespace TheFrayedRedString.Narrative
             float grade = -1f;
             Color? stain = null;
             bool aside = false;
+            FallKind fall = FallKind.None;
+            float fallDensity = 0f;
 
             for (int i = 0; i < index && i < _act.Count; i++)
             {
@@ -1323,6 +1360,16 @@ namespace TheFrayedRedString.Narrative
                     case StoryBeatKind.ExitAside:
                         aside = false;
                         break;
+
+                    // Replayed like the background and the veil are, and for the
+                    // same reason: a save taken in a scene with leaves falling
+                    // has to come back to one. Only the last instruction before
+                    // the resume point counts, so it is recorded rather than
+                    // applied here.
+                    case StoryBeatKind.Fall:
+                        fall = beat.Fall;
+                        fallDensity = beat.FallDensity;
+                        break;
                 }
             }
 
@@ -1364,6 +1411,20 @@ namespace TheFrayedRedString.Narrative
             // in a brightly lit version of it.
             _aside = aside;
             _dialogue.SetAsideMode(aside);
+
+            // Weather, on the frame rather than fading in over two seconds: this
+            // is a scene being restored, not a scene changing.
+            if (_fall != null)
+            {
+                _fall.ResetLayer();
+
+                if (fall != FallKind.None)
+                {
+                    _fall.Set(fall, fallDensity, 0f);
+                }
+
+                _fall.Suspend(aside);
+            }
         }
     }
 }

@@ -42,6 +42,7 @@ namespace TheFrayedRedString.Scenes
     public sealed class ActSceneController : MonoBehaviour
     {
         private VisualNovelStage _stage;
+        private SeasonalFall _fall;
         private StoryFrameView _frame;
         private StoryGrade _grade;
         private VideoScreenView _film;
@@ -79,6 +80,7 @@ namespace TheFrayedRedString.Scenes
             // so a click that misses a control still turns the page; then the
             // framed interface; then the frame itself, over all of it.
             BuildStage(authoredBackground, backgroundLayer, _storyLayer);
+            BuildSeasonalFall(backgroundLayer);
             BuildAdvanceCatcher(_storyLayer);
             BuildGrade(_storyLayer);
 
@@ -204,6 +206,27 @@ namespace TheFrayedRedString.Scenes
 
             _stage = host.AddComponent<VisualNovelStage>();
             _stage.Initialize(authoredBackground, backgroundLayer, storyLayer);
+        }
+
+        /// <summary>
+        /// Builds the layer petals and leaves fall through.
+        /// </summary>
+        /// <remarks>
+        /// On the background canvas rather than the story one, which puts it
+        /// behind the characters and behind the frame — so leaves drift past the
+        /// scenery and never over somebody's face, and the black bars crop them
+        /// with everything else.
+        ///
+        /// Built for every act even though most scenes have no weather. It costs
+        /// one empty GameObject, and an act that wants leaves for one scene
+        /// should not have to know whether the layer exists.
+        /// </remarks>
+        private void BuildSeasonalFall(RectTransform backgroundLayer)
+        {
+            GameObject host = new GameObject("[TFRS] SeasonalFall", typeof(RectTransform));
+
+            _fall = host.AddComponent<SeasonalFall>();
+            _fall.Initialize(backgroundLayer);
         }
 
         /// <summary>
@@ -560,7 +583,7 @@ namespace TheFrayedRedString.Scenes
         private void BuildDirector()
         {
             _director = UnityUtility.GetOrAdd<StoryDirector>(gameObject);
-            _director.Initialize(_stage, _dialogue, _overlay, _choices, _frame, _grade, _film);
+            _director.Initialize(_stage, _dialogue, _overlay, _choices, _frame, _grade, _film, _fall);
             _director.Finished += OnActFinished;
         }
 
