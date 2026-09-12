@@ -725,7 +725,7 @@ namespace TheFrayedRedString.EditorTools
         //                  November.
         //     Date         Tuesday 5 November, evening.
         //     On stage     The machine, the bicycle, the streetlamps, the beds
-        //                  the flowers have gone out of.
+        //                  the flowers have gone out of. Two cans by the end.
         //     From act 1   The machine paid out twice on the 7th of September
         //                  and neither of them has stopped talking about it.
         //
@@ -889,29 +889,45 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(1.4f);
 
+            // ART NOTE. An earlier draft had him take his cardigan off and put
+            // it round her, which is the better image and which this project
+            // cannot show: both characters have exactly one outfit drawn, and a
+            // narrator saying he is not wearing his cardigan while the sprite
+            // plainly is, is the scene lock broken. The hot can does the same
+            // work with an object that is already on stage, already established
+            // by the machine, and contradicts no picture.
             Narrate(
-                "He took his cardigan off and put it on the wall between them, without offering it, so that it was not an offer and could not be refused.",
-                "ハルはカーディガンを脱いで、差し出さずに、二人のあいだの塀に置いた。差し出さなければ、断られようがない。",
-                "ژاکتشو درآورد و بدونِ اینکه تعارف کنه، گذاشتش رو دیوار، بینِ خودشون — تا تعارف نباشه و نشه ردش کرد.");
+                "He went back to the machine and put another hundred in, and took the hot one out of the tray, and held it for about ten seconds.",
+                "ハルは自販機に戻って、もう百円入れて、あたたかいほうを取り出して、十秒くらい持っていた。",
+                "برگشت سمتِ دستگاه، یه صد ینِ دیگه انداخت، داغیه رو از سینی برداشت، و حدودِ ده ثانیه نگهش داشت.");
+
+            Cue(SfxId.CanDrop, 0.8f);
+
+            Hold(2.0f);
+
+            Narrate(
+                "Then he put it on the wall between them, without offering it, so that it was not an offer and could not be refused.",
+                "それから、差し出さずに、二人のあいだの塀に置いた。差し出さなければ、断られようがない。",
+                "بعد گذاشتش رو دیوار، بینِ خودشون، بدونِ اینکه تعارف کنه — تا تعارف نباشه و نشه ردش کرد.");
 
             Hold(2.0f);
 
             Say(Speaker.Yua, Portrait.Neutral,
-                "...You'll be cold.",
-                "……ハルぴが寒い。",
-                "...خودت سردت می‌شه.");
+                "...That one's yours.",
+                "……それ、ハルぴのでしょ。",
+                "...اون مالِ توئه.");
 
             Say(Speaker.Haru, Portrait.Unchanged,
-                "I'll be cold.",
-                "うん、寒い。",
-                "آره سردم می‌شه.");
+                "It's on the wall.",
+                "塀の上にある。",
+                "رو دیواره.");
 
             Hold(2.4f);
 
             Narrate(
-                "She put it on.",
-                "結愛はそれを着た。",
-                "پوشیدش.");
+                "She picked it up. He put his hands in his pockets, which is a thing you do instead of having something warm in them.",
+                "結愛はそれを取った。ハルは両手をポケットに入れた。あたたかいものを持てないときに、人がやることだ。",
+                "برش داشت. هارو دست‌هاشو کرد تو جیبش، که کاریه که آدم به‌جای داشتنِ یه چیزِ گرم تو دستش می‌کنه.");
 
             Hold(2.0f);
 
@@ -925,14 +941,14 @@ namespace TheFrayedRedString.EditorTools
             Hold(1.6f);
 
             InnerVoice(
-                "He'll be cold all the way home.",
-                "帰るあいだ、ずっと寒い。",
-                "تا خونه سردش می‌شه.");
+                "His hands will be cold all the way home.",
+                "帰るあいだ、ずっと手が冷たい。",
+                "تا خونه دست‌هاش سرده.");
 
             InnerVoice(
-                "He'll be cold all the way home and he won't say anything.",
-                "ずっと寒くて、なにも言わない。",
-                "تا خونه سردش می‌شه و هیچی نمی‌گه.");
+                "They'll be cold all the way home and he won't say anything.",
+                "ずっと冷たくて、なにも言わない。",
+                "تا خونه سرده و هیچی نمی‌گه.");
 
             Hold(1.2f);
 
@@ -1799,9 +1815,9 @@ namespace TheFrayedRedString.EditorTools
             Hold(2.2f);
 
             Narrate(
-                "It got properly cold on the platform, the way it does after the light has gone, and he did not put the cardigan back on for a while.",
-                "光が消えたあとの、本格的な寒さが来た。ハルはしばらくカーディガンを着直さなかった。",
-                "سکو حسابی سرد شد، همون‌جوری که بعد از رفتنِ نور می‌شه، و هارو یه مدت ژاکتشو دوباره نپوشید.");
+                "It got properly cold on the platform, the way it does once the light has gone, and he stood in it without doing anything about it, which he had not done before.",
+                "光が消えたあとの本格的な寒さが来た。ハルはその中に、なにもせずに立っていた。今まではしなかったことだ。",
+                "سکو حسابی سرد شد، همون‌جوری که بعد از رفتنِ نور می‌شه، و هارو توش وایساد و هیچ کاری براش نکرد، که قبلاً نمی‌کرد.");
 
             Hold(1.8f);
 
@@ -2046,7 +2062,7 @@ namespace TheFrayedRedString.EditorTools
             // =================================================================
             //
             //  SHAPE
-            //    5 days across 11 weeks · 9 scenes · 232 frames · 4 white
+            //    5 days across 11 weeks · 9 scenes · 233 frames · 4 white
             //    choices · ZERO blue and ZERO green, as the mechanics table
             //    requires. Narration runs about one frame in eight, against act
             //    one's one in fifteen: the act is slower, and slower is made of

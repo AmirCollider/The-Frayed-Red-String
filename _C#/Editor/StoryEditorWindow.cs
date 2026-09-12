@@ -853,13 +853,14 @@ namespace TheFrayedRedString.EditorTools
 
                 case StoryBeatKind.Fall:
                 {
-                    // intValue, not enumValueIndex: see ResetBeat.
-                    FallKind kind = (FallKind)beat.FindPropertyRelative("Fall").intValue;
+                    // Not "kind": this method already has a parameter by that
+                    // name. intValue, not enumValueIndex: see ResetBeat.
+                    FallKind falling = (FallKind)beat.FindPropertyRelative("Fall").intValue;
                     float density = beat.FindPropertyRelative("FallDensity").floatValue;
 
-                    return kind == FallKind.None
+                    return falling == FallKind.None
                         ? "❄ clear the air"
-                        : $"❄ {kind} at {density:P0}";
+                        : $"❄ {falling} at {density:P0}";
                 }
 
                 case StoryBeatKind.CutMusic:
