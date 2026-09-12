@@ -20,6 +20,7 @@
 | Background File Name | Visual & Environmental Description |
 | :--- | :--- |
 | `CherryBlossomSchoolAlleyDay.jpg` | Paved school pathway lined with blooming pink cherry blossom trees in bright daylight, traditional school building facade on the right, wooden benches, and ground lanterns. |
+| `AutumnSchoolAlleyDay.png` | Paved school pathway lined with vibrant autumn foliage (fiery red maple trees on the left, golden yellow foliage on the right) with scattered fallen leaves across the stone pavement in crisp daylight, traditional school building facade on the right, wooden benches, and ground lanterns. |
 | `SunnyClassroomDay.jpg` | Japanese high school classroom bathed in warm sunny daylight, wooden desks neatly arranged with pastel stationery and pencil pouches, chalkboard, and pink curtains by an open window. |
 | `OvercastClassroomRainy.jpg` | Japanese classroom on an overcast rainy day, gentle breeze swaying pink curtains by an open window, wooden student desks, chalkboard, and a bookshelf. |
 | `SchoolCorridorSunset.jpg` | Quiet, empty school hallway bathed in golden sunset light with long shadows stretching across the floor, floor-to-ceiling windows looking out at sakura trees, and student lockers. |
