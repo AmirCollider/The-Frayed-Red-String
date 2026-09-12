@@ -1,0 +1,15 @@
+{
+  "kind": "scene-summary",
+  "generatedBy": "Unity DocSnap v1.0.4",
+  "scene": "URP2DSceneTemplate",
+  "path": "Assets/+_KsoSherPluss/Settings/Scenes/URP2DSceneTemplate.unity",
+  "unityVersion": "6000.4.9f1",
+  "exportedUtc": "2026-09-12T10:26:28Z",
+  "totals": { "gameObjects": 2, "components": 4, "customScripts": 0, "texts": 0, "missingScripts": 0 },
+  "hierarchy": [
+    { "name": "Main Camera", "tag": "MainCamera", "components": "Camera, AudioListener, UniversalAdditionalCameraData" },
+    { "name": "Global Light 2D", "components": "Light2D" }
+  ],
+  "texts": [],
+  "scripts": []
+}
