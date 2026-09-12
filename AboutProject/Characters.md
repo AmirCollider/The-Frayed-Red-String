@@ -121,6 +121,7 @@ enum ها روی **احساس** نام‌گذاری شده‌اند، نه رو�
 ## ۴. کاراکترهای بچه — پرده‌ی ششم
 
 اسمِ فایل‌ها **از الآن قفل است**: دقیقاً اسمِ بزرگسال با `Child` بعد از اسمِ کاراکتر.
+
 YuaChildNeutralGentleSmile.png     HaruChildNeutralGentleSmile.png
 YuaChildJoyfulHappyLaugh.png       HaruChildJoyfulHappyLaugh.png
 YuaChildShyBlushingLookDown.png    HaruChildShyBlushingLookAway.png
