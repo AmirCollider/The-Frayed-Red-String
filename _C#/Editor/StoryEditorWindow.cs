@@ -1481,17 +1481,13 @@ namespace TheFrayedRedString.EditorTools
                 return;
             }
 
+            LocalizedLine full = StoryCalendar.Line(value, DateStyle.Full);
+
             EditorGUILayout.HelpBox(
-                $"{weekday}.
-
-"
-                + $"en   {StoryCalendar.Line(value, DateStyle.Full).English}
-"
-                + $"ja   {StoryCalendar.Line(value, DateStyle.Full).Japanese}
-"
-                + $"fa   {StoryCalendar.Line(value, DateStyle.Full).Persian}
-
-"
+                weekday + ".\n\n"
+                + "en   " + full.English + "\n"
+                + "ja   " + full.Japanese + "\n"
+                + "fa   " + full.Persian + "\n\n"
                 + "The corner plate uses the short form, without the weekday. The full form above is "
                 + "what an act's title card shows.",
                 MessageType.None);
