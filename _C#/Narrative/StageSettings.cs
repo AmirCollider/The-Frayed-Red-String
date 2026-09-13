@@ -486,6 +486,73 @@ namespace TheFrayedRedString.Narrative
         [Tooltip("Warm and pale, matching the dialogue panel. The alpha here is the maximum.")]
         public Color VeilColour = new Color(1f, 0.87f, 0.91f, 0.17f);
 
+        // ---------------------------------------------------------------------
+        //  Separation
+        //
+        //  Both characters and every room in this game are drawn in the same
+        //  pastel key, at the same value, with the same soft line. That is the
+        //  look and it is not a mistake — but it means a cream cardigan in front
+        //  of a cream classroom wall has almost no edge, and the eye loses the
+        //  person it is supposed to be reading. It was worst in 1-A and on the
+        //  school path, where Haru's shoulder simply dissolved into the
+        //  building behind him.
+        //
+        //  Two small moves rather than one big one, because either alone has to
+        //  be pushed far enough to be ugly:
+        //
+        //    * the scenery steps back a little, cooler and slightly darker,
+        //      which is what distance does to colour anyway;
+        //    * the characters get a soft dark contour, which is what a hundred
+        //      visual novels do and what nobody notices until it is missing.
+        //
+        //  Both are numbers here rather than constants in code, so they can be
+        //  looked at and judged, and both can be taken to zero: at
+        //  SeparateFromScenery off the game looks exactly as it did before.
+        // ---------------------------------------------------------------------
+
+        [Header("Separation")]
+        [Tooltip("Push the scenery back and give the characters an edge, so the two do not merge.")]
+        public bool SeparateFromScenery = true;
+
+        /// <summary>How far the scenery steps back, 0..1.</summary>
+        /// <remarks>
+        /// A multiply towards <see cref="SceneryRecedeTint"/>, applied to the
+        /// background layers only. 0.16 is about a sixth of the way, which is
+        /// enough to open a gap and not enough to read as evening.
+        /// </remarks>
+        [Tooltip("0 leaves the scenery exactly as drawn. Around 0.16 opens a gap without darkening the room.")]
+        [Range(0f, 0.5f)] public float SceneryRecede = 0.16f;
+
+        /// <summary>What the scenery is pushed towards.</summary>
+        /// <remarks>
+        /// Cool and slightly dark, because that is what air does to a distance,
+        /// and because the characters are warm: pushing the room the other way
+        /// separates them by hue as well as by value.
+        /// </remarks>
+        [Tooltip("Cool and slightly dark. The scenery is multiplied towards this.")]
+        public Color SceneryRecedeTint = new Color(0.62f, 0.66f, 0.78f, 1f);
+
+        /// <summary>
+        /// How far the characters' contour reaches, in canvas units.
+        /// </summary>
+        /// <remarks>
+        /// Drawn with UnityEngine.UI.Outline, which repeats the sprite four
+        /// times at the diagonals in a flat colour underneath it. Around four
+        /// and a half units on a 1080-unit-tall screen is a line the player
+        /// reads as depth rather than as an outline. Zero removes it.
+        /// </remarks>
+        [Tooltip("Reach of the characters' soft dark contour, in canvas units. 0 removes it.")]
+        [Range(0f, 12f)] public float CharacterEdge = 4.5f;
+
+        /// <summary>The contour's colour, alpha included.</summary>
+        /// <remarks>
+        /// Not black. A very dark violet sits under this palette without going
+        /// grey, and the alpha is the number that decides whether this reads as
+        /// a shadow or as a sticker.
+        /// </remarks>
+        [Tooltip("Very dark violet at low alpha. Black at high alpha reads as a sticker.")]
+        public Color CharacterEdgeColour = new Color(0.10f, 0.09f, 0.15f, 0.34f);
+
         [Header("Focus")]
         [Tooltip("How much the character who is not speaking is dimmed. 1 is no dimming.")]
         [Range(0.2f, 1f)] public float InactiveTint = 0.62f;

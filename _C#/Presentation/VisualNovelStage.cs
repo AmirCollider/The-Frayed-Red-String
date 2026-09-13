@@ -217,9 +217,21 @@ namespace TheFrayedRedString.Presentation
             (_backgroundFront, _backgroundBack) = (_backgroundBack, _backgroundFront);
             (_frontMotion, _backMotion) = (_backMotion, _frontMotion);
 
-            // Whichever layer is now showing has to be the one drawn on top, or
-            // the next crossfade will happen behind the old picture.
-            _backgroundFront.transform.SetAsLastSibling();
+            // Whichever layer is now showing has to be drawn above the other
+            // one, or the next crossfade happens behind the old picture.
+            //
+            // ABOVE THE OTHER ONE, not above everything: this used to be
+            // SetAsLastSibling, which put the scenery on top of every other
+            // child of the background canvas the first time a scene changed.
+            // Nothing shared that parent when it was written. The seasonal fall
+            // layer does, so from act one's opening Place() onward the leaves
+            // were being drawn and then covered by the picture they were
+            // supposed to be falling in front of.
+            //
+            // The two of them are the bottom two children and they swap between
+            // themselves. Anything else in this parent stays above both.
+            _backgroundBack.transform.SetAsFirstSibling();
+            _backgroundFront.transform.SetSiblingIndex(1);
         }
 
         private void SetUpBackgrounds(Image authored, RectTransform backgroundParent)
@@ -259,6 +271,44 @@ namespace TheFrayedRedString.Presentation
 
             _backgroundFront.transform.SetAsFirstSibling();
             _backgroundBack.transform.SetSiblingIndex(_backgroundFront.transform.GetSiblingIndex() + 1);
+
+            ApplyRecede(_backgroundFront);
+            ApplyRecede(_backgroundBack);
+        }
+
+        /// <summary>
+        /// Steps one background layer back from the characters standing in it.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// A multiply on the layer's own colour, set once and never touched
+        /// again: the crossfade writes alpha through SetAlpha, which leaves the
+        /// colour channels alone, so this survives every scene change without
+        /// having to be re-applied.
+        /// </para>
+        /// <para>
+        /// Why it is needed at all is in StageSettings, under Separation. The
+        /// short version is that the rooms and the people in them are painted in
+        /// the same key, and a cream cardigan in front of a cream wall has no
+        /// edge. Pushing the room a sixth of the way towards a cooler, darker
+        /// tint gives the person in front of it somewhere to stand.
+        /// </para>
+        /// </remarks>
+        private void ApplyRecede(Image layer)
+        {
+            if (layer == null || _settings == null)
+            {
+                return;
+            }
+
+            float amount = _settings.SeparateFromScenery
+                ? Mathf.Clamp01(_settings.SceneryRecede)
+                : 0f;
+
+            Color tint = Color.Lerp(Color.white, _settings.SceneryRecedeTint, amount);
+
+            // Alpha belongs to the crossfade. Only the colour is ours.
+            layer.color = new Color(tint.r, tint.g, tint.b, layer.color.a);
         }
 
         private static Image CreateBackgroundLayer(RectTransform parent, string layerName)
@@ -744,6 +794,8 @@ namespace TheFrayedRedString.Presentation
             image.color = new Color(1f, 1f, 1f, 0f);
             image.enabled = false;
 
+            ApplyEdge(image);
+
             Slot slot = new Slot
             {
                 Image = image,
@@ -772,6 +824,65 @@ namespace TheFrayedRedString.Presentation
             slot.Motion = motion;
 
             return slot;
+        }
+
+        /// <summary>
+        /// Gives a character a soft dark contour, so they read in front of the
+        /// room rather than printed on it.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// UnityEngine.UI.Outline, which is a mesh effect rather than a second
+        /// object: it repeats the sprite's own quad four times at the diagonals
+        /// in a flat colour behind the original, using the sprite's alpha, so
+        /// what is drawn is the character's silhouette and not a rectangle.
+        /// </para>
+        /// <para>
+        /// Two things follow from that and both are wanted. The contour fades
+        /// with the entrance, because Outline scales its alpha by the graphic's
+        /// (useGraphicAlpha, on by default) and the entrance animates exactly
+        /// that. And it costs no GameObject, no second AmbientMotion and no
+        /// synchronisation: a companion sprite behind each character would have
+        /// had to be kept in step with the pose, the size, the flip, the
+        /// entrance, the focus dim and the breathing, in six places, forever.
+        /// </para>
+        /// <para>
+        /// Removed rather than left at zero when the setting is off. A mesh
+        /// effect that contributes nothing still runs on every rebuild.
+        /// </para>
+        /// </remarks>
+        private void ApplyEdge(Image image)
+        {
+            if (image == null)
+            {
+                return;
+            }
+
+            Outline outline = image.GetComponent<Outline>();
+
+            bool wanted = _settings != null
+                && _settings.SeparateFromScenery
+                && _settings.CharacterEdge > 0.01f
+                && _settings.CharacterEdgeColour.a > 0.001f;
+
+            if (!wanted)
+            {
+                if (outline != null)
+                {
+                    Destroy(outline);
+                }
+
+                return;
+            }
+
+            if (outline == null)
+            {
+                outline = image.gameObject.AddComponent<Outline>();
+            }
+
+            outline.effectColor = _settings.CharacterEdgeColour;
+            outline.effectDistance = new Vector2(_settings.CharacterEdge, _settings.CharacterEdge);
+            outline.useGraphicAlpha = true;
         }
 
         /// <summary>

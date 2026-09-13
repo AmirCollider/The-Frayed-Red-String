@@ -286,6 +286,7 @@ namespace TheFrayedRedString.Presentation
             }
 
             MeasureLayer();
+            KeepOnTop();
 
             for (int i = 0; i < _particles.Count; i++)
             {
@@ -337,6 +338,33 @@ namespace TheFrayedRedString.Presentation
 
                     _particles[i] = particle;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Stays the last child of the background canvas.
+        /// </summary>
+        /// <remarks>
+        /// Belt and braces. The stage used to send whichever background was
+        /// showing to the end of this parent every time the scene changed,
+        /// which put the picture on top of the leaves from act one's opening
+        /// beat onward — the effect ran perfectly and was never once visible.
+        /// That is fixed at the source in VisualNovelStage.SwapBackgroundLayers,
+        /// and this is here so that the next thing to reorder this parent
+        /// cannot do it again silently. One integer comparison a frame.
+        /// </remarks>
+        private void KeepOnTop()
+        {
+            if (_root == null || _root.parent == null)
+            {
+                return;
+            }
+
+            int last = _root.parent.childCount - 1;
+
+            if (_root.GetSiblingIndex() != last)
+            {
+                _root.SetSiblingIndex(last);
             }
         }
 

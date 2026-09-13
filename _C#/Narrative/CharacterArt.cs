@@ -263,7 +263,64 @@ namespace TheFrayedRedString.Narrative
         /// For the unimportant argument he wins in every scene. Angry is far too
         /// much for that, and Neutral does not look like somebody who is right.
         /// </remarks>
-        CalmSerious = 30
+        CalmSerious = 30,
+
+        // ---------------------------------------------------------------------
+        //  Autumn and winter, and two hands round something warm
+        //
+        //  Added for acts one and two once the seasons were right. Between
+        //  October and March these two are outdoors in clothes that are not
+        //  enough, and the game had no way to show it: every sprite stood with
+        //  its arms down as though it were still September.
+        // ---------------------------------------------------------------------
+
+        /// <summary>
+        /// Arms folded across herself against the cold. Yua's.
+        /// </summary>
+        /// <remarks>
+        /// She is in a summer dress in November and December and will not admit
+        /// it, which is the joke and also the character. Haru has no drawing of
+        /// this and does not need one — he puts his hands in his pockets
+        /// instead, which is what <see cref="Pockets"/> is, and that is where
+        /// this falls through to for him.
+        /// </remarks>
+        ColdHug = 31,
+
+        /// <summary>One hand up, five fingers open. Yua's.</summary>
+        /// <remarks>
+        /// Counting to five out loud for two children on a slide, on the last
+        /// day of act one. The number is not a coincidence and nothing in the
+        /// scene points at it.
+        /// </remarks>
+        Counting = 32,
+
+        /// <summary>Both hands round a hot can. Both of them have one.</summary>
+        HoldCan = 33,
+
+        /// <summary>Both hands round a hot cup, still full.</summary>
+        /// <remarks>
+        /// The café in December, and the winter answer to
+        /// <see cref="DrinkFull"/> — that one is an iced matcha with a straw and
+        /// belongs to September.
+        /// </remarks>
+        WarmCup = 34,
+
+        /// <summary>
+        /// The cup, finished.
+        /// </summary>
+        /// <remarks>
+        /// Haru's only. Yua falls through to <see cref="WarmCup"/> and that is
+        /// exact rather than a compromise: in the scene this exists for, her cup
+        /// goes cold in her hands and she never touches it.
+        /// </remarks>
+        WarmCupEmpty = 35,
+
+        /// <summary>Both hands in his pockets. Haru's.</summary>
+        /// <remarks>
+        /// What he does instead of holding the warm thing he has just given
+        /// away. The narrator says so out loud once, in act two.
+        /// </remarks>
+        Pockets = 36
     }
 
     /// <summary>Which half of the stage a character stands on.</summary>
@@ -389,6 +446,13 @@ namespace TheFrayedRedString.Narrative
                 case Portrait.DrinkFull:
                 case Portrait.DrinkReluctant:
                 case Portrait.DrinkFinished:
+
+                // The winter half of the same idea: a hot can off the machine
+                // and a cup in a cafe. A nine-year-old has neither, and neither
+                // is a face the project still owes anybody a drawing of.
+                case Portrait.HoldCan:
+                case Portrait.WarmCup:
+                case Portrait.WarmCupEmpty:
                     return true;
 
                 default:
@@ -431,6 +495,18 @@ namespace TheFrayedRedString.Narrative
                 // And her half of the café. She finishes first, and the last
                 // picture is her sitting with her eyes shut while he catches up.
                 case Portrait.Pout: return "PoutTsundere";
+                case Portrait.ColdHug: return "ArmsHuggingCold";
+                case Portrait.Counting: return "CountingFingers";
+                case Portrait.HoldCan: return "HoldWarmCan";
+
+                // Her cup is never finished, so both states are the same
+                // drawing. That is the scene, not a shortcut.
+                case Portrait.WarmCup: return "WarmCupHoldUntouched";
+                case Portrait.WarmCupEmpty: return "WarmCupHoldUntouched";
+
+                // She does not stand with her hands in her pockets. The dress
+                // does not have any.
+                case Portrait.Pockets: return "NeutralGentleSmile";
                 case Portrait.Smug: return "SmugMischievousSmile";
                 case Portrait.Surprised: return "SurprisedTakenAback";
                 case Portrait.Bored: return "BoredUnamused";
@@ -480,14 +556,26 @@ namespace TheFrayedRedString.Narrative
                 // The matcha he was ordered and does not like.
                 case Portrait.Surprised: return "SurprisedTakenAback";
                 case Portrait.Bored: return "DeadpanFlat";
+                case Portrait.HoldCan: return "HoldWarmCan";
+                case Portrait.WarmCup: return "WarmCupHoldFull";
+                case Portrait.WarmCupEmpty: return "WarmCupHoldEmpty";
+                case Portrait.Pockets: return "HandsInPockets";
+
+                // He does not fold his arms against the cold, he pockets his
+                // hands. Same meaning, his gesture.
+                case Portrait.ColdHug: return "HandsInPockets";
+
+                // No counting hand and no scene that wants one.
+                case Portrait.Counting: return "NeutralGentleSmile";
                 case Portrait.StrainedSmile: return "StrainedPainfulSmile";
                 case Portrait.Sheepish: return "SheepishHandBehindHead";
                 case Portrait.CalmSerious: return "CalmSerious";
 
+                case Portrait.Smug: return "SmugPleasedWithSelf";
+
                 // He does not sulk, he concedes; and he does not decide in front
                 // of anyone. Both fall through to faces he does have.
                 case Portrait.Pout: return "SeriousAngryFrown";
-                case Portrait.Smug: return "JoyfulHappyLaugh";
                 case Portrait.Thinking: return "NeutralGentleSmile";
 
                 case Portrait.DrinkFull: return "MatchaHoldFullCup";
@@ -534,16 +622,73 @@ namespace TheFrayedRedString.Narrative
         public const string SchoolAlleySpring = "CherryBlossomSchoolAlleyDay";
         public const string ClassroomDay = "SunnyClassroomDay";
         public const string ClassroomRainy = "OvercastClassroomRainy";
-        public const string CorridorSunset = "SchoolCorridorSunset";
+        /// <summary>
+        /// The second-floor corridor in autumn light.
+        /// </summary>
+        /// <remarks>
+        /// The canonical one, and the one every act from the first to the fifth
+        /// wants: the maples through the glass have turned. The spring version
+        /// still exists under <see cref="CorridorSunsetSpring"/> and is not for
+        /// anything that happens between September and March.
+        ///
+        /// Both versions carry the floor grille at the far end. Act two's second
+        /// silence is built on it — the machine room comes up through it — so a
+        /// corridor without one cannot be used for that scene.
+        /// </remarks>
+        public const string CorridorSunset = "SchoolCorridorAutumnSunset";
+
+        /// <summary>The same corridor with cherry blossom through the windows.</summary>
+        /// <remarks>
+        /// Flashback and dream only. See <see cref="SchoolAlleySpring"/> for the
+        /// reasoning: blossom in this game is a thing that is not there.
+        /// </remarks>
+        public const string CorridorSunsetSpring = "SchoolCorridorSunset";
         public const string RooftopDay = "SchoolRooftopSunnyDay";
         public const string BakeryStreetDay = "UsagiBakeryStreetDay";
-        public const string VendingStreetDay = "PastelStreetVendingDay";
+        /// <summary>The corner with the machine, in autumn daylight.</summary>
+        public const string VendingStreetDay = "PastelStreetVendingAutumnDay";
+
+        /// <summary>The same corner with blossom in the background trees.</summary>
+        public const string VendingStreetSpringDay = "PastelStreetVendingDay";
+
+        /// <summary>
+        /// The same corner at night, with the beds still in flower.
+        /// </summary>
+        /// <remarks>
+        /// Right for September, wrong from November on: act two's narrator says
+        /// the flowers have gone. Use <see cref="VendingStreetWinterNight"/>
+        /// after October.
+        /// </remarks>
         public const string VendingStreetNight = "PastelStreetVendingNight";
+
+        /// <summary>
+        /// The corner at night with the beds empty and a low wall to sit on.
+        /// </summary>
+        /// <remarks>
+        /// Act two, the 5th of November. The wall is load-bearing: the last
+        /// third of that scene happens sitting on it.
+        /// </remarks>
+        public const string VendingStreetWinterNight = "PastelStreetVendingWinterNight";
         public const string AlleywayNight = "TraditionalAlleywayNight";
         public const string CafeDay = "CozyCafeDay";
         public const string CafeRainy = "CozyCafeDimRainy";
         public const string PlaygroundDay = "PastelPlaygroundDay";
-        public const string TrainPlatformSunset = "TrainPlatformSunset";
+        /// <summary>The platform in autumn, with the trackside trees turned.</summary>
+        public const string TrainPlatformSunset = "TrainPlatformAutumnSunset";
+
+        /// <summary>The platform with the trackside cherries in flower.</summary>
+        public const string TrainPlatformSpringSunset = "TrainPlatformSunset";
+
+        /// <summary>
+        /// The platform in winter: the trackside trees are bare and there is
+        /// frost on the ground and on the seats.
+        /// </summary>
+        /// <remarks>
+        /// Act two, the 19th of December. The narrator says the trees have
+        /// nothing on them at all, and this is the picture that sentence is
+        /// describing.
+        /// </remarks>
+        public const string TrainPlatformWinterSunset = "TrainPlatformWinterSunset";
         public const string YuaRoomDay = "YuaRoomSunnyDay";
 
         /// <summary>

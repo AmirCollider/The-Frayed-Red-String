@@ -233,6 +233,8 @@ namespace TheFrayedRedString.EditorTools
 
         private void WriteOctoberClassroom()
         {
+            ClearStage();
+
             Place(
                 Backgrounds.ClassroomDay,
                 "1-A", "一年A組", "اول-الف");
@@ -376,6 +378,8 @@ namespace TheFrayedRedString.EditorTools
 
         private void WriteOctoberRoof()
         {
+            ClearStage();
+
             Place(
                 Backgrounds.RooftopDay,
                 "The roof", "屋上", "پشت‌بام");
@@ -524,15 +528,20 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(1.6f);
 
+            // Not "Tuesday, then." The next scene in the act is a Tuesday,
+            // four weeks later, and a parting that names the day made those two
+            // read as consecutive — the gap the whole act is built out of,
+            // closed by two words. They say tomorrow, and the date card does
+            // the rest.
             Say(Speaker.Yua, Portrait.Neutral,
-                "Tuesday, then.",
-                "じゃあ火曜。",
-                "پس سه‌شنبه.");
+                "Tomorrow, then.",
+                "じゃあ、また明日。",
+                "پس فردا.");
 
             Say(Speaker.Haru, Portrait.Neutral,
-                "Tuesday.",
-                "火曜。",
-                "سه‌شنبه.");
+                "Tomorrow.",
+                "また明日。",
+                "فردا.");
         }
 
         // =====================================================================
@@ -552,9 +561,9 @@ namespace TheFrayedRedString.EditorTools
         //  Tuesday, after school — the corridor
         //
         //  ▣ Scene state
-        //     Background   SchoolCorridorSunset. In November the sunset arrives
-        //                  during cleaning, so the corridor is gold at half
-        //                  past four instead of six.
+        //     Background   SchoolCorridorAutumnSunset. In November the sunset
+        //                  arrives during cleaning, so the corridor is gold at
+        //                  half past four instead of six. Indoors, so no fall.
         //     Date         Tuesday 5 November 2024.
         //     On stage     The windows, the lockers, the light, a grille in the
         //                  floor at the end of the corridor.
@@ -570,13 +579,19 @@ namespace TheFrayedRedString.EditorTools
 
         private void WriteNovemberCorridor()
         {
+            ClearStage();
+
             Place(
                 Backgrounds.CorridorSunset,
                 "The second-floor corridor", "二階の廊下", "راهروی طبقه‌ی دوم");
 
             Date(2024, 11, 5);
 
-            AutumnAir(0.42f);
+            // Indoors, and this used to be AutumnAir(0.42f) — the heaviest
+            // fall anywhere in the game, running down a corridor with a roof on
+            // it. The maples are on the far side of the glass, which is where
+            // the picture already puts them.
+            NoFall(0f);
 
             Hold(2.0f);
 
@@ -721,8 +736,11 @@ namespace TheFrayedRedString.EditorTools
         //  Tuesday, evening — the street with the machine
         //
         //  ▣ Scene state
-        //     Background   PastelStreetVendingNight. Dark at half past five in
-        //                  November.
+        //     Background   PastelStreetVendingWinterNight. Dark at half past
+        //                  five in November: the beds are bare earth and dead
+        //                  stalks, and there is a low wall beside the machine.
+        //                  The September picture has neither, and this scene
+        //                  narrates both.
         //     Date         Tuesday 5 November, evening.
         //     On stage     The machine, the bicycle, the streetlamps, the beds
         //                  the flowers have gone out of. Two cans by the end.
@@ -737,8 +755,10 @@ namespace TheFrayedRedString.EditorTools
 
         private void WriteNovemberStreet()
         {
+            ClearStage();
+
             Place(
-                Backgrounds.VendingStreetNight,
+                Backgrounds.VendingStreetWinterNight,
                 "The corner", "曲がり角", "سرِ نبش");
 
             NoFall(2f);
@@ -792,12 +812,16 @@ namespace TheFrayedRedString.EditorTools
 
             Cue(SfxId.CanDrop, 0.8f);
 
+            Cel(Portrait.Unchanged, Portrait.HoldCan, 1.0f);
+
             Say(Speaker.Yua, Portrait.Bored,
                 "Boring.",
                 "つまんない。",
                 "خسته‌کننده.");
 
-            Say(Speaker.Haru, Portrait.Joyful,
+            // Unchanged, so the can stays in his hands through the exchange.
+            // The joke is in the word, not in his face.
+            Say(Speaker.Haru, Portrait.Unchanged,
                 "Reliable.",
                 "信頼できる。",
                 "قابل اعتماد.");
@@ -814,7 +838,9 @@ namespace TheFrayedRedString.EditorTools
                 "花の抜けた花壇のそばの低い塀に座って、缶を回し飲みして、しばらく話さなかった。それは、居心地がよかった。",
                 "رو دیوارِ کوتاهِ کنارِ باغچه‌ای که گل‌هاش رفته بودن نشستن، قوطی رو دست‌به‌دست کردن، و یه مدت حرف نزدن، که راحت بود.");
 
-            Hold(2.2f);
+            // The pass, shown rather than said: it leaves his hands and arrives
+            // in hers, and nobody remarks on it.
+            Cel(Portrait.HoldCan, Portrait.Neutral, 2.2f);
 
             Say(Speaker.Haru, Portrait.Neutral,
                 "My pencil case doesn't shut.",
@@ -877,7 +903,10 @@ namespace TheFrayedRedString.EditorTools
                 "十一月で、その恰好。",
                 "نوامبره و تو اون پیراهنی.");
 
-            Say(Speaker.Yua, Portrait.Pout,
+            // Her arms are already folded across herself when she says it.
+            // The line and the picture disagree, and neither of them mentions
+            // that either.
+            Say(Speaker.Yua, Portrait.ColdHug,
                 "I'm fine.",
                 "平気。",
                 "من خوبم.");
@@ -903,16 +932,17 @@ namespace TheFrayedRedString.EditorTools
 
             Cue(SfxId.CanDrop, 0.8f);
 
-            Hold(2.0f);
+            Cel(Portrait.Unchanged, Portrait.HoldCan, 2.0f);
 
             Narrate(
                 "Then he put it on the wall between them, without offering it, so that it was not an offer and could not be refused.",
                 "それから、差し出さずに、二人のあいだの塀に置いた。差し出さなければ、断られようがない。",
                 "بعد گذاشتش رو دیوار، بینِ خودشون، بدونِ اینکه تعارف کنه — تا تعارف نباشه و نشه ردش کرد.");
 
-            Hold(2.0f);
+            // Empty hands again, and her arms are still folded.
+            Cel(Portrait.Unchanged, Portrait.Neutral, 2.0f);
 
-            Say(Speaker.Yua, Portrait.Neutral,
+            Say(Speaker.Yua, Portrait.Unchanged,
                 "...That one's yours.",
                 "……それ、ハルぴのでしょ。",
                 "...اون مالِ توئه.");
@@ -929,11 +959,14 @@ namespace TheFrayedRedString.EditorTools
                 "結愛はそれを取った。ハルは両手をポケットに入れた。あたたかいものを持てないときに、人がやることだ。",
                 "برش داشت. هارو دست‌هاشو کرد تو جیبش، که کاریه که آدم به‌جای داشتنِ یه چیزِ گرم تو دستش می‌کنه.");
 
-            Hold(2.0f);
+            // The trade, in one picture: the warm thing crosses the wall and he
+            // has nowhere to put his hands.
+            Cel(Portrait.HoldCan, Portrait.Pockets, 2.0f);
 
             // ◆ LADDER RUNG FOUR. Out loud, and then not out loud, and they do
             // not match. Every monologue before this one agreed with her face.
-            Say(Speaker.Yua, Portrait.Joyful,
+            // Unchanged: she says it holding the can he gave up.
+            Say(Speaker.Yua, Portrait.Unchanged,
                 "Thank you.",
                 "ありがと。",
                 "ممنون.");
@@ -959,12 +992,14 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(2.2f);
 
-            Say(Speaker.Yua, Portrait.Joyful,
+            Say(Speaker.Yua, Portrait.Unchanged,
                 "Walk faster, then. You're shivering.",
                 "じゃあ早く歩いて。震えてる。",
                 "پس تندتر راه برو. داری می‌لرزی.");
 
-            Say(Speaker.Haru, Portrait.Joyful,
+            // Hands still in his pockets while he says it, which is the joke
+            // she made three minutes ago with her arms folded.
+            Say(Speaker.Haru, Portrait.Unchanged,
                 "I'm walking at a normal speed.",
                 "ふつうの速さだよ。",
                 "با سرعتِ عادی راه می‌رم.");
@@ -1007,11 +1042,13 @@ namespace TheFrayedRedString.EditorTools
 
         private void WriteDecemberClassroom()
         {
+            ClearStage();
+
             Place(
                 Backgrounds.ClassroomRainy,
                 "1-A", "一年A組", "اول-الف");
 
-            Date(2024, 12, 18);
+            Date(StoryCalendar.TheFriendStory);
 
             NoFall(0f);
 
@@ -1154,6 +1191,8 @@ namespace TheFrayedRedString.EditorTools
 
         private void WriteDecemberCafe()
         {
+            ClearStage();
+
             Place(
                 Backgrounds.CafeRainy,
                 "The café", "喫茶店", "کافه");
@@ -1204,7 +1243,9 @@ namespace TheFrayedRedString.EditorTools
                 "カップが来た。結愛のには、いつも外して受け皿に置いて、けっきょく食べないものが載っている。",
                 "فنجون‌ها اومدن. مالِ اون همون چیزی رو روش داشت که همیشه برمی‌داره، می‌ذاره تو نعلبکی، و هیچ‌وقت نمی‌خوره.");
 
-            Hold(1.6f);
+            // Both cups full, both held. This frame exists so the last one in
+            // the scene means something.
+            Cel(Portrait.WarmCup, Portrait.WarmCup, 1.6f);
 
             Say(Speaker.Yua, Portrait.Neutral,
                 "Did you get a new one?",
@@ -1469,12 +1510,17 @@ namespace TheFrayedRedString.EditorTools
                 "結愛のカップは冷めていた。一度も手をつけず、上に載っていたものは、置いたときのまま受け皿にあった。",
                 "فنجونش سرد شده بود. دست نزده بود بهش و اون چیزی که روش بود هنوز همون‌جا تو نعلبکی بود، جایی که گذاشته بودش.");
 
-            Say(Speaker.Yua, Portrait.Neutral,
+            // Rule six, in one picture. His cup is finished and hers is the
+            // same drawing it was ninety frames ago, because she has not moved
+            // it. That is the whole scene, and nobody says a word over it.
+            Cel(Portrait.WarmCup, Portrait.WarmCupEmpty, 2.4f);
+
+            Say(Speaker.Yua, Portrait.Unchanged,
                 "Do you want this? I'm not going to eat it.",
                 "これ、いる? 食べないから。",
                 "اینو می‌خوای؟ من نمی‌خورمش.");
 
-            Say(Speaker.Haru, Portrait.Neutral,
+            Say(Speaker.Haru, Portrait.Unchanged,
                 "You never eat it.",
                 "いつも食べないよね。",
                 "هیچ‌وقت نمی‌خوریش.");
@@ -1574,6 +1620,8 @@ namespace TheFrayedRedString.EditorTools
 
         private void WriteThursdayClassroom()
         {
+            ClearStage();
+
             Place(
                 Backgrounds.ClassroomDay,
                 "1-A", "一年A組", "اول-الف");
@@ -1585,9 +1633,9 @@ namespace TheFrayedRedString.EditorTools
             Hold(2.2f);
 
             Narrate(
-                "It had stopped in the night. December sun through glass is a lie about temperature and everybody in the room fell for it every year.",
-                "夜のうちに雨はやんだ。ガラス越しの十二月の陽射しは気温についての嘘で、毎年みんなそれに騙される。",
-                "شب بند اومده بود. آفتابِ دسامبر از پشتِ شیشه دروغیه درباره‌ی دما و هر سال همه‌ی این کلاس بهش گول می‌خورن.");
+                "The rain had gone over to snow at some point in the night and then stopped. December sun through glass is a lie about temperature and everybody in the room fell for it every year.",
+                "雨は夜のどこかで雪に変わって、それからやんだ。ガラス越しの十二月の陽射しは気温についての嘘で、毎年みんなそれに騙される。",
+                "بارون یه‌جایی تو شب برف شده بود و بعد بند اومده بود. آفتابِ دسامبر از پشتِ شیشه دروغیه درباره‌ی دما و هر سال همه‌ی این کلاس بهش گول می‌خورن.");
 
             Enter(Speaker.Haru, Portrait.Neutral);
             Enter(Speaker.Yua, Portrait.Joyful);
@@ -1697,9 +1745,15 @@ namespace TheFrayedRedString.EditorTools
         //  Thursday, evening — the platform
         //
         //  ▣ Scene state
-        //     Background   TrainPlatformSunset. In December the sunset is at
-        //                  half past four and is over before the trains thin
-        //                  out.
+        //     Background   TrainPlatformWinterSunset. Not a sunset, whatever
+        //                  the file is called: a flat white winter afternoon
+        //                  with snow lying on the canopy, icicles along its
+        //                  edge, snow on the seats and bare black trees down
+        //                  the track. The narration follows the picture rather
+        //                  than the file name — the snow is last night's, from
+        //                  the rain in the café scene, and this is the only
+        //                  place in the first two acts where the weather of one
+        //                  day is visibly still there on the next.
         //     Date         Thursday 19 December, evening.
         //     On stage     The seats, the machine, the stall, the track, bare
         //                  trees along it.
@@ -1713,18 +1767,22 @@ namespace TheFrayedRedString.EditorTools
 
         private void WriteThursdayPlatform()
         {
+            ClearStage();
+
             Place(
-                Backgrounds.TrainPlatformSunset,
+                Backgrounds.TrainPlatformWinterSunset,
                 "The platform", "ホーム", "سکوی ایستگاه");
 
+            // Nothing falling yet. It starts again at the end of the scene, and
+            // that is the only weather beat in act two that is not a leaf.
             NoFall(0f);
 
             Hold(2.2f);
 
             Narrate(
-                "The trees along the track had nothing on them at all now, and the light was finished by five past five.",
-                "線路沿いの木にはもう何も残っていなくて、光は五時五分には終わっていた。",
-                "درخت‌های کنارِ ریل دیگه هیچی روشون نبود، و نور ساعتِ پنج و پنج دقیقه تموم شده بود.");
+                "Last night's snow was still on the canopy and still on the seats, because nothing on this side of the station gets the sun. The trees along the track had nothing on them at all.",
+                "昨夜の雪が屋根にも椅子にも残っていた。駅のこちら側には陽が当たらない。線路沿いの木には、もう何も残っていなかった。",
+                "برفِ دیشب هنوز رو سایبون بود و هنوز رو صندلی‌ها، چون این‌ورِ ایستگاه اصلاً آفتاب نمی‌خوره. درخت‌های کنارِ ریل دیگه هیچی روشون نبود.");
 
             Enter(Speaker.Yua, Portrait.Joyful);
             Enter(Speaker.Haru, Portrait.Neutral);
@@ -1819,7 +1877,11 @@ namespace TheFrayedRedString.EditorTools
                 "光が消えたあとの本格的な寒さが来た。ハルはその中に、なにもせずに立っていた。今まではしなかったことだ。",
                 "سکو حسابی سرد شد، همون‌جوری که بعد از رفتنِ نور می‌شه، و هارو توش وایساد و هیچ کاری براش نکرد، که قبلاً نمی‌کرد.");
 
-            Hold(1.8f);
+            // Rule seven, as an absence, in one picture: she folds her arms the
+            // way she did on the 5th of November, and this time nothing crosses
+            // the gap. Six weeks ago he bought a second can for it. Neither of
+            // them mentions that, and the frame does not linger.
+            Cel(Portrait.ColdHug, Portrait.Unchanged, 1.8f);
 
             Say(Speaker.Haru, Portrait.StrainedSmile,
                 "Hey.",
@@ -1839,6 +1901,12 @@ namespace TheFrayedRedString.EditorTools
                 "هیچی. ولش کن.");
 
             Hold(2.4f);
+
+            // It starts again here, thinly, and nobody in the scene remarks on
+            // it. Six seconds to come up, so it is at its lightest under the
+            // last three lines and heaviest over the empty platform after he
+            // has gone.
+            Fall(FallKind.Snow, 0.10f, 6f);
 
             Say(Speaker.Yua, Portrait.Joyful,
                 "Your train.",
@@ -1913,6 +1981,8 @@ namespace TheFrayedRedString.EditorTools
 
         private void WriteSundayRoom()
         {
+            ClearStage();
+
             Place(
                 Backgrounds.YuaRoomDay,
                 "Yua's room", "結愛の部屋", "اتاقِ یوآ");
@@ -2122,8 +2192,8 @@ namespace TheFrayedRedString.EditorTools
             //    it only works when it is wet · seasonal is a shape.
             //
             //  AND LOSES ONE REAL DECISION PER SCENE
-            //    who reads the board · which stairs · that she keeps the
-            //    cardigan · that he does not replace the pencil case · the long
+            //    who reads the board · which stairs · that she takes the can
+            //    off the wall · that he does not replace the pencil case · the long
             //    way home · that he comes on Sunday · that he has plans for the
             //    holidays now.
             //
@@ -2133,9 +2203,15 @@ namespace TheFrayedRedString.EditorTools
             //
             //  SEASON AND CALENDAR
             //    7 Oct warm in the sun, leaves at their reddest, fall 0.20 ·
-            //    5 Nov leaves heavy, fall 0.42, dark at half five ·
+            //    5 Nov no fall at all — the corridor is indoors and the
+            //      corner is after dark with the beds already bare; the leaves
+            //      are down, not coming down, and the winter picture of the
+            //      corner says exactly that. Dark at half past five ·
             //    18 Dec bare, rain, no fall, windows steamed from inside ·
-            //    19 Dec bare, clear, light gone by five past five ·
+            //    19 Dec last night's rain fell as snow and stopped; sun in the
+            //      morning, none on the north side of the station, and it
+            //      starts again over the last three frames of the platform.
+            //      The only snow in the act, and nobody mentions it ·
             //    22 Dec indoors. Every date is on screen. No blossom.
             //
             //  WHAT IS DELIBERATELY NOT HERE

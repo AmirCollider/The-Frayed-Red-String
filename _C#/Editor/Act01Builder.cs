@@ -31,12 +31,12 @@
 //      player the truth on the title card — which is the one thing it must not
 //      do. The alley is now full of dead leaves and nobody mentions it.
 //
-//   3. THEY WERE IN A UNIFORM NOBODY HAS DRAWN. Every one of the fifty-one
-//      character sprites has them in one outfit and it is not a uniform: she is
-//      in a pink and blue frilled dress with a red cord at her wrists, he is in
-//      a cream cardigan and grey trousers. The old act's opening joke — the new
-//      uniform is a bit loose — pointed at something that is not on screen,
-//      which is the scene lock broken in the first thirty seconds.
+//   3. THEY WERE IN A UNIFORM NOBODY HAS DRAWN. All sixty character sprites
+//      have these two in one outfit each, and neither of them is a uniform:
+//      she is in a pink and blue frilled dress with a red cord at her wrists,
+//      he is in a cream cardigan and grey trousers. The old act's opening
+//      joke — the new uniform is a bit loose — pointed at something that is
+//      not on screen, which is the scene lock broken in thirty seconds.
 //
 //      The replacement is better rather than merely correct: a girl worrying
 //      about a dress she chose says more about her than a girl worrying about
@@ -180,8 +180,9 @@ namespace TheFrayedRedString.EditorTools
         //  The test   Morita-sensei said "maybe" on Monday. Haru says her maybe
         //             means yes. He is right on Thursday.
         //  Dango      Four on a stick, from the stall by the station, Friday.
-        //  Sounds     The school bell rings on Monday, Tuesday and Thursday.
-        //             Nothing else in the act keeps time.
+        //  Sounds     The school bell rings twice in six days, on the path,
+        //             on Monday and on Friday — the first morning of the act
+        //             and the last one. Nothing else in the act keeps time.
         // =====================================================================
 
         /// <summary>
@@ -308,6 +309,8 @@ namespace TheFrayedRedString.EditorTools
 
         private void WriteMondayAlley()
         {
+            ClearStage();
+
             Place(
                 Backgrounds.SchoolAlleyDay,
                 "The path to school", "通学路", "راهِ مدرسه");
@@ -598,6 +601,8 @@ namespace TheFrayedRedString.EditorTools
 
         private void WriteMondayClassroom()
         {
+            ClearStage();
+
             Place(
                 Backgrounds.ClassroomDay,
                 "1-A", "一年A組", "اول-الف");
@@ -778,9 +783,11 @@ namespace TheFrayedRedString.EditorTools
         //  Monday, going home — the corner with the machine
         //
         //  ▣ Scene state
-        //     Background   PastelStreetVendingDay: a residential street, a pink
-        //                  drinks machine on the left, a bicycle against the
-        //                  wall, flowerbeds.
+        //     Background   PastelStreetVendingAutumnDay: a residential street,
+        //                  a pink drinks machine on the left, a bicycle against
+        //                  the wall, flowerbeds still in flower. The spring
+        //                  version of this corner is a separate file and is not
+        //                  used between September and March.
         //     Date         Monday 2 September, late afternoon.
         //     On stage     The machine, the bicycle, the flowerbeds.
         //     In hand      Bags. The rolls are gone.
@@ -799,6 +806,8 @@ namespace TheFrayedRedString.EditorTools
 
         private void WriteMondayCorner()
         {
+            ClearStage();
+
             Place(
                 Backgrounds.VendingStreetDay,
                 "The corner", "曲がり角", "سرِ نبش");
@@ -1052,6 +1061,8 @@ namespace TheFrayedRedString.EditorTools
 
         private void WriteTuesdayClassroom()
         {
+            ClearStage();
+
             Place(
                 Backgrounds.ClassroomRainy,
                 "1-A", "一年A組", "اول-الف");
@@ -1212,6 +1223,8 @@ namespace TheFrayedRedString.EditorTools
 
         private void WriteTuesdayBakery()
         {
+            ClearStage();
+
             Place(
                 Backgrounds.BakeryStreetDay,
                 "Outside Usagi Bakery", "うさぎベーカリーの前", "جلوی نونواییِ اوساگی");
@@ -1414,6 +1427,8 @@ namespace TheFrayedRedString.EditorTools
 
         private void WriteWednesdayRoof()
         {
+            ClearStage();
+
             Place(
                 Backgrounds.RooftopDay,
                 "The roof", "屋上", "پشت‌بام");
@@ -1635,9 +1650,11 @@ namespace TheFrayedRedString.EditorTools
         //  Wednesday, after school — the corridor
         //
         //  ▣ Scene state
-        //     Background   SchoolCorridorSunset: an empty corridor in gold
-        //                  light, long shadows, floor-to-ceiling windows,
-        //                  lockers.
+        //     Background   SchoolCorridorAutumnSunset: an empty corridor in
+        //                  gold light, long shadows, floor-to-ceiling windows
+        //                  with turned maples behind them, lockers, and a
+        //                  grille in the floor at the far end that this act
+        //                  never looks at.
         //     Date         Wednesday 4 September, going home.
         //     On stage     The windows, the lockers, the light.
         //     From before  The plant. The window that does not shut.
@@ -1649,6 +1666,8 @@ namespace TheFrayedRedString.EditorTools
 
         private void WriteWednesdayCorridor()
         {
+            ClearStage();
+
             Place(
                 Backgrounds.CorridorSunset,
                 "The second-floor corridor", "二階の廊下", "راهروی طبقه‌ی دوم");
@@ -1772,6 +1791,8 @@ namespace TheFrayedRedString.EditorTools
 
         private void WriteThursdayClassroom()
         {
+            ClearStage();
+
             Place(
                 Backgrounds.ClassroomDay,
                 "1-A", "一年A組", "اول-الف");
@@ -1906,11 +1927,16 @@ namespace TheFrayedRedString.EditorTools
 
         private void WriteThursdayCafe()
         {
+            ClearStage();
+
             Place(
                 Backgrounds.CafeDay,
                 "The café", "喫茶店", "کافه");
 
-            AutumnAir(0.05f);
+            // Indoors. The fall layer covers the whole picture, not the window
+            // in it, so anything but NoFall here is leaves coming down between
+            // the tables.
+            NoFall(0f);
 
             Hold(1.8f);
 
@@ -2108,6 +2134,8 @@ namespace TheFrayedRedString.EditorTools
 
         private void WriteThursdayAlley()
         {
+            ClearStage();
+
             Place(
                 Backgrounds.AlleywayNight,
                 "The old alley", "古い路地", "کوچه‌ی قدیمی");
@@ -2237,6 +2265,8 @@ namespace TheFrayedRedString.EditorTools
 
         private void WriteFridayPath()
         {
+            ClearStage();
+
             Place(
                 Backgrounds.SchoolAlleyDay,
                 "The path to school", "通学路", "راهِ مدرسه");
@@ -2353,9 +2383,11 @@ namespace TheFrayedRedString.EditorTools
         //  Friday, after school — the platform
         //
         //  ▣ Scene state
-        //     Background   TrainPlatformSunset: a platform in gold and pink
-        //                  light, a pink drinks machine, coloured seats, trees
-        //                  along the track, a stall at the far end.
+        //     Background   TrainPlatformAutumnSunset: a platform in gold and
+        //                  pink light, a pink drinks machine, coloured seats,
+        //                  turned trees along the track, a stall at the far
+        //                  end. December's version of this platform has the
+        //                  same seats and nothing on the trees.
         //     Date         Friday 6 September, evening.
         //     On stage     The seats, the machine, the stall, the track.
         //     In hand      One stick of dango with four on it.
@@ -2387,6 +2419,8 @@ namespace TheFrayedRedString.EditorTools
 
         private void WriteFridayPlatform()
         {
+            ClearStage();
+
             Place(
                 Backgrounds.TrainPlatformSunset,
                 "The platform", "ホーム", "سکوی ایستگاه");
@@ -2625,13 +2659,16 @@ namespace TheFrayedRedString.EditorTools
         //     From before  A name she has been sitting on since Thursday.
         //
         //  ◆ DREAD 8 — she counts to five for two children who are arguing, and
-        //  she is completely lovely about it, and on "five" her voice goes flat
-        //  for one syllable. Deniable: she was concentrating. Nobody hears it
-        //  except the player, and the player is not sure they heard it either.
+        //  she is completely lovely about it, and on "five" the hand comes down
+        //  and the face goes ordinary, one beat before the count has finished
+        //  being useful. Deniable: she was done. Nobody sees it except the
+        //  player, and the player is not sure they saw it either.
         // ---------------------------------------------------------------------
 
         private void WriteSaturdayPlayground()
         {
+            ClearStage();
+
             Place(
                 Backgrounds.PlaygroundDay,
                 "The playground", "公園", "زمینِ بازی");
@@ -2704,7 +2741,9 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(1.4f);
 
-            Say(Speaker.Yua, Portrait.Joyful,
+            // The hand goes up here with all five fingers open, and it stays
+            // up through the whole count. Nothing points at the number.
+            Say(Speaker.Yua, Portrait.Counting,
                 "Right. The one at the top goes first, because that is how a slide works. And the one at the bottom gets to count out loud. All right? Count for me.",
                 "はい。上にいる子が先。すべり台ってそういうものだから。下の子は、声に出して数える係。いい? 数えて。",
                 "خب. اونی که بالاست اول می‌ره، چون سرسره همین‌جوریه. اونی که پایینه هم بلندبلند می‌شمره. باشه؟ بشمر واسم.");
@@ -2726,8 +2765,9 @@ namespace TheFrayedRedString.EditorTools
                 "し。",
                 "چهار.");
 
-            // ◆ DREAD 8. One syllable, on her ordinary face, and then straight
-            // back to the children. Deniable: she was concentrating.
+            // ◆ DREAD 8. The hand comes down on this one and not on the one
+            // after it, and her face is ordinary, and then she is straight back
+            // to the children. Deniable: she had finished.
             Say(Speaker.Yua, Portrait.Neutral,
                 "Five.",
                 "ご。",
@@ -2838,6 +2878,8 @@ namespace TheFrayedRedString.EditorTools
 
         private void WriteSaturdayCorner()
         {
+            ClearStage();
+
             Place(
                 Backgrounds.VendingStreetNight,
                 "The corner", "曲がり角", "سرِ نبش");
@@ -2940,12 +2982,22 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(1.6f);
 
+            // SCENE LOCK. Not "the low wall" — the September picture of this
+            // corner has flowerbeds and no wall to sit on. The wall arrives in
+            // November, in the winter picture, and act two sits on it there.
             Narrate(
-                "They sat on the low wall by the flowerbeds and opened them at the same time, which was not planned and happened anyway.",
-                "花壇のそばの低い塀に座って、二人同時に開けた。示し合わせていないのに、そうなった。",
-                "رو دیوارِ کوتاهِ کنارِ باغچه نشستن و همزمان بازشون کردن، که قرار نبود و بازم شد.");
+                "They sat down on the kerb by the flowerbeds and opened them at the same time, which was not planned and happened anyway.",
+                "花壇のふちの縁石に腰を下ろして、二人同時に開けた。示し合わせていないのに、そうなった。",
+                "رو جدولِ کنارِ باغچه نشستن و همزمان بازشون کردن، که قرار نبود و بازم شد.");
 
-            Say(Speaker.Haru, Portrait.Joyful,
+            // A can each, in the same frame. The machine has been taking his
+            // hundred yen since Monday and this is what six days of that bought
+            // — the one picture the whole running joke was for. It stays up
+            // through the four lines after it, because none of them needs a
+            // face and all of them are better with two hands round a can.
+            Cel(Portrait.HoldCan, 2.0f);
+
+            Say(Speaker.Haru, Portrait.Unchanged,
                 "Six days.",
                 "六日間。",
                 "شیش روز.");
@@ -2955,12 +3007,12 @@ namespace TheFrayedRedString.EditorTools
                 "六日間、なにが?",
                 "شیش روزِ چی؟");
 
-            Say(Speaker.Haru, Portrait.Neutral,
+            Say(Speaker.Haru, Portrait.Unchanged,
                 "Term. It's gone fast.",
                 "学期。早かった。",
                 "ترم. زود گذشت.");
 
-            Say(Speaker.Yua, Portrait.Neutral,
+            Say(Speaker.Yua, Portrait.Unchanged,
                 "It has.",
                 "うん。",
                 "آره.");
@@ -3051,8 +3103,11 @@ namespace TheFrayedRedString.EditorTools
         // =====================================================================
         //
         //  SHAPE
-        //    6 days · 14 scenes · 385 frames that show text · 8 white choices,
-        //    one of which branches for six frames and changes nothing.
+        //    6 days · 14 scenes · 385 written frames that show text · 9 white
+        //    choices, one of which branches and changes nothing. A single
+        //    playthrough reads 378 or 381 of the 385: the branch is seven
+        //    frames down one road and four down the other, and both roads are
+        //    counted above because both are written.
         //    No blue or green anywhere. No player address. No aside. Nothing
         //    above ladder rung three.
         //
@@ -3133,8 +3188,13 @@ namespace TheFrayedRedString.EditorTools
         //    uniform is referred to at any point.
         //    Bento numbers: six and four said once, ten pictures, four and
         //    three onto his lid — the frames and the line agree.
-        //    Sounds: the school bell Mon, Tue, Fri. The machine Mon and Sat.
-        //    A chair Mon, a knock Mon, the thing under the road Thu.
+        //    Sounds: the school bell twice, Mon and Fri, both on the path.
+        //    The machine Mon (takes) and Sat (pays out twice). A chair Mon, a
+        //    knock on the machine Mon, the thing under the road Thu. Counted,
+        //    not remembered: nine cues in the act.
+        //    Weather by scene: leaves outdoors in daylight only. Never in a
+        //    room — not the classroom, not the corridor, not the café — and
+        //    never at night, which is both of the night scenes.
         //
         //  WHAT THIS ACT PLANTS FOR LATER, AND HOW MUCH IT WEIGHS
         //    · "-pi", from the first exchange, never explained.        (act 6)

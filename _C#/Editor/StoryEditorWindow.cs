@@ -2448,6 +2448,24 @@ namespace TheFrayedRedString.EditorTools
             EditorGUILayout.PropertyField(_settingsSerialized.FindProperty("EntranceSlide"));
 
             EditorGUILayout.Space(10f);
+            EditorGUILayout.LabelField("Separation", EditorStyles.boldLabel);
+
+            EditorGUILayout.HelpBox(
+                "Both characters and every room are painted in the same pastel key, so a cream cardigan " +
+                "in front of a cream classroom wall has almost no edge and the eye loses the person it " +
+                "is meant to be reading.\n\n" +
+                "Two small moves rather than one big one: the scenery steps back a little, cooler and " +
+                "slightly darker, and the characters get a soft dark contour. Turn Separate From Scenery " +
+                "off and the game looks exactly as it did before either existed.",
+                MessageType.Info);
+
+            EditorGUILayout.PropertyField(_settingsSerialized.FindProperty("SeparateFromScenery"));
+            EditorGUILayout.PropertyField(_settingsSerialized.FindProperty("SceneryRecede"));
+            EditorGUILayout.PropertyField(_settingsSerialized.FindProperty("SceneryRecedeTint"));
+            EditorGUILayout.PropertyField(_settingsSerialized.FindProperty("CharacterEdge"));
+            EditorGUILayout.PropertyField(_settingsSerialized.FindProperty("CharacterEdgeColour"));
+
+            EditorGUILayout.Space(10f);
             EditorGUILayout.LabelField("Frame", EditorStyles.boldLabel);
 
             EditorGUILayout.HelpBox(
@@ -2499,6 +2517,22 @@ namespace TheFrayedRedString.EditorTools
                 DrawSprite(frame, background);
             }
 
+            // The scenery stepping back, over the picture and under the people,
+            // which is where the runtime puts it too.
+            //
+            // A blend rather than the multiply the game does: EditorGUI cannot
+            // multiply, and on a palette this pale the two land within a
+            // percent of each other. The point of the preview is the size of
+            // the gap it opens, and that is honest.
+            if (_settings.SeparateFromScenery && _settings.SceneryRecede > 0f)
+            {
+                Color back = _settings.SceneryRecedeTint;
+
+                EditorGUI.DrawRect(
+                    frame,
+                    new Color(back.r, back.g, back.b, Mathf.Clamp01(_settings.SceneryRecede)));
+            }
+
             DrawCharacterPreview(frame, scale, Speaker.Yua);
             DrawCharacterPreview(frame, scale, Speaker.Haru);
 
@@ -2544,7 +2578,8 @@ namespace TheFrayedRedString.EditorTools
             EditorGUI.DrawRect(box, new Color(1f, 0.976f, 0.984f, 0.55f));
 
             EditorGUILayout.LabelField(
-                "Preview shows the first background in this act, both characters, the frame and the dialogue box.",
+                "Preview shows the first background in this act, both characters, the separation " +
+                "settings, the veil, the frame and the dialogue box.",
                 EditorStyles.miniLabel);
         }
 
@@ -2615,6 +2650,26 @@ namespace TheFrayedRedString.EditorTools
 
             GUI.BeginClip(frame);
             Rect local = new Rect(rect.x - frame.x, rect.y - frame.y, rect.width, rect.height);
+
+            // The same four diagonal copies UnityEngine.UI.Outline draws at
+            // runtime, in the same colour, at the same reach converted into
+            // preview pixels. Drawn before the sprite, so they end up behind it.
+            if (_settings.SeparateFromScenery
+                && _settings.CharacterEdge > 0.01f
+                && _settings.CharacterEdgeColour.a > 0.001f)
+            {
+                float reach = _settings.CharacterEdge * scale;
+                Color was = GUI.color;
+                GUI.color = _settings.CharacterEdgeColour;
+
+                DrawSprite(new Rect(local.x + reach, local.y + reach, local.width, local.height), sprite);
+                DrawSprite(new Rect(local.x - reach, local.y + reach, local.width, local.height), sprite);
+                DrawSprite(new Rect(local.x + reach, local.y - reach, local.width, local.height), sprite);
+                DrawSprite(new Rect(local.x - reach, local.y - reach, local.width, local.height), sprite);
+
+                GUI.color = was;
+            }
+
             DrawSprite(local, sprite);
             GUI.EndClip();
         }

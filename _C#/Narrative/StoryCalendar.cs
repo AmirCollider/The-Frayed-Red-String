@@ -135,11 +135,30 @@ namespace TheFrayedRedString.Narrative
         /// </remarks>
         public static readonly StoryDate ActOneDayOne = new StoryDate(2024, 9, 2);
 
-        /// <summary>Act two opens.</summary>
-        public static readonly StoryDate ActTwoBegins = new StoryDate(2024, 10, 3);
+        /// <summary>
+        /// Act two opens.
+        /// </summary>
+        /// <remarks>
+        /// The 7th and not the 3rd. Act two's first scene calls the day a Monday
+        /// out loud — "four floors is a lot for a Monday" — and the 3rd of
+        /// October 2024 is a Thursday. The title card computes its weekday from
+        /// this constant, so the two of them were contradicting each other on
+        /// screen, in the same frame, in three languages.
+        /// </remarks>
+        public static readonly StoryDate ActTwoBegins = new StoryDate(2024, 10, 7);
 
-        /// <summary>Haru tells her about his friend. Act two's last day.</summary>
-        public static readonly StoryDate TheFriendStory = new StoryDate(2024, 12, 21);
+        /// <summary>
+        /// Haru tells her about his friend, in the café, in the rain.
+        /// </summary>
+        /// <remarks>
+        /// The 18th, which is act two's third day and not its last: the act runs
+        /// on to the platform on the 19th and her room on the 22nd, and the
+        /// whole point of rule seven is that this day does not finish when the
+        /// scene does. The 21st was left here from a draft in which the café was
+        /// the ending, and it is a Saturday, which is not a school day, which is
+        /// how it was caught.
+        /// </remarks>
+        public static readonly StoryDate TheFriendStory = new StoryDate(2024, 12, 18);
 
         /// <summary>Act three opens.</summary>
         public static readonly StoryDate ActThreeBegins = new StoryDate(2024, 12, 25);
