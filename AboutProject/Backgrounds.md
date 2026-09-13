@@ -20,7 +20,7 @@
 
 ## ۲. پس‌زمینه‌های موجود
 
-**۳۴ فایل.** ستونِ «پرده‌ها» شمرده شده است، نه حدس — از روی `Backgrounds.` در هر هفت `ActXXBuilder.cs`.
+**۳۶ فایل.** ستونِ «پرده‌ها» شمرده شده است، نه حدس — از روی `Backgrounds.` در هر هفت `ActXXBuilder.cs`.
 
 ### ۲.۱ سه‌گانه‌های فصلی — مهم‌ترین جدولِ این فایل
 
@@ -29,14 +29,14 @@
 | مکان | پیش‌فرض (پاییز) | زمستان | بهار — فقط خاطره و رویا |
 |---|---|---|---|
 | مسیرِ مدرسه | `SchoolAlleyDay` → `AutumnSchoolAlleyDay` | — | `SchoolAlleySpring` → `CherryBlossomSchoolAlleyDay` |
-| ۱-الف، آفتابی | `ClassroomDay` → `SunnyClassroomAutumnDay` | — | `ClassroomSpringDay` → `SunnyClassroomDay` |
+| ۱-الف، آفتابی | `ClassroomDay` → `SunnyClassroomAutumnDay` | `ClassroomWinterDay` → `SunnyClassroomWinterDay` | `ClassroomSpringDay` → `SunnyClassroomDay` |
 | ۱-الف، بارانی | `ClassroomRainy` → `OvercastClassroomRainyAutumnDay` | — | `ClassroomRainySpring` → `OvercastClassroomRainy` |
 | **راه‌پله** | `StairsAutumn` → `AutumnAfternoonSchoolStairs` | `StairsWinter` → `WinterAfternoonSchoolStairs` | `StairsSpring` → `SpringAfternoonSchoolStairs` |
 | راهرو | `CorridorSunset` → `SchoolCorridorAutumnSunset` | `CorridorWinterRainyNight` → `SchoolCorridorWinterRainyNight` | `CorridorSunsetSpring` → `SchoolCorridorSunset` |
 | پشت‌بام | `RooftopDay` → `SchoolRooftopAutumnSunnyDay` | — | `RooftopSpringDay` → `SchoolRooftopSunnyDay` |
 | نونوایی | `BakeryStreetDay` → `UsagiBakeryStreetAutumnDay` | `BakeryStreetWinterDay` → `UsagiBakeryStreetWinterDay` | `BakeryStreetSpringDay` → `UsagiBakeryStreetDay` |
 | نبشِ دستگاه، روز | `VendingStreetDay` → `PastelStreetVendingAutumnDay` | — | `VendingStreetSpringDay` → `PastelStreetVendingDay` |
-| نبشِ دستگاه، شب | `VendingStreetNight` → `PastelStreetVendingNight` (سپتامبر) | `VendingStreetWinterNight` → `PastelStreetVendingWinterNight` | — |
+| نبشِ دستگاه، شب | `VendingStreetNight` → `PastelStreetVendingNight` (سپتامبر، باغچه پرگل)<br>`VendingStreetAutumnNight` → `PastelStreetVendingAutumnNight` (نوامبر، ساقه‌ی خشک، بدونِ برف) | `VendingStreetWinterNight` → `PastelStreetVendingWinterNight` (برف‌دار) | — |
 | کافه | `CafeDay` → `CozyCafeDay` · `CafeRainy` → `CozyCafeDimAutumnDimRainy` | — | `CafeRainySpring` → `CozyCafeDimRainy` |
 | زمینِ بازی | `PlaygroundDay` → `PastelPlaygroundAutumnDay` | — | `PlaygroundSpringDay` → `PastelPlaygroundDay` |
 | سکوی ایستگاه | `TrainPlatformSunset` → `TrainPlatformAutumnSunset` | `TrainPlatformWinterSunset` → `TrainPlatformWinterSunset` | `TrainPlatformSpringSunset` → `TrainPlatformSunset` |
@@ -60,7 +60,8 @@
 | **دکه‌ی دانگو** | `TrainPlatformAutumnSunset` | در نسخه‌ی زمستان و بهارِ سکو دکه‌ای نیست. صحنه‌ی ۱۹ دسامبر روی سکوی زمستانی می‌گذرد، پس دانگو **دمِ گیت** خریده می‌شود، بیرون از کادر |
 | **جا چتری** | `SchoolCorridorWinterRainyNight` | مدرسه جا چتری را زمستان می‌گذارد بیرون و پاییز — که آن هم بارون می‌آید — ورش می‌دارد. **هنوز ازش صحنه ساخته نشده و باید ساخته شود** |
 | **نیمکتِ سنگیِ کوتاه کنارِ دستگاه** | `PastelStreetVendingNight` · `PastelStreetVendingWinterNight` · `PastelStreetVendingDay` | در `PastelStreetVendingAutumnDay` **نیست**. صحنه‌ی ۵ نوامبر به همین دلیل ایستاده نوشته شده و نه نشسته |
-| **برف** | `PastelStreetVendingWinterNight` | بعد از بازطراحی برف اضافه شد، پس این تصویر **دسامبر به بعد** است، نه نوامبر |
+| **برف** | `PastelStreetVendingWinterNight` · `SunnyClassroomWinterDay` · `UsagiBakeryStreetWinterDay` · `TrainPlatformWinterSunset` · `WinterAfternoonSchoolStairs` · `YuaRoomWinterDay` | این‌ها **دسامبر به بعد**اند. برای ۵ نوامبر هیچ‌کدام کار نمی‌کنند — آن روز `PastelStreetVendingAutumnNight` دارد |
+| **گویِ برفی روی میز** | `SunnyClassroomWinterDay` | یک چیزی که یکی آورده کلاس. کاشتِ هیچ‌چیز نیست و می‌شود ازش یک شوخی درآورد |
 | **تومو (گلدانِ لبِ پنجره)** | `SunnyClassroomDay` · `SunnyClassroomAutumnDay` | در نسخه‌ی بارانی دیده نمی‌شود. هر صحنه‌ای که تومو را نشان می‌دهد باید کلاسِ آفتابی باشد |
 | **بچه‌ها روی سرسره** | `PastelPlaygroundAutumnDay` · `PastelPlaygroundDay` | صحنه‌ی شمردن تا پنج روی همین بچه‌ها بنا شده |
 | **گربه‌های نیمکت** | هر سه نسخه‌ی نونوایی | زمستان هم هستند، روی برف. آنکو همیشه سرِ جایش است |
@@ -145,5 +146,7 @@
 
 | # | فایل | چرا |
 |---|---|---|
-| ۱ | `PastelStreetVendingAutumnNight.png` | **تنها موردِ ضروری.** نبشِ دستگاه در شبِ پاییز: باغچه‌ها ساقه‌ی خشک، **بدونِ برف**، نیمکتِ سنگی سرِ جایش. صحنه‌ی ۵ نوامبر به این نیاز دارد. الآن روی `PastelStreetVendingAutumnDay` (غروبِ طلایی) نوشته شده که کار می‌کند ولی صحنه واقعاً شب می‌خواهد |
-| ۲ | `SunnyClassroomWinterDay.png` | خوب است، ضروری نیست. صحنه‌ی ۱۹ دسامبر در کلاس می‌گذرد و نسخه‌ی زمستانیِ کلاس وجود ندارد؛ فعلاً نسخه‌ی پاییزی استفاده می‌شود |
+| ۱ | ~~`PastelStreetVendingAutumnNight.png`~~ | ✅ **ساخته شد.** صحنه‌ی ۵ نوامبر روی همین است، و چون نیمکتِ سنگی دارد، آن دو نفر دوباره می‌نشینند به‌جای اینکه بایستند |
+| ۲ | ~~`SunnyClassroomWinterDay.png`~~ | ✅ **ساخته شد.** صحنه‌ی ۱۹ دسامبر روی همین است |
+
+**هیچ آرتِ دیگری برای پرده‌های ۱ و ۲ لازم نیست.** هر ۴۵ ثابتِ `Backgrounds` که این دو پرده استفاده می‌کنند به یک فایلِ موجود می‌رسند — شمرده شد.
