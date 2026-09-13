@@ -179,7 +179,28 @@ namespace TheFrayedRedString.EditorTools
         /// <summary>Yua thinking, with nobody to hear it.</summary>
         private void InnerVoice(string english, string japanese, string persian)
         {
-            Say(Speaker.Yua, Portrait.Unchanged, english, japanese, persian);
+            InnerVoice(Portrait.Unchanged, english, japanese, persian);
+        }
+
+        /// <summary>
+        /// The same, with a face on it.
+        /// </summary>
+        /// <remarks>
+        /// Added because the version without it was a freezing machine. A
+        /// monologue is the longest stretch in the game where one drawing is on
+        /// screen with nobody else speaking, and every one of them inherited
+        /// whatever expression the last line of dialogue happened to leave
+        /// behind — so act one's first dread moment played out with Yua stood
+        /// there smirking with a hand on her hip, because that is what she had
+        /// been doing four frames earlier.
+        ///
+        /// A monologue now states its own face. Unchanged is still available
+        /// and still means "carry on with the last one", but it has to be asked
+        /// for rather than being what happens when nobody thought about it.
+        /// </remarks>
+        private void InnerVoice(Portrait portrait, string english, string japanese, string persian)
+        {
+            Say(Speaker.Yua, portrait, english, japanese, persian);
             Script[Script.Count - 1].TypeSpeed = InnerMonologueTypeSpeed;
         }
 
@@ -284,9 +305,9 @@ namespace TheFrayedRedString.EditorTools
                 "این یعنی یه ماه.");
 
             Say(Speaker.Yua, Portrait.Unchanged,
-                "The seventh of September to the seventh of October is four weeks and four days, and what you said on the seventh of September was that you would try it again in a month.",
-                "九月七日から十月七日は、四週間と四日。ハルぴが九月七日に言ったのは「一ヶ月したらもう一回やる」。",
-                "از هفتِ سپتامبر تا هفتِ اکتبر می‌شه چهار هفته و چهار روز، و چیزی که هفتِ سپتامبر گفتی این بود که یه ماهِ دیگه دوباره امتحانش می‌کنی.");
+                "Seventh of September to the seventh of October. Four weeks and four days. You said a month.",
+                "九月七日から十月七日。四週間と四日。ハルぴは「一ヶ月」って言った。",
+                "از هفتِ سپتامبر تا هفتِ اکتبر. چهار هفته و چهار روز. تو گفتی یه ماه.");
 
             Say(Speaker.Haru, Portrait.Bored,
                 "...It's the same reason as last week.",
@@ -425,6 +446,19 @@ namespace TheFrayedRedString.EditorTools
                         "چهار.");
                 });
 
+            // POSE RESET AFTER A BRANCH.
+            //
+            // A road may only hold spoken lines, so neither road can move
+            // anybody. Both characters therefore walk out of a choice wearing
+            // whatever the last line of that road left on them, and the one who
+            // did not speak wearing whatever they had before it started. In act
+            // one's Monday classroom that was Haru stuck on Surprised for the
+            // last eight frames of the scene, and it happened at every branch
+            // in both acts.
+            //
+            // One frame on the join where the picture is stated for both.
+            Cel(Portrait.Neutral, Portrait.Neutral, 1.2f);
+
             Hold(1.8f);
 
             Narrate(
@@ -463,9 +497,9 @@ namespace TheFrayedRedString.EditorTools
             Hold(2.0f);
 
             Narrate(
-                "In October the roof was warm in the sun and cold two steps into the shade. They sat in the sun. Neither of them said so; they just both went there.",
-                "十月の屋上は、日なたはあたたかく、二歩で日陰は寒い。二人は日なたに座った。どちらも口には出さず、どちらもそっちへ行った。",
-                "تو اکتبر پشت‌بوم تو آفتاب گرم بود و دو قدم اون‌ورتر، تو سایه، سرد. تو آفتاب نشستن. هیچ‌کدوم نگفتش؛ فقط هردو رفتن همون‌جا.");
+                "In October the roof was warm in the sun and cold two steps into the shade. They sat in the sun.",
+                "十月の屋上は、日なたはあたたかく、二歩で日陰は寒い。二人は日なたに座った。",
+                "تو اکتبر پشت‌بوم تو آفتاب گرم بود و دو قدم اون‌ورتر، تو سایه، سرد. تو آفتاب نشستن.");
 
             Enter(Speaker.Haru, Portrait.Neutral);
 
@@ -642,10 +676,13 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(1.2f);
 
+            // "She did not ask" is the narrator doing the noticing. The
+            // stairwell being quiet is the same information and the player gets
+            // to find it.
             Listen(
-                "She did not ask. She stood on the step below him and waited, and the stairwell was very quiet, and after a while he came down.",
-                "結愛は訊かなかった。一段下で待って、階段はとても静かで、しばらくして、ハルは下りてきた。",
-                "نپرسید. یه پله پایین‌تر وایساد و منتظر موند، و راه‌پله خیلی ساکت بود، و بعد از یه مدت اومد پایین.");
+                "The stairwell was very quiet. After a few seconds he started down again.",
+                "階段はとても静かだった。何秒かして、ハルはまた下りはじめた。",
+                "راه‌پله خیلی ساکت بود. بعد از چند ثانیه دوباره راه افتاد.");
 
             Hold(1.6f);
 
@@ -804,15 +841,20 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(1.2f);
 
+            // THIS USED TO EXPLAIN ITSELF. "Since I was small. I don't know
+            // why." is a girl handing the player a diagnosis, and it gave away
+            // in two frames a thing the game does not confirm for four more
+            // acts. What is left is a sentence anybody could say about a
+            // boiler.
+            //
+            // The whole beat is now in his answer. "I know" is not what you say
+            // when a friend complains about a noise — you say "yeah, it's
+            // horrible" — and that is the only wrong note in the scene. Nobody
+            // reaches for it.
             Say(Speaker.Yua, Portrait.Unchanged,
-                "I've never liked that sound.",
-                "その音、昔から苦手。",
-                "من هیچ‌وقت این صدا رو دوست نداشتم.");
-
-            Say(Speaker.Yua, Portrait.Unchanged,
-                "Since I was small. I don't know why.",
-                "小さいころから。理由はわかんない。",
-                "از بچگی. نمی‌دونم چرا.");
+                "I hate that noise.",
+                "その音、きらい。",
+                "از این صدا بدم میاد.");
 
             Hold(1.4f);
 
@@ -911,6 +953,19 @@ namespace TheFrayedRedString.EditorTools
                         "سرده و چهار دقیقه‌ست رو یه شبکه وایسادم و به صدای دیگ گوش می‌دم. خب دیگه.");
                 });
 
+            // POSE RESET AFTER A BRANCH.
+            //
+            // A road may only hold spoken lines, so neither road can move
+            // anybody. Both characters therefore walk out of a choice wearing
+            // whatever the last line of that road left on them, and the one who
+            // did not speak wearing whatever they had before it started. In act
+            // one's Monday classroom that was Haru stuck on Surprised for the
+            // last eight frames of the scene, and it happened at every branch
+            // in both acts.
+            //
+            // One frame on the join where the picture is stated for both.
+            Cel(Portrait.ColdHug, Portrait.Neutral, 1.2f);
+
             Hold(1.4f);
 
             Narrate(
@@ -923,24 +978,19 @@ namespace TheFrayedRedString.EditorTools
         //  Tuesday, evening — the street with the machine
         //
         //  ▣ Scene state
-        //     Background   PastelStreetVendingAutumnDay. The sky in that
-        //                  picture is already a low gold, which is what half
-        //                  past four in November looks like.
+        //     Background   PastelStreetVendingAutumnNight, drawn for this
+        //                  scene and for nothing else: the corner after dark
+        //                  with the beds gone over to bare earth and dead
+        //                  stalks, a bare tree, the low stone wall, and no snow.
         //
-        //                  NOT the winter night one, which now has snow in it —
-        //                  snow at this corner on the 5th of November in
-        //                  Kanagawa is a claim nobody would believe. NOT the
-        //                  September night one either, whose flowerbeds are in
-        //                  full flower. The corner at dusk in autumn is the one
-        //                  picture of this place the project does not have, and
-        //                  it is the single item on the art request.
-        //
-        //                  There is no bench in this picture, so nobody sits on
-        //                  one. See the can, below: the staging was rewritten
-        //                  around what is drawn rather than the other way round.
-        //     Date         Tuesday 5 November, on the way home.
-        //     On stage     The machine, the bicycle, the beds the flowers have
-        //                  gone out of. Two cans by the end.
+        //                  The September night has the beds in full flower and
+        //                  the winter night has snow on everything. The six
+        //                  weeks in between is where act two's fourth rung
+        //                  lives, and until this existed the scene had nowhere
+        //                  correct to stand.
+        //     Date         Tuesday 5 November, after dark.
+        //     On stage     The machine, the bicycle, the low wall, the beds the
+        //                  flowers have gone out of. Two cans by the end.
         //     From act 1   The machine paid out twice on the 7th of September
         //                  and neither of them has stopped talking about it.
         //
@@ -955,7 +1005,7 @@ namespace TheFrayedRedString.EditorTools
             ClearStage();
 
             Place(
-                Backgrounds.VendingStreetDay,
+                Backgrounds.VendingStreetAutumnNight,
                 "The corner", "曲がり角", "سرِ نبش");
 
             NoFall(2f);
@@ -963,9 +1013,9 @@ namespace TheFrayedRedString.EditorTools
             Hold(2.0f);
 
             Narrate(
-                "The fifth of November, and the sun was off this side of the street by half past four. The beds by the machine had gone over to stalks. The machine did not care and was the same colour it had been in September.",
-                "十一月五日。四時半にはもうこちら側に陽が当たらない。自販機のそばの花壇は茎だけになっていた。自販機はそんなことは気にせず、九月と同じ色をしていた。",
-                "پنجمِ نوامبر، و ساعتِ چهار و نیم آفتاب دیگه از این‌ورِ خیابون رفته بود. باغچه‌های کنارِ دستگاه شده بودن ساقه‌ی خشک. دستگاه اهمیتی نمی‌داد و همون رنگی بود که سپتامبر بود.");
+                "The fifth of November, and it was dark by half past five. The beds by the machine had gone over to stalks. The machine did not care and was the same colour it had been in September.",
+                "十一月五日。五時半にはもう暗い。自販機のそばの花壇は茎だけになっていた。自販機はそんなことは気にせず、九月と同じ色をしていた。",
+                "پنجمِ نوامبر، و ساعتِ پنج و نیم هوا تاریک بود. باغچه‌های کنارِ دستگاه شده بودن ساقه‌ی خشک. دستگاه اهمیتی نمی‌داد و همون رنگی بود که سپتامبر بود.");
 
             Enter(Speaker.Yua, Portrait.Neutral);
             Enter(Speaker.Haru, Portrait.Neutral);
@@ -1031,9 +1081,9 @@ namespace TheFrayedRedString.EditorTools
             Hold(1.8f);
 
             Narrate(
-                "They stood by the machine and passed the can back and forth, and did not talk for a while, which was comfortable.",
-                "自販機のそばに立って、缶を回し飲みして、しばらく話さなかった。それは、居心地がよかった。",
-                "کنارِ دستگاه وایسادن و قوطی رو دست‌به‌دست کردن، و یه مدت حرف نزدن، که راحت بود.");
+                "They sat on the low wall and passed the can back and forth, and did not talk for a while, which was comfortable.",
+                "低い塀に座って、缶を回し飲みして、しばらく話さなかった。それは、居心地がよかった。",
+                "رو دیوارِ کوتاه نشستن و قوطی رو دست‌به‌دست کردن، و یه مدت حرف نزدن، که راحت بود.");
 
             // The pass, shown rather than said: it leaves his hands and arrives
             // in hers, and nobody remarks on it.
@@ -1067,10 +1117,18 @@ namespace TheFrayedRedString.EditorTools
             // THE ZIP IS NOT DRAWN. "It goes about that far" points at a
             // gesture the player cannot see, on an object the player cannot
             // see. Said in words instead.
+            // "SINCE SECOND YEAR", NOT "SINCE THE SUMMER". Six weeks later he
+            // describes his friend's pencil case as having been broken since
+            // second year, and act five has already told anybody on a second
+            // playthrough that there was never a friend. If the two dates do
+            // not match, the second reading has a hole in it.
+            //
+            // Said flatly, in the middle of a sentence about a window, with
+            // nothing after it.
             Say(Speaker.Haru, Portrait.Sheepish,
-                "The zip won't go past halfway. It's been like that since the summer. I was looking at the window in class and I thought about it.",
-                "ファスナーが半分から先へ行かない。夏からずっと。授業中に窓を見てて、それを思い出した。",
-                "زیپش از وسط جلوتر نمی‌ره. از تابستون همین‌جوریه. تو کلاس داشتم پنجره رو نگاه می‌کردم و یادش افتادم.");
+                "The zip won't go past halfway. It's been like that since second year.",
+                "ファスナーが半分から先へ行かない。二年のときからずっと。",
+                "زیپش از وسط جلوتر نمی‌ره. از کلاسِ دوم همین‌جوریه.");
 
             Say(Speaker.Yua, Portrait.Joyful,
                 "Everything you own is broken in the same way.",
@@ -1149,16 +1207,17 @@ namespace TheFrayedRedString.EditorTools
 
             Cel(Portrait.Unchanged, Portrait.HoldCan, 2.0f);
 
-            // NOT ON A WALL. There is no wall in the autumn picture of this
-            // corner. He holds it out at arm's length and looks at the machine
-            // instead of at her, which does the same work — it is not an offer
-            // if nobody is offering — and needs no furniture that is not drawn.
+            // AND THIS IS A DRAWING NOW. HaruShylyOffersDrink: the can out at
+            // arm's length towards her, his face turned the other way. Three
+            // drafts of this beat have been written against furniture that did
+            // not exist — a cardigan, then a wall — and the fourth one is just
+            // the picture.
             Narrate(
-                "He held it out sideways, at arm's length, and looked at the machine while he did it, so that it was not an offer and could not be refused.",
-                "腕を伸ばして横に差し出したまま、目は自販機のほうを見ていた。差し出しているのでなければ、断られようがない。",
-                "دستشو دراز کرد و قوطی رو از پهلو گرفت جلو، و تو همون حال به دستگاه نگاه می‌کرد — تا تعارف نباشه و نشه ردش کرد.");
+                "He held it out sideways, at arm's length, and looked somewhere else while he did it, so that it was not an offer and could not be refused.",
+                "腕を伸ばして横に差し出したまま、目はよそを見ていた。差し出しているのでなければ、断られようがない。",
+                "دستشو دراز کرد و قوطی رو از پهلو گرفت جلو، و تو همون حال یه جای دیگه رو نگاه می‌کرد — تا تعارف نباشه و نشه ردش کرد.");
 
-            Hold(2.2f);
+            Cel(Portrait.Unchanged, Portrait.OfferDrink, 2.4f);
 
             Say(Speaker.Yua, Portrait.Unchanged,
                 "...That one's yours.",
@@ -1205,19 +1264,22 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(1.8f);
 
-            InnerVoice(
+            // She is watching his back, not folded up against the cold. This
+            // used to inherit ColdHug from nine frames earlier and sit on it for
+            // the whole monologue.
+            InnerVoice(Portrait.Neutral,
                 "His hands will be cold all the way home.",
                 "帰るあいだ、ずっと手が冷たい。",
                 "تا خونه دست‌هاش سرده.");
 
-            InnerVoice(
+            InnerVoice(Portrait.Unchanged,
                 "They'll be cold all the way home and he won't say anything.",
                 "ずっと冷たくて、なにも言わない。",
                 "تا خونه سرده و هیچی نمی‌گه.");
 
             Hold(1.2f);
 
-            InnerVoice(
+            InnerVoice(Portrait.Smug,
                 "...Good.",
                 "……いい。",
                 "...خوبه.");
@@ -1349,9 +1411,9 @@ namespace TheFrayedRedString.EditorTools
                 "دسامبره دیگه.");
 
             Say(Speaker.Yua, Portrait.Bored,
-                "The eighteenth of December. Three days of term left and then it's dark until January.",
-                "十二月十八日。学期はあと三日で、そのあとは一月まで暗い。",
-                "هجدهِ دسامبر. سه روز از ترم مونده و بعدش تا ژانویه تاریکه.");
+                "Eighteenth of December. Three days left, and then it's dark until January.",
+                "十二月十八日。あと三日で、そのあとは一月まで暗い。",
+                "هجدهِ دسامبر. سه روز مونده، بعدش تا ژانویه تاریکه.");
 
             Hold(1.6f);
 
@@ -1396,6 +1458,19 @@ namespace TheFrayedRedString.EditorTools
                         "植物だよ。そこに何も乗せないで。",
                         "یه گیاهه. روش چیزی بنا نکن.");
                 });
+
+            // POSE RESET AFTER A BRANCH.
+            //
+            // A road may only hold spoken lines, so neither road can move
+            // anybody. Both characters therefore walk out of a choice wearing
+            // whatever the last line of that road left on them, and the one who
+            // did not speak wearing whatever they had before it started. In act
+            // one's Monday classroom that was Haru stuck on Surprised for the
+            // last eight frames of the scene, and it happened at every branch
+            // in both acts.
+            //
+            // One frame on the join where the picture is stated for both.
+            Cel(Portrait.Neutral, Portrait.Neutral, 1.2f);
 
             Hold(1.4f);
 
@@ -1634,7 +1709,13 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(1.8f);
 
-            Say(Speaker.Haru, Portrait.Unchanged,
+            // HARU'S FACE THROUGH THE STORY. It used to be four drawings across
+            // ninety frames, two of which were held for twelve frames each — so
+            // the longest speech in the game played out on a sprite that did not
+            // move. Nine states now, and the two that matter are the flat one
+            // (Bored — the deadpan he quotes his friend on, twice) and the one
+            // where he stops being able to look at her (Shy).
+            Say(Speaker.Haru, Portrait.Neutral,
                 "He wasn't a talker. When he was happy he'd talk for an hour about nothing. When he wasn't he'd go quiet, and I'd know, and I'd ask, and he'd say he was fine.",
                 "しゃべるほうじゃなかった。機嫌がいいときは一時間くらいどうでもいい話をして、そうじゃないときは黙る。わかるから訊くんだけど、平気って言う。",
                 "اهلِ حرف زدن نبود. وقتی حالش خوب بود یه ساعت درباره‌ی هیچی حرف می‌زد. وقتی نبود ساکت می‌شد، و من می‌فهمیدم، و می‌پرسیدم، و می‌گفت خوبم.");
@@ -1644,7 +1725,9 @@ namespace TheFrayedRedString.EditorTools
                 "だから全部言った。信じてよ、話してよ、ここにいるよ、僕に言わないなら誰に言うの、ためこまないで。",
                 "پس همه‌ی اون حرف‌ها رو می‌زدم. بهم اعتماد کن. بهم بگو. من کنارتم. به من نگی به کی می‌گی. نریز تو خودت.");
 
-            Say(Speaker.Haru, Portrait.Unchanged,
+            // Flat. He is doing the friend's voice and it is the only time in
+            // the act his face has nothing on it at all.
+            Say(Speaker.Haru, Portrait.Bored,
                 "And he'd say he was fine.",
                 "で、平気って言う。",
                 "و می‌گفت خوبم.");
@@ -1654,29 +1737,32 @@ namespace TheFrayedRedString.EditorTools
             // The irrelevant detail that stayed. This is the pencil case, and
             // the player has already been told once, in November, that his own
             // does not shut. Nothing points at that. It is four frames.
-            Say(Speaker.Haru, Portrait.Unchanged,
+            Say(Speaker.Haru, Portrait.StrainedSmile,
                 "He had a pencil case with a zip that didn't shut. He'd had it since second year. It was the stupidest thing and he wouldn't get rid of it.",
                 "ファスナーの閉まらない筆箱を持ってた。二年のときからずっと。どうしようもないやつなのに、捨てなかった。",
                 "یه جامدادی داشت که زیپش بسته نمی‌شد. از کلاس دوم داشتش. مسخره‌ترین چیزِ ممکن بود و حاضر نبود بندازتش دور.");
 
-            Say(Speaker.Haru, Portrait.StrainedSmile,
+            Say(Speaker.Haru, Portrait.Unchanged,
                 "I don't know why that's the thing I remember.",
                 "なんでそれを覚えてるのか、自分でもわからない。",
                 "نمی‌دونم چرا همین یکی اونیه که یادم مونده.");
 
             Hold(2.2f);
 
-            // Arms folded, completely still, and she stays exactly like this
-            // for the next forty frames. It is the longest single picture in
-            // act two and it is doing all of the work.
-            Say(Speaker.Yua, Portrait.Unchanged,
+            // She looks down. Nineteen frames on one drawing read as a bug
+            // rather than as stillness — the whole point was that she does not
+            // move, and a sprite that literally does not change for a fifth of
+            // a scene stops being a choice and starts being a fault. Four
+            // states, none of them a smile, none of them held past seven
+            // frames: down, folded, down, folded.
+            Say(Speaker.Yua, Portrait.Shy,
                 "Go on.",
                 "つづけて。",
                 "بگو.");
 
             Hold(1.6f);
 
-            Say(Speaker.Haru, Portrait.Unchanged,
+            Say(Speaker.Haru, Portrait.Shy,
                 "I thought maybe he didn't trust me. Or he thought I was a kid. Or he thought I had my own things and no room for his. Or that if he said it out loud I'd start feeling sorry for him, and he'd rather have a friend than be somebody's sad thing.",
                 "信用されてないのかと思った。子どもだと思われてるのかも。こっちにも事情があるから、入る隙がないと思ってるのかも。口に出したら僕が気の毒がるから、かわいそうな存在になるくらいなら友だちのままでいたい、とか。",
                 "فکر کردم شاید بهم اعتماد نداره. یا فکر می‌کنه بچه‌ام. یا فکر می‌کنه من خودم مشکلاتِ خودمو دارم و جا واسه مالِ اون نیست. یا اگه بگه، من دلم براش می‌سوزه و ترجیح می‌ده دوست باشه تا چیزِ غم‌انگیزِ یکی.");
@@ -1688,14 +1774,14 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(1.2f);
 
-            Say(Speaker.Haru, Portrait.Unchanged,
+            Say(Speaker.Haru, Portrait.Bored,
                 "It didn't work.",
                 "効かなかった。",
                 "جواب نداد.");
 
             Hold(2.4f);
 
-            Say(Speaker.Haru, Portrait.Unchanged,
+            Say(Speaker.Haru, Portrait.Neutral,
                 "We weren't in the same class after eighth year.",
                 "八年のあと、同じクラスじゃなくなった。",
                 "بعد از کلاس هشتم دیگه هم‌کلاسی نشدیم.");
@@ -1711,10 +1797,13 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(2.4f);
 
-            Say(Speaker.Haru, Portrait.Unchanged,
-                "Yeah.",
-                "うん。",
-                "آره.");
+            // The full stop was wrong. He is not confirming a fact, he is
+            // running out of the ability to say the sentence, and the three
+            // dots are the whole difference.
+            Say(Speaker.Haru, Portrait.StrainedSmile,
+                "Yeah...",
+                "……うん。",
+                "آره...");
 
             Hold(2.6f);
 
@@ -1723,7 +1812,10 @@ namespace TheFrayedRedString.EditorTools
                 "ドアが鳴って、傘を振りながら誰かが入ってきた。冷たい空気も一緒に入って、また出ていった。",
                 "در باز شد و یکی اومد تو و چترشو تکون داد، و سرما باهاش اومد تو و دوباره رفت.");
 
-            Hold(2.2f);
+            // She folds back up while the door is open. It is the cold, it is
+            // completely deniable, and it is the picture she asks the next two
+            // questions from.
+            Cel(Portrait.ColdHug, Portrait.Unchanged, 2.2f);
 
             // 4 THE HORROR IS IN THE LISTENER. One practical question too
             // many, asked off the same unmoved picture she has been wearing
@@ -1745,7 +1837,12 @@ namespace TheFrayedRedString.EditorTools
                 "ここの人たち、知ってる?",
                 "اینجا کسی می‌دونه؟");
 
-            Say(Speaker.Haru, Portrait.Surprised,
+            // NOT SURPRISED. She has asked him a reasonable question and he is
+            // not startled by it — he is ashamed of the answer, and he stops
+            // being able to look at her. Surprised also left him stuck on one
+            // drawing from here through the next three frames, including the
+            // line where he asks her for the promise.
+            Say(Speaker.Haru, Portrait.Shy,
                 "...No.",
                 "……ううん。",
                 "...نه.");
@@ -1767,7 +1864,7 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(2.4f);
 
-            Say(Speaker.Haru, Portrait.Unchanged,
+            Say(Speaker.Haru, Portrait.Neutral,
                 "I don't know how to ask you this.",
                 "どう頼めばいいか、わからないんだけど。",
                 "نمی‌دونم چطوری ازت بخوام.");
@@ -1959,7 +2056,7 @@ namespace TheFrayedRedString.EditorTools
             ClearStage();
 
             Place(
-                Backgrounds.ClassroomDay,
+                Backgrounds.ClassroomWinterDay,
                 "1-A", "一年A組", "اول-الف");
 
             Date(2024, 12, 19);
@@ -2111,6 +2208,19 @@ namespace TheFrayedRedString.EditorTools
                         "گفتی «هوم». چهار بار.");
                 });
 
+            // POSE RESET AFTER A BRANCH.
+            //
+            // A road may only hold spoken lines, so neither road can move
+            // anybody. Both characters therefore walk out of a choice wearing
+            // whatever the last line of that road left on them, and the one who
+            // did not speak wearing whatever they had before it started. In act
+            // one's Monday classroom that was Haru stuck on Surprised for the
+            // last eight frames of the scene, and it happened at every branch
+            // in both acts.
+            //
+            // One frame on the join where the picture is stated for both.
+            Cel(Portrait.Joyful, Portrait.Neutral, 1.2f);
+
             Hold(1.4f);
 
             Say(Speaker.Yua, Portrait.Smug,
@@ -2213,15 +2323,16 @@ namespace TheFrayedRedString.EditorTools
                 "味だなんて誰も言ってない。形って言ったのは結愛ぴ。で、形ではある。",
                 "کسی نگفت طعمه. خودت گفتی شکل. خب، شکله دیگه.");
 
+            // Persian does not walk into things. It hands them over.
             Say(Speaker.Yua, Portrait.Bored,
-                "I walked into that.",
-                "自分で言った。",
-                "خودم رفتم توش.");
+                "I handed you that one.",
+                "自分で渡しちゃった。",
+                "خودم دادم دستش.");
 
             Say(Speaker.Haru, Portrait.Joyful,
-                "You did. From quite a long way away.",
-                "けっこう遠くから、まっすぐ。",
-                "آره. از یه فاصله‌ی نسبتاً دور.");
+                "You did. With both hands.",
+                "うん。両手で。",
+                "دادی. با دو تا دست.");
 
             Hold(2.0f);
 
@@ -2270,9 +2381,9 @@ namespace TheFrayedRedString.EditorTools
                 "یکشنبه. بیا خونه‌ی ما. مامانم کلِ روز نیست.");
 
             Say(Speaker.Yua, Portrait.Unchanged,
-                "Oh — and we've got a heater that actually works, so you can stop doing the thing where you're cold at me and won't say it.",
-                "あ、それと、うちの暖房はちゃんと効くから。寒いのに寒いって言わないやつ、やらなくていいよ。",
-                "راستی — یه بخاری هم داریم که واقعاً کار می‌کنه، پس دیگه لازم نیست اون کارو بکنی که سردته و نمی‌گی.");
+                "Oh — and our heater works. So you can stop doing the cold thing.",
+                "あ、うち暖房効くから。寒いふりのやつ、しなくていい。",
+                "راستی — بخاریِ ما کار می‌کنه. پس اون ادای سرما رو لازم نیست دربیاری.");
 
             Hold(1.4f);
 
@@ -2423,12 +2534,12 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(2.2f);
 
-            InnerVoice(
+            InnerVoice(Portrait.Joyful,
                 "Haru-pi said yes to every single thing I asked him for today.",
                 "今日あたしが頼んだこと、ハルぴはぜんぶ、うんって言った。",
                 "هاروپی به همه‌ی چیزایی که امروز ازش خواستم گفت آره.");
 
-            InnerVoice(
+            InnerVoice(Portrait.Smug,
                 "Two weeks of the holidays. Every day of it. He didn't even ask what we'd be doing.",
                 "冬休みの二週間。全部の日。なにするかも訊かなかった。",
                 "دو هفته‌ی تعطیلات. هر روزش. حتی نپرسید قراره چیکار کنیم.");
@@ -2480,7 +2591,16 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(2.2f);
 
-            Say(Speaker.Yua, Portrait.Neutral,
+            // ACT TWO'S ONE DeadEyes, AND THIS IS WHERE IT GOES.
+            //
+            // The face is rationed to once an act and act two had not spent it
+            // anywhere. There is no better frame for it than this one: the top
+            // of the ladder, the fourth wall already down, and the sentence the
+            // whole game is about, said with nothing on her face at all.
+            //
+            // It also breaks the longest remaining hold in the act — seven
+            // frames of her ordinary smile through the middle of the speech.
+            Say(Speaker.Yua, Portrait.DeadEyes,
                 "I want him.",
                 "ハルぴが、ほしい。",
                 "من اونو می‌خوام.");
@@ -2492,6 +2612,7 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(2.4f);
 
+            // And straight back to ordinary, which is the whole trick.
             Say(Speaker.Yua, Portrait.Neutral,
                 "From January there'll be two buttons.",
                 "一月から、ボタンが二つ出る。",
@@ -2523,7 +2644,7 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(3.0f);
 
-            Say(Speaker.Yua, Portrait.Neutral,
+            Say(Speaker.Yua, Portrait.Shy,
                 "And don't worry about him finding out about you.",
                 "それと、あんたのこと、ハルぴにばれる心配もしないで。",
                 "و نگرانِ این نباش که هارو از تو باخبر بشه.");
@@ -2542,28 +2663,56 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(2.4f);
 
-            // The invitation, which the act needed and did not have. Everything
-            // before this is instructions; this is the first line in the game
-            // that offers the player something back, and it is the line that
-            // makes the next three acts feel like theirs.
+            // THE INVITATION, AND IT GOES THE OTHER WAY ROUND.
+            //
+            // A draft of this offered the player a share of Haru — press the
+            // buttons and some of him is yours. That is generous, and Yua is
+            // not: she does not divide him, she collects. The line that fits
+            // her is the one that puts the player in the same drawer he is in.
+            //
+            // It is also the more frightening of the two, which is the point of
+            // the scene.
             Say(Speaker.Yua, Portrait.Neutral,
-                "And if you do it — if you keep pressing them — then some of what happens to him is yours.",
-                "押してくれたら、ハルぴに起きることの一部は、あんたのものになる。",
-                "و اگه بزنیشون — اگه همین‌جور بزنیشون — اون‌وقت یه بخشی از اتفاقایی که واسش می‌افته مالِ توئه.");
+                "And when you press one, that's you doing it. Not me. You.",
+                "押したら、それはあんたがやったこと。あたしじゃなくて、あんた。",
+                "و وقتی یکیشو می‌زنی، اون کاریه که تو کردی. نه من. تو.");
 
             Hold(2.0f);
 
             Say(Speaker.Yua, Portrait.Unchanged,
-                "Which means a little bit of him is yours too. Don't you think that's nice?",
-                "ってことは、ハルぴの少しは、あんたのもの。いいと思わない?",
-                "یعنی یه‌ذره‌ی خودشم مالِ توئه. فکر نمی‌کنی این قشنگه؟");
+                "Which makes you a little bit mine. Same as him.",
+                "だからあんたも、ちょっとだけ、あたしの。ハルぴとおんなじ。",
+                "پس تو هم یه‌ذره مالِ منی. عینِ خودش.");
 
-            Hold(2.6f);
+            Hold(2.2f);
 
             Say(Speaker.Yua, Portrait.Joyful,
+                "Don't you think that's nice?",
+                "いいと思わない?",
+                "فکر نمی‌کنی این قشنگه؟");
+
+            Hold(2.8f);
+
+            Say(Speaker.Yua, Portrait.Neutral,
                 "Thank you.",
                 "ありがと。",
                 "ممنون.");
+
+            Hold(1.8f);
+
+            // She says what it costs her to say it, which is the only warm
+            // thing in the speech and is also a boast.
+            Say(Speaker.Yua, Portrait.Shy,
+                "I don't say that. Ask him — I don't say that.",
+                "あたし、それ言わないの。ハルぴに訊いてみて。ほんとに言わない。",
+                "من این رو نمی‌گم. از خودش بپرس — من این رو نمی‌گم.");
+
+            Hold(2.0f);
+
+            Say(Speaker.Yua, Portrait.Smug,
+                "You're the only one who can actually do anything. So.",
+                "実際になにかできるのは、あんただけだから。だから。",
+                "تنها کسی که واقعاً می‌تونه کاری بکنه تویی. خب.");
 
             Hold(2.2f);
 

@@ -78,6 +78,21 @@ namespace TheFrayedRedString.Presentation
         /// <summary>Builds both layers, taking the veil from the settings.</summary>
         public void Initialize(RectTransform parent, StageSettings settings)
         {
+            Initialize(parent, settings, null);
+        }
+
+        /// <summary>
+        /// The same, with the attention veil put somewhere else.
+        /// </summary>
+        /// <param name="attentionParent">
+        /// Where the "the room steps back" layer goes. Null keeps it with the
+        /// other two, which is what every caller did until act two's last scene
+        /// made it obvious that dimming the person who is talking to you is the
+        /// opposite of paying attention to them. Pass a layer that sits under
+        /// the characters and the veil lands behind them.
+        /// </param>
+        public void Initialize(RectTransform parent, StageSettings settings, RectTransform attentionParent)
+        {
             if (settings != null)
             {
                 Color colour = settings.VeilColour;
@@ -95,7 +110,11 @@ namespace TheFrayedRedString.Presentation
             // Above the veil and below the blood: the veil is how the world
             // looks, this is the world stepping back, and the blood is on the
             // lens in front of both.
-            _attention = CreateLayer("StoryAttention", root);
+            //
+            // On its own parent when one is given, so that "the world steps
+            // back" can mean the world rather than the world and everybody in
+            // it. The order of the other two is unchanged.
+            _attention = CreateLayer("StoryAttention", attentionParent != null ? attentionParent : root);
             _stain = CreateLayer("StoryStain", root);
 
             _attention.color = new Color(0f, 0f, 0f, 0f);

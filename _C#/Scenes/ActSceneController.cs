@@ -242,8 +242,19 @@ namespace TheFrayedRedString.Scenes
         {
             GameObject host = new GameObject("[TFRS] Grade", typeof(RectTransform));
 
+            // The veil and the blood stay over everything. The attention layer —
+            // the one that takes the room down when somebody starts talking to
+            // the player — goes on its own canvas between the scenery and the
+            // characters, so the room dims and the person speaking does not.
+            //
+            // Four scenes in the game do this and one of them is the last scene
+            // of act two. Until now all four dimmed Yua along with her bedroom,
+            // which is the opposite of what the beat is for.
+            RectTransform attentionLayer = CreateCanvas(
+                "AttentionCanvas", GameConfig.AttentionCanvasOrder);
+
             _grade = host.AddComponent<StoryGrade>();
-            _grade.Initialize(storyLayer, StageSettings.Load());
+            _grade.Initialize(storyLayer, StageSettings.Load(), attentionLayer);
         }
 
         /// <summary>

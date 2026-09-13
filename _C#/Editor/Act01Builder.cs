@@ -222,7 +222,28 @@ namespace TheFrayedRedString.EditorTools
         /// </remarks>
         private void InnerVoice(string english, string japanese, string persian)
         {
-            Say(Speaker.Yua, Portrait.Unchanged, english, japanese, persian);
+            InnerVoice(Portrait.Unchanged, english, japanese, persian);
+        }
+
+        /// <summary>
+        /// The same, with a face on it.
+        /// </summary>
+        /// <remarks>
+        /// Added because the version without it was a freezing machine. A
+        /// monologue is the longest stretch in the game where one drawing is on
+        /// screen with nobody else speaking, and every one of them inherited
+        /// whatever expression the last line of dialogue happened to leave
+        /// behind — so act one's first dread moment played out with Yua stood
+        /// there smirking with a hand on her hip, because that is what she had
+        /// been doing four frames earlier.
+        ///
+        /// A monologue now states its own face. Unchanged is still available
+        /// and still means "carry on with the last one", but it has to be asked
+        /// for rather than being what happens when nobody thought about it.
+        /// </remarks>
+        private void InnerVoice(Portrait portrait, string english, string japanese, string persian)
+        {
+            Say(Speaker.Yua, portrait, english, japanese, persian);
             Script[Script.Count - 1].TypeSpeed = InnerMonologueTypeSpeed;
         }
 
@@ -328,12 +349,12 @@ namespace TheFrayedRedString.EditorTools
 
             Enter(Speaker.Yua, Portrait.Neutral);
 
-            InnerVoice(
+            InnerVoice(Portrait.Shy,
                 "Okay. Okay okay okay.",
                 "よし。よしよしよし。",
                 "خب. خب خب خب.");
 
-            InnerVoice(
+            InnerVoice(Portrait.Unchanged,
                 "The hem is fine. The hem is completely fine.",
                 "裾は平気。裾はぜんぜん平気。",
                 "دامنش خوبه. دامنش کاملاً خوبه.");
@@ -507,9 +528,9 @@ namespace TheFrayedRedString.EditorTools
                 "روزِ اولِ ترمِ دومه و از همین الآن معلمِ کلاسمون عوض شده. خانمِ موریتا.");
 
             Say(Speaker.Yua, Portrait.Unchanged,
-                "Since Friday. Ishikawa-sensei's baby came six weeks early, so she's gone until March and they've moved somebody across from the third years.",
-                "金曜に決まった。石川先生の赤ちゃんが六週間早く生まれて、三月までお休み。三年生のほうから一人まわしてきたの。",
-                "از جمعه. بچه‌ی خانمِ ایشیکاوا شیش هفته زودتر به دنیا اومد، تا مارس نیست، و یکی رو از سومی‌ها آوردن این‌ور.");
+                "Since Friday. Ishikawa-sensei had her baby early, so we've got someone off the third years until March.",
+                "金曜から。石川先生、予定より早く産まれちゃって、三月まで三年生のほうの先生が来るって。",
+                "از جمعه. بچه‌ی خانمِ ایشیکاوا زودتر به دنیا اومد، تا مارس یکی رو از سومی‌ها بهمون دادن.");
 
             Say(Speaker.Haru, Portrait.Surprised,
                 "How do you know that.",
@@ -528,7 +549,7 @@ namespace TheFrayedRedString.EditorTools
             // and editing how the other one speaks is the thing this game gives
             // to Yua and to nobody else. It is the first frame of the whole
             // pattern the last act is about.
-            Say(Speaker.Haru, Portrait.Unchanged,
+            Say(Speaker.Haru, Portrait.Neutral,
                 "They say she's strict.",
                 "厳しいらしいよ。",
                 "می‌گن سختگیره.");
@@ -538,7 +559,7 @@ namespace TheFrayedRedString.EditorTools
                 "誰が言ってるの?",
                 "کی می‌گه؟");
 
-            Say(Speaker.Haru, Portrait.Unchanged,
+            Say(Speaker.Haru, Portrait.Sheepish,
                 "...I don't know. Someone was saying.",
                 "……知らない。誰かが言ってた。",
                 "...نمی‌دونم. یکی می‌گفت.");
@@ -584,15 +605,20 @@ namespace TheFrayedRedString.EditorTools
                         "あたしのは今食べる。",
                         "من مالِ خودمو شروع می‌کنم.");
 
+                    // He went to the bakery on his own and they are standing on
+                    // the school path, so there is no "we left the shop"; and she
+                    // has been holding the roll for about two seconds, so there
+                    // is nothing to have been carrying for two hours. What she
+                    // has had for two hours is a morning.
                     Say(Speaker.Haru, Portrait.Surprised,
-                        "We left the shop ninety seconds ago.",
-                        "店出て一分半だけど。",
-                        "یه دقیقه و نیم پیش از مغازه اومدیم بیرون.");
+                        "You've had that for about two seconds.",
+                        "渡して二秒だけど。",
+                        "تازه دو ثانیه‌ست دستته.");
 
-                    Say(Speaker.Yua, Portrait.Unchanged,
-                        "And I have been awake for two hours. Two hours is a long time to be carrying a bread and not be eating it.",
-                        "で、あたしはもう二時間起きてる。パン持って食べないで二時間は長い。",
-                        "و من دو ساعته بیدارم. دو ساعت واسه اینکه نون دستت باشه و نخوریش خیلی زیاده.");
+                    Say(Speaker.Yua, Portrait.Smug,
+                        "And I've been awake for two hours. Two hours is a very long morning to have no bread in it.",
+                        "こっちは二時間起きてる。パンなしの二時間は、朝として長すぎる。",
+                        "و من دو ساعته بیدارم. دو ساعتِ صبح بدونِ نون خیلی طولانیه.");
 
                     Narrate(
                         "She got through about a third of it on the way up and folded the bag over the rest without being asked to.",
@@ -622,6 +648,19 @@ namespace TheFrayedRedString.EditorTools
                         "袋の口を二回折って、鞄の底に平らに入れた。昼にはもっと平らになっているはずのところに。",
                         "سرِ پاکت رو دو بار تا کرد و صافش گذاشت تهِ کیفش، جایی که تا ناهار صاف‌تر هم می‌شد.");
                 });
+
+            // POSE RESET AFTER A BRANCH.
+            //
+            // A road may only hold spoken lines, so neither road can move
+            // anybody. Both characters therefore walk out of a choice wearing
+            // whatever the last line of that road left on them, and the one who
+            // did not speak wearing whatever they had before it started. In act
+            // one's Monday classroom that was Haru stuck on Surprised for the
+            // last eight frames of the scene, and it happened at every branch
+            // in both acts.
+            //
+            // One frame on the join where the picture is stated for both.
+            Cel(Portrait.Joyful, Portrait.Neutral, 1.2f);
 
             Say(Speaker.Yua, Portrait.Neutral,
                 "Yours is for the roof, though. Lunch. Don't touch it.",
@@ -777,6 +816,11 @@ namespace TheFrayedRedString.EditorTools
                 "来た。",
                 "داره میاد.");
 
+            // Three frames of narration with nobody speaking is three frames of
+            // two people standing perfectly still. They sit up when a teacher
+            // walks in, which is both true and the thing that unfreezes them.
+            Cel(Portrait.Neutral, Portrait.Neutral, 1.2f);
+
             Narrate(
                 "Morita-sensei wrote her name on the board, turned round, and found that not one person in the room had picked up a pen.",
                 "森田先生は黒板に名前を書いて、振り返って、この教室の誰ひとりペンを持っていないことを知った。",
@@ -798,7 +842,7 @@ namespace TheFrayedRedString.EditorTools
 
             Hold(1.6f);
 
-            Say(Speaker.Yua, Portrait.Unchanged,
+            Say(Speaker.Yua, Portrait.Smug,
                 "Someone was saying she's strict.",
                 "「誰かが、厳しいって言ってた」。",
                 "«یکی می‌گفت سختگیره.»");
@@ -919,6 +963,19 @@ namespace TheFrayedRedString.EditorTools
                         "白いページのままノートを閉じて、木曜まで思い出さなかった。",
                         "دفترش رو رو یه صفحه‌ی سفید بست و تا پنج‌شنبه دیگه بهش فکر نکرد.");
                 });
+
+            // POSE RESET AFTER A BRANCH.
+            //
+            // A road may only hold spoken lines, so neither road can move
+            // anybody. Both characters therefore walk out of a choice wearing
+            // whatever the last line of that road left on them, and the one who
+            // did not speak wearing whatever they had before it started. In act
+            // one's Monday classroom that was Haru stuck on Surprised for the
+            // last eight frames of the scene, and it happened at every branch
+            // in both acts.
+            //
+            // One frame on the join where the picture is stated for both.
+            Cel(Portrait.Neutral, Portrait.Neutral, 1.2f);
 
             Hold(1.4f);
 
@@ -1170,6 +1227,19 @@ namespace TheFrayedRedString.EditorTools
                         "سکه رو گذاشت تو جیبش و دو بار زد به جلوی دستگاه، که هیچ فایده‌ای نداشت و قرار هم نبود داشته باشه.");
                 });
 
+            // POSE RESET AFTER A BRANCH.
+            //
+            // A road may only hold spoken lines, so neither road can move
+            // anybody. Both characters therefore walk out of a choice wearing
+            // whatever the last line of that road left on them, and the one who
+            // did not speak wearing whatever they had before it started. In act
+            // one's Monday classroom that was Haru stuck on Surprised for the
+            // last eight frames of the scene, and it happened at every branch
+            // in both acts.
+            //
+            // One frame on the join where the picture is stated for both.
+            Cel(Portrait.Smug, Portrait.Bored, 1.2f);
+
             Hold(1.2f);
 
             Say(Speaker.Haru, Portrait.Neutral,
@@ -1202,20 +1272,24 @@ namespace TheFrayedRedString.EditorTools
             Exit(Speaker.Haru);
 
             Narrate(
-                "He went down the hill and she stayed on the corner for a moment, next to the machine that had her friend's money in it.",
-                "ハルは坂を下りていって、結愛は少しだけ角に残った。友だちの百円が入ったままの自販機の横に。",
-                "اون از سرازیری رفت پایین و یوآ یه لحظه سرِ نبش موند، کنارِ دستگاهی که پولِ دوستش توش بود.");
+                "He went down the hill. She stayed on the corner for a moment, next to the machine with his hundred yen still inside it.",
+                "ハルは坂を下りていった。結愛は少しだけ角に残った。ハルの百円が入ったままの自販機の横に。",
+                "از سرازیری رفت پایین. یوآ یه لحظه سرِ نبش موند، کنارِ دستگاهی که صدینِ هارو هنوز توش بود.");
 
             Hold(2.0f);
 
             // ◆ DREAD 1. Two frames, and the entire day's budget. First reading:
             // she is fond of him. Second reading: she has been checking.
-            InnerVoice(
+            // The face is stated rather than inherited. Whatever she was doing
+            // four frames ago, these two land on her ordinary one: the dread is
+            // in the words and nowhere else, and a smirk on "Good." turns a
+            // deniable line into a wink.
+            InnerVoice(Portrait.Neutral,
                 "Good.",
                 "よかった。",
                 "خوبه.");
 
-            InnerVoice(
+            InnerVoice(Portrait.Unchanged,
                 "Still the same.",
                 "まだ、おんなじ。",
                 "هنوز همون‌جوریه.");
@@ -1290,9 +1364,9 @@ namespace TheFrayedRedString.EditorTools
                 "یعنی چی بسته نمی‌شه.");
 
             Say(Speaker.Haru, Portrait.CalmSerious,
-                "It goes about that far and then it stops. Since last year, apparently.",
-                "そこまでで止まる。去年からずっとらしいよ。",
-                "تا اینجا می‌ره و وایمیسته. ظاهراً از پارساله.");
+                "It shuts to about a hand's width and stops. Since last year, apparently.",
+                "手のひらぶんのところで止まる。去年からずっとらしい。",
+                "تا یه وجب مونده وایمیسته. ظاهراً از پارساله.");
 
             Say(Speaker.Yua, Portrait.Bored,
                 "Apparently.",
@@ -1357,9 +1431,9 @@ namespace TheFrayedRedString.EditorTools
                 "بازم این بحث؟");
 
             Say(Speaker.Yua, Portrait.Smug,
-                "We're doing it for six years.",
-                "六年やるよ。",
-                "شش سال ادامه‌ش می‌دیم.");
+                "I'm going to keep having it for three years.",
+                "この話、あと三年するから。",
+                "من این بحث رو سه سالِ دیگه هم ادامه می‌دم.");
 
             Hold(1.4f);
 
@@ -1501,12 +1575,22 @@ namespace TheFrayedRedString.EditorTools
                 "なんで?",
                 "چرا نه؟");
 
-            // The act's long line. Somebody excited about something who will not
+            // The act's long line: somebody excited about something who will not
             // let go of it, exactly where the manual asks for one.
+            //
+            // In two frames rather than one. At 261 Persian characters it ran
+            // off the bottom of the dialogue box and the last third could not be
+            // read — the same fault the promise in act two had. The break is
+            // also where she takes a breath, which the line wanted anyway.
             Say(Speaker.Yua, Portrait.Joyful,
-                "Because if I read it I'll know it, and then it stops being Anko, and I have to carry that for the rest of my life. There are things it's better not to know. Cats are one. Honestly there are about four things in the world I want to know less than that cat's real name, and two of them are what's in the third-year toilets.",
-                "だって読んだら知っちゃうでしょ。そしたら、あんこじゃなくなる。それを一生かかえて生きるの。知らないほうがいいことってあるんだよ。猫はそのひとつ。ていうか、あの猫の本名より知りたくないことなんて世界に四つくらいしかなくて、そのうち二つは三年のトイレの話。",
-                "چون اگه بخونمش می‌دونمش، بعدش دیگه آنکو نیست، و باید تا آخرِ عمرم اینو با خودم حمل کنم. یه چیزایی هست که ندونستنش بهتره. گربه یکیشونه. اصلاً توی کلِ دنیا چهار تا چیز بیشتر نیست که کمتر از اسمِ واقعیِ این گربه بخوام بدونمشون، و دوتاش مربوط به دستشوییِ سومی‌هاست.");
+                "Because if I read it I'll know it, and then it stops being Anko, and I have to carry that for the rest of my life. There are things it's better not to know. Cats are one.",
+                "だって読んだら知っちゃうでしょ。そしたら、あんこじゃなくなる。それを一生かかえて生きるの。知らないほうがいいことってあるの。猫はそのひとつ。",
+                "چون اگه بخونمش می‌دونمش، بعدش دیگه آنکو نیست، و باید تا آخرِ عمرم اینو با خودم حمل کنم. یه چیزایی هست که ندونستنش بهتره. گربه یکیشونه.");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "There are about four things in the world I want to know less than that cat's real name, and two of them are in the third-year toilets.",
+                "あの猫の本名より知りたくないことなんて、世界に四つくらいしかない。そのうち二つは三年のトイレにある。",
+                "تو کلِ دنیا چهار تا چیز بیشتر نیست که کمتر از اسمِ واقعیِ این گربه بخوام بدونمشون، و دوتاش تو دستشوییِ سومی‌هاست.");
 
             Hold(1.0f);
 
@@ -1569,6 +1653,25 @@ namespace TheFrayedRedString.EditorTools
                 "……それは、いい理由。",
                 "...باشه، دلیلِ خوبیه.");
 
+            Hold(1.4f);
+
+            // THE CLOCK, SAID OUT LOUD, BECAUSE THE ARITHMETIC WAS WRONG.
+            // The rain stops at ten past four in this scene's first line of
+            // narration, and eleven minutes later the roads of the choice below
+            // were saying it was eleven minutes to five. Forty minutes went
+            // missing between two lines of dialogue. They have been standing
+            // outside a bakery arguing about a cat for most of an hour, which
+            // is true, funny and worth one frame.
+            Say(Speaker.Yua, Portrait.Surprised,
+                "What time is it now?",
+                "いま何時?",
+                "الآن ساعت چنده؟");
+
+            Say(Speaker.Haru, Portrait.Neutral,
+                "Ten to. We've been standing outside a bakery arguing about a cat for forty minutes.",
+                "十分前。パン屋の前で四十分、猫の話でもめてる。",
+                "ده دقیقه مونده. چهل دقیقه‌ست جلوی یه نونوایی وایسادیم و سرِ یه گربه بحث می‌کنیم.");
+
             DecideIdly(
                 "Wait until five", "五時まで待つ", "تا پنج صبر کن",
                 () =>
@@ -1578,28 +1681,28 @@ namespace TheFrayedRedString.EditorTools
                         "待つよ。",
                         "صبر می‌کنیم.");
 
-                    Say(Speaker.Haru, Portrait.Surprised,
-                        "It's eleven minutes.",
-                        "十一分あるけど。",
-                        "یازده دقیقه‌ست.");
+                    Say(Speaker.Haru, Portrait.Bored,
+                        "Ten minutes.",
+                        "十分。",
+                        "ده دقیقه.");
 
                     Say(Speaker.Yua, Portrait.Smug,
-                        "Eleven minutes for half price bread is the best paid eleven minutes of your entire life and you're about to argue with me about it.",
-                        "半額のパンのために十一分。人生でいちばん時給のいい十一分だよ。それに文句言おうとしてる。",
-                        "یازده دقیقه واسه نونِ نصفِ قیمت، پردرآمدترین یازده دقیقه‌ی کلِ عمرته، و تو داری باهام بحث می‌کنی.");
+                        "Ten minutes for half price bread is the best paid ten minutes of your entire life and you are about to argue with me about it.",
+                        "半額のパンのために十分。人生でいちばん割のいい十分だよ。それに文句言おうとしてる。",
+                        "ده دقیقه واسه نونِ نصفِ قیمت، پردرآمدترین ده دقیقه‌ی کلِ عمرته، و تو داری باهام بحث می‌کنی.");
 
                     Narrate(
-                        "They waited the eleven minutes on the bench with the cats. She bought two.",
-                        "猫のいるベンチで十一分待った。結愛は二つ買った。",
-                        "یازده دقیقه رو رو نیمکتِ کنارِ گربه‌ها صبر کردن. یوآ دو تا خرید.");
+                        "They waited on the bench with the cats. She bought two.",
+                        "猫のいるベンチで待った。結愛は二つ買った。",
+                        "رو نیمکتِ کنارِ گربه‌ها صبر کردن. یوآ دو تا خرید.");
                 },
                 "Go home now", "もう帰る", "همین الآن برو خونه",
                 () =>
                 {
                     Say(Speaker.Yua, Portrait.Bored,
-                        "I'm not standing outside a bakery for eleven minutes.",
-                        "パン屋の前で十一分は立たない。",
-                        "یازده دقیقه جلوی نونوایی واینمیستم.");
+                        "I'm not standing outside a bakery for another ten minutes.",
+                        "パン屋の前でこれ以上十分は立たない。",
+                        "ده دقیقه‌ی دیگه جلوی نونوایی واینمیستم.");
 
                     Say(Speaker.Haru, Portrait.Unchanged,
                         "It's half price.",
@@ -1616,6 +1719,19 @@ namespace TheFrayedRedString.EditorTools
                         "帰り道のあいだじゅうパンのことを考えて、誰にも言わなかった。",
                         "تمامِ راهِ خونه به اون نون فکر کرد و به هیچ‌کس نگفت.");
                 });
+
+            // POSE RESET AFTER A BRANCH.
+            //
+            // A road may only hold spoken lines, so neither road can move
+            // anybody. Both characters therefore walk out of a choice wearing
+            // whatever the last line of that road left on them, and the one who
+            // did not speak wearing whatever they had before it started. In act
+            // one's Monday classroom that was Haru stuck on Surprised for the
+            // last eight frames of the scene, and it happened at every branch
+            // in both acts.
+            //
+            // One frame on the join where the picture is stated for both.
+            Cel(Portrait.Neutral, Portrait.Neutral, 1.2f);
 
             Hold(1.2f);
 
@@ -1909,6 +2025,19 @@ namespace TheFrayedRedString.EditorTools
                         "最初のひとつに「はい」って言ったら、三年間ぜんぶ頼まれる。",
                         "اگه به اولین چیزی که ازم می‌خوان بگم آره، سه سال همه‌چی رو ازم می‌خوان.");
                 });
+
+            // POSE RESET AFTER A BRANCH.
+            //
+            // A road may only hold spoken lines, so neither road can move
+            // anybody. Both characters therefore walk out of a choice wearing
+            // whatever the last line of that road left on them, and the one who
+            // did not speak wearing whatever they had before it started. In act
+            // one's Monday classroom that was Haru stuck on Surprised for the
+            // last eight frames of the scene, and it happened at every branch
+            // in both acts.
+            //
+            // One frame on the join where the picture is stated for both.
+            Cel(Portrait.Bored, Portrait.Neutral, 1.2f);
 
             Cel(Portrait.LunchFinished);
 
@@ -2221,6 +2350,19 @@ namespace TheFrayedRedString.EditorTools
                         "دارم از تو کپی می‌کنم. فرق داره و بدترم هست.");
                 });
 
+            // POSE RESET AFTER A BRANCH.
+            //
+            // A road may only hold spoken lines, so neither road can move
+            // anybody. Both characters therefore walk out of a choice wearing
+            // whatever the last line of that road left on them, and the one who
+            // did not speak wearing whatever they had before it started. In act
+            // one's Monday classroom that was Haru stuck on Surprised for the
+            // last eight frames of the scene, and it happened at every branch
+            // in both acts.
+            //
+            // One frame on the join where the picture is stated for both.
+            Cel(Portrait.Neutral, Portrait.Neutral, 1.2f);
+
             Hold(1.2f);
         }
 
@@ -2362,6 +2504,19 @@ namespace TheFrayedRedString.EditorTools
                         "……たぶん。",
                         "...احتمالاً.");
                 });
+
+            // POSE RESET AFTER A BRANCH.
+            //
+            // A road may only hold spoken lines, so neither road can move
+            // anybody. Both characters therefore walk out of a choice wearing
+            // whatever the last line of that road left on them, and the one who
+            // did not speak wearing whatever they had before it started. In act
+            // one's Monday classroom that was Haru stuck on Surprised for the
+            // last eight frames of the scene, and it happened at every branch
+            // in both acts.
+            //
+            // One frame on the join where the picture is stated for both.
+            Cel(Portrait.Neutral, Portrait.Neutral, 1.2f);
 
             Say(Speaker.Haru, Portrait.Neutral,
                 "I'm paying.",
@@ -2736,6 +2891,19 @@ namespace TheFrayedRedString.EditorTools
                         "毎回。",
                         "هر بار.");
                 });
+
+            // POSE RESET AFTER A BRANCH.
+            //
+            // A road may only hold spoken lines, so neither road can move
+            // anybody. Both characters therefore walk out of a choice wearing
+            // whatever the last line of that road left on them, and the one who
+            // did not speak wearing whatever they had before it started. In act
+            // one's Monday classroom that was Haru stuck on Surprised for the
+            // last eight frames of the scene, and it happened at every branch
+            // in both acts.
+            //
+            // One frame on the join where the picture is stated for both.
+            Cel(Portrait.Joyful, Portrait.Neutral, 1.2f);
 
             SayWithSound(Speaker.Yua, Portrait.Neutral, SfxId.SchoolBell, 0.7f,
                 "That's us.",
@@ -3240,6 +3408,19 @@ namespace TheFrayedRedString.EditorTools
                         "یه مجسمه‌ی کلاه‌به‌سر.");
                 });
 
+            // POSE RESET AFTER A BRANCH.
+            //
+            // A road may only hold spoken lines, so neither road can move
+            // anybody. Both characters therefore walk out of a choice wearing
+            // whatever the last line of that road left on them, and the one who
+            // did not speak wearing whatever they had before it started. In act
+            // one's Monday classroom that was Haru stuck on Surprised for the
+            // last eight frames of the scene, and it happened at every branch
+            // in both acts.
+            //
+            // One frame on the join where the picture is stated for both.
+            Cel(Portrait.Neutral, Portrait.Neutral, 1.2f);
+
             Hold(1.4f);
 
             Say(Speaker.Yua, Portrait.Thinking,
@@ -3518,12 +3699,12 @@ namespace TheFrayedRedString.EditorTools
             Hold(2.0f);
 
             // ◆ DREAD 10. The last two frames of the act.
-            InnerVoice(
+            InnerVoice(Portrait.Neutral,
                 "Six days.",
                 "六日間。",
                 "شیش روز.");
 
-            InnerVoice(
+            InnerVoice(Portrait.Unchanged,
                 "Nothing's changed at all.",
                 "なんにも、変わってない。",
                 "هیچی عوض نشده.");

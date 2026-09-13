@@ -347,7 +347,22 @@ namespace TheFrayedRedString.Narrative
         CountingThree = 39,
 
         /// <summary>Four. Yua's.</summary>
-        CountingFour = 40
+        CountingFour = 40,
+
+        /// <summary>
+        /// Holding a drink out sideways and looking the other way. Haru's.
+        /// </summary>
+        /// <remarks>
+        /// One drawing for the whole of act two's rung four, and the reason the
+        /// scene no longer needs any furniture to work: he has the can out at
+        /// arm's length towards her and his face turned away from it, so it is
+        /// not an offer, so it cannot be refused. The staging used to be a wall
+        /// to put it down on, and before that a cardigan, and neither of those
+        /// was drawn.
+        ///
+        /// Yua has no version and needs none: she is never the one offering.
+        /// </remarks>
+        OfferDrink = 41
     }
 
     /// <summary>Which half of the stage a character stands on.</summary>
@@ -536,8 +551,10 @@ namespace TheFrayedRedString.Narrative
                 case Portrait.WarmCupEmpty: return "WarmCupHoldUntouched";
 
                 // She does not stand with her hands in her pockets. The dress
-                // does not have any.
-                case Portrait.Pockets: return "NeutralGentleSmile";
+                // does not have any, and she is never the one holding something
+                // out to somebody else.
+                case Portrait.Pockets:
+                case Portrait.OfferDrink: return "NeutralGentleSmile";
                 case Portrait.Smug: return "SmugMischievousSmile";
                 case Portrait.Surprised: return "SurprisedTakenAback";
                 case Portrait.Bored: return "BoredUnamused";
@@ -588,6 +605,15 @@ namespace TheFrayedRedString.Narrative
                 case Portrait.Surprised: return "SurprisedTakenAback";
                 case Portrait.Bored: return "DeadpanFlat";
                 case Portrait.HoldCan: return "HoldWarmCan";
+
+                // NOTE THE FILE NAME. The PNG in the project is
+                // "HaruShylyOffersDrink .png" — with a space before the
+                // extension — which Unity imports as an asset called
+                // "HaruShylyOffersDrink " and which will therefore never match
+                // this string. The file needs renaming; the code is spelled the
+                // way the file should be, not the way it currently is.
+                case Portrait.OfferDrink: return "ShylyOffersDrink";
+
                 case Portrait.WarmCup: return "WarmCupHoldFull";
                 case Portrait.WarmCupEmpty: return "WarmCupHoldEmpty";
                 case Portrait.Pockets: return "HandsInPockets";
@@ -671,6 +697,16 @@ namespace TheFrayedRedString.Narrative
 
         /// <summary>The same room with green outside. Flashback and dream only.</summary>
         public const string ClassroomSpringDay = "SunnyClassroomDay";
+
+        /// <summary>
+        /// 1-A with deep snow on everything outside the window.
+        /// </summary>
+        /// <remarks>
+        /// The 19th of December, the morning after it turned. There is a snow
+        /// globe on one of the desks, which is not a plant for anything and is
+        /// simply a thing somebody brought in.
+        /// </remarks>
+        public const string ClassroomWinterDay = "SunnyClassroomWinterDay";
 
         /// <summary>The same room under grey light and rain, in autumn.</summary>
         public const string ClassroomRainy = "OvercastClassroomRainyAutumnDay";
@@ -784,6 +820,18 @@ namespace TheFrayedRedString.Narrative
         /// November scene is written for daylight.
         /// </remarks>
         public const string VendingStreetWinterNight = "PastelStreetVendingWinterNight";
+
+        /// <summary>
+        /// The corner after dark in autumn: bare earth and dead stalks in the
+        /// beds, a bare tree, the low stone wall, and no snow.
+        /// </summary>
+        /// <remarks>
+        /// Act two, the 5th of November, and it exists because that scene had
+        /// nowhere correct to stand. The September night has the beds in full
+        /// flower and the winter night has snow on everything; this is the six
+        /// weeks in between, which is exactly where act two's fourth rung is.
+        /// </remarks>
+        public const string VendingStreetAutumnNight = "PastelStreetVendingAutumnNight";
         public const string AlleywayNight = "TraditionalAlleywayNight";
 
         /// <summary>

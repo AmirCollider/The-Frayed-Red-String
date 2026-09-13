@@ -101,6 +101,20 @@ namespace TheFrayedRedString.Core
         public const int BackgroundCanvasOrder = 0;
 
         /// <summary>Draw order of the dialogue, captions and choices.</summary>
+        /// <summary>
+        /// The attention veil, between the scenery and the people standing in
+        /// it.
+        /// </summary>
+        /// <remarks>
+        /// It used to live on the story canvas with everything else, which put
+        /// it in front of the characters as well — so the four scenes where
+        /// somebody speaks to the player dimmed the speaker along with the room
+        /// and the effect was a screen that got darker rather than a person who
+        /// got closer. Between the two canvases, the room goes down and Yua
+        /// does not.
+        /// </remarks>
+        public const int AttentionCanvasOrder = 50;
+
         public const int StoryCanvasOrder = 100;
 
         /// <summary>Draw order of the pause layer, above everything but the fade curtain.</summary>
