@@ -286,11 +286,12 @@ namespace TheFrayedRedString.Narrative
         /// </remarks>
         ColdHug = 31,
 
-        /// <summary>One hand up, five fingers open. Yua's.</summary>
+        /// <summary>
+        /// One hand up, five fingers open. Yua's.
+        /// </summary>
         /// <remarks>
-        /// Counting to five out loud for two children on a slide, on the last
-        /// day of act one. The number is not a coincidence and nothing in the
-        /// scene points at it.
+        /// The last picture of a count, and the one the scene is built on.
+        /// See <see cref="CountingOne"/> for why the other four exist.
         /// </remarks>
         Counting = 32,
 
@@ -320,7 +321,33 @@ namespace TheFrayedRedString.Narrative
         /// What he does instead of holding the warm thing he has just given
         /// away. The narrator says so out loud once, in act two.
         /// </remarks>
-        Pockets = 36
+        Pockets = 36,
+
+        // ---------------------------------------------------------------------
+        //  The rest of the count
+        //
+        //  Act one's playground scene has her count to five out loud, and until
+        //  these existed there was exactly one drawing for it: the open hand.
+        //  So the count ran one, two, three, four on a hand that was already
+        //  showing five, and the number the whole act has been quietly building
+        //  towards arrived on a picture the player had been staring at for four
+        //  frames.
+        //
+        //  Five drawings, five numbers. The hand fills up as she counts, and on
+        //  "five" it is full and her face has already gone somewhere else.
+        // ---------------------------------------------------------------------
+
+        /// <summary>One finger. Yua's.</summary>
+        CountingOne = 37,
+
+        /// <summary>Two fingers. Yua's.</summary>
+        CountingTwo = 38,
+
+        /// <summary>Three. Yua's.</summary>
+        CountingThree = 39,
+
+        /// <summary>Four. Yua's.</summary>
+        CountingFour = 40
     }
 
     /// <summary>Which half of the stage a character stands on.</summary>
@@ -496,6 +523,10 @@ namespace TheFrayedRedString.Narrative
                 // picture is her sitting with her eyes shut while he catches up.
                 case Portrait.Pout: return "PoutTsundere";
                 case Portrait.ColdHug: return "ArmsHuggingCold";
+                case Portrait.CountingOne: return "CountingFingers01";
+                case Portrait.CountingTwo: return "CountingFingers02";
+                case Portrait.CountingThree: return "CountingFingers03";
+                case Portrait.CountingFour: return "CountingFingers04";
                 case Portrait.Counting: return "CountingFingers";
                 case Portrait.HoldCan: return "HoldWarmCan";
 
@@ -566,6 +597,10 @@ namespace TheFrayedRedString.Narrative
                 case Portrait.ColdHug: return "HandsInPockets";
 
                 // No counting hand and no scene that wants one.
+                case Portrait.CountingOne:
+                case Portrait.CountingTwo:
+                case Portrait.CountingThree:
+                case Portrait.CountingFour:
                 case Portrait.Counting: return "NeutralGentleSmile";
                 case Portrait.StrainedSmile: return "StrainedPainfulSmile";
                 case Portrait.Sheepish: return "SheepishHandBehindHead";
@@ -620,8 +655,51 @@ namespace TheFrayedRedString.Narrative
         /// the same time.
         /// </remarks>
         public const string SchoolAlleySpring = "CherryBlossomSchoolAlleyDay";
-        public const string ClassroomDay = "SunnyClassroomDay";
-        public const string ClassroomRainy = "OvercastClassroomRainy";
+        /// <summary>
+        /// 1-A in the sun, with the maples turned outside the window.
+        /// </summary>
+        /// <remarks>
+        /// The autumn one is the default because the game is set in autumn and
+        /// winter and never once in spring. Every act from the first to the
+        /// fifth wants this; the spring version is kept under
+        /// <see cref="ClassroomSpringDay"/> for the flashback and the dream.
+        ///
+        /// Tomo is on the near windowsill in both, which is load-bearing: act
+        /// one plants the pot, act one names it, and act two watches it lean.
+        /// </remarks>
+        public const string ClassroomDay = "SunnyClassroomAutumnDay";
+
+        /// <summary>The same room with green outside. Flashback and dream only.</summary>
+        public const string ClassroomSpringDay = "SunnyClassroomDay";
+
+        /// <summary>The same room under grey light and rain, in autumn.</summary>
+        public const string ClassroomRainy = "OvercastClassroomRainyAutumnDay";
+
+        /// <summary>The rainy room with green outside. Flashback and dream only.</summary>
+        public const string ClassroomRainySpring = "OvercastClassroomRainy";
+
+        // ---------------------------------------------------------------------
+        //  The stairwell
+        //
+        //  Between 1-A and the roof, and the only place in the school the game
+        //  had no picture of. It matters because of one thing that happens on
+        //  it: four floors is where Haru's leg stops him, twice, in two
+        //  different acts, and a scene that happens on a staircase should not
+        //  have to be played against a photograph of the roof it is on the way
+        //  to.
+        //
+        //  The window on the half-landing carries the season and is the whole
+        //  reason there are three of these.
+        // ---------------------------------------------------------------------
+
+        /// <summary>The half-landing with maples through the window.</summary>
+        public const string StairsAutumn = "AutumnAfternoonSchoolStairs";
+
+        /// <summary>The half-landing with snow through the window.</summary>
+        public const string StairsWinter = "WinterAfternoonSchoolStairs";
+
+        /// <summary>The half-landing with blossom. Flashback and dream only.</summary>
+        public const string StairsSpring = "SpringAfternoonSchoolStairs";
         /// <summary>
         /// The second-floor corridor in autumn light.
         /// </summary>
@@ -643,8 +721,33 @@ namespace TheFrayedRedString.Narrative
         /// reasoning: blossom in this game is a thing that is not there.
         /// </remarks>
         public const string CorridorSunsetSpring = "SchoolCorridorSunset";
-        public const string RooftopDay = "SchoolRooftopSunnyDay";
-        public const string BakeryStreetDay = "UsagiBakeryStreetDay";
+
+        /// <summary>
+        /// The same corridor at night, in winter, with rain on the glass.
+        /// </summary>
+        /// <remarks>
+        /// The umbrella stand at the near end exists in THIS PICTURE ONLY. It
+        /// is not in the autumn corridor and not in the spring one, which is a
+        /// fact about the drawings and is also the funniest thing in the
+        /// building: the school puts the umbrella stand out in winter and takes
+        /// it away in autumn, when it also rains. Act two says so out loud.
+        /// </remarks>
+        public const string CorridorWinterRainyNight = "SchoolCorridorWinterRainyNight";
+
+        /// <summary>The roof with the potted trees turned, and the city beyond.</summary>
+        public const string RooftopDay = "SchoolRooftopAutumnSunnyDay";
+
+        /// <summary>The roof in hydrangea season. Flashback and dream only.</summary>
+        public const string RooftopSpringDay = "SchoolRooftopSunnyDay";
+
+        /// <summary>The bakery street in autumn: pumpkins out, cats on the bench.</summary>
+        public const string BakeryStreetDay = "UsagiBakeryStreetAutumnDay";
+
+        /// <summary>The same street under snow, cats still on the bench.</summary>
+        public const string BakeryStreetWinterDay = "UsagiBakeryStreetWinterDay";
+
+        /// <summary>The green version. Flashback and dream only.</summary>
+        public const string BakeryStreetSpringDay = "UsagiBakeryStreetDay";
         /// <summary>The corner with the machine, in autumn daylight.</summary>
         public const string VendingStreetDay = "PastelStreetVendingAutumnDay";
 
@@ -652,27 +755,67 @@ namespace TheFrayedRedString.Narrative
         public const string VendingStreetSpringDay = "PastelStreetVendingDay";
 
         /// <summary>
-        /// The same corner at night, with the beds still in flower.
+        /// The corner at night, with the beds still in flower and a low stone
+        /// wall beside the machine.
         /// </summary>
         /// <remarks>
-        /// Right for September, wrong from November on: act two's narrator says
-        /// the flowers have gone. Use <see cref="VendingStreetWinterNight"/>
-        /// after October.
+        /// Act one's last scene. The wall is load-bearing — the two of them sit
+        /// on it and open a can each — and it was added to this picture on
+        /// purpose so that they could.
+        ///
+        /// Right for September and wrong from November on: the beds are full of
+        /// flowers and act two says they have gone.
         /// </remarks>
         public const string VendingStreetNight = "PastelStreetVendingNight";
 
         /// <summary>
-        /// The corner at night with the beds empty and a low wall to sit on.
+        /// The corner at night under snow: the beds are bare earth and dead
+        /// stalks, there is snow on the machine and along the wall.
         /// </summary>
         /// <remarks>
-        /// Act two, the 5th of November. The wall is load-bearing: the last
-        /// third of that scene happens sitting on it.
+        /// DECEMBER AND AFTER, not November. The snow went into this picture
+        /// after act two was written against a version that had none, and snow
+        /// on the 5th of November in Kanagawa is a claim about the weather that
+        /// nobody would believe.
+        ///
+        /// Act two's November scene therefore does not use it and asks for an
+        /// autumn night version of this corner instead — see
+        /// AboutProject/ArtRequest-Act01-Act02.md. Until that exists, the
+        /// November scene is written for daylight.
         /// </remarks>
         public const string VendingStreetWinterNight = "PastelStreetVendingWinterNight";
         public const string AlleywayNight = "TraditionalAlleywayNight";
+
+        /// <summary>
+        /// The café in daylight. Act one's, in September.
+        /// </summary>
+        /// <remarks>
+        /// Deliberately the one picture in the game with no season in it. The
+        /// windows are bright and what is behind them is pale and out of focus,
+        /// so this reads as any warm afternoon — which is what act one needs and
+        /// what act two must not use.
+        /// </remarks>
         public const string CafeDay = "CozyCafeDay";
-        public const string CafeRainy = "CozyCafeDimRainy";
-        public const string PlaygroundDay = "PastelPlaygroundDay";
+
+        /// <summary>
+        /// The café under low grey light, with rain on the glass.
+        /// </summary>
+        /// <remarks>
+        /// Act two's heavy scene. The narration steams the windows up in its
+        /// first line, so what is behind them stops mattering three seconds in —
+        /// which is why the autumn picture serves a December evening without
+        /// lying about anything the player can see.
+        /// </remarks>
+        public const string CafeRainy = "CozyCafeDimAutumnDimRainy";
+
+        /// <summary>The rainy café with green outside. Flashback and dream only.</summary>
+        public const string CafeRainySpring = "CozyCafeDimRainy";
+
+        /// <summary>The playground in autumn. Children on the slide, the angel in the fountain.</summary>
+        public const string PlaygroundDay = "PastelPlaygroundAutumnDay";
+
+        /// <summary>The playground in hydrangea season. Flashback and dream only.</summary>
+        public const string PlaygroundSpringDay = "PastelPlaygroundDay";
         /// <summary>The platform in autumn, with the trackside trees turned.</summary>
         public const string TrainPlatformSunset = "TrainPlatformAutumnSunset";
 
@@ -689,7 +832,15 @@ namespace TheFrayedRedString.Narrative
         /// describing.
         /// </remarks>
         public const string TrainPlatformWinterSunset = "TrainPlatformWinterSunset";
-        public const string YuaRoomDay = "YuaRoomSunnyDay";
+        /// <summary>Yua's room with the maples through the window.</summary>
+        public const string YuaRoomDay = "YuaRoomAutumnDay";
+
+        /// <summary>Yua's room with a bare tree and snow through the window.</summary>
+        /// <remarks>Act two's last scene is the 22nd of December.</remarks>
+        public const string YuaRoomWinterDay = "YuaRoomWinterDay";
+
+        /// <summary>Yua's room in spring. Flashback and dream only.</summary>
+        public const string YuaRoomSpringDay = "YuaRoomSunnyDay";
 
         /// <summary>
         /// Haru's room, and the last place in the story that is still a room.

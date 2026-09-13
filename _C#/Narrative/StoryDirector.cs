@@ -404,9 +404,18 @@ namespace TheFrayedRedString.Narrative
                     // and neither should make them wait for the answer. The line
                     // is handed over unresolved so that switching language while
                     // it is on screen re-renders it.
+                    //
+                    // FULL RATHER THAN SHORT, AND HELD LONGER. This used to
+                    // print "3 October 2024" for two and a half seconds, which
+                    // is not enough of a date to be worth putting on screen: the
+                    // characters talk in weekdays — "four floors is a lot for a
+                    // Monday", "the last Thursday before the holidays" — and the
+                    // corner was answering a different question from the one the
+                    // dialogue was asking. With the weekday on it, the stamp and
+                    // the script are finally saying the same thing.
                     _overlay.ShowCaption(
-                        StoryCalendar.Line(beat.Date, DateStyle.Short),
-                        GameConfig.CaptionHoldDuration);
+                        StoryCalendar.Line(beat.Date, DateStyle.Full),
+                        GameConfig.DateCardHoldDuration);
                     break;
 
                 case StoryBeatKind.Fall:

@@ -322,9 +322,9 @@ namespace TheFrayedRedString.EditorTools
             Hold(1.8f);
 
             Narrate(
-                "The top of the path had gone red over the summer and the bottom had not caught up yet.",
-                "坂の上の木は夏のあいだに赤くなって、下のほうはまだ追いついていなかった。",
-                "بالای مسیر تابستون قرمز شده بود و پایینش هنوز نرسیده بود.");
+                "The maples at the top of the path had gone red over the summer. The ones at the bottom were still green, so the walk up to school started in one season and finished in another.",
+                "坂の上の楓は夏のあいだに赤くなっていた。下のほうはまだ緑で、学校までの坂は、下で夏、上で秋だった。",
+                "افراهای بالای مسیر تابستون قرمز شده بودن. اونایی که پایین بودن هنوز سبز بودن، پس راهِ مدرسه از یه فصل شروع می‌شد و تو یه فصلِ دیگه تموم می‌شد.");
 
             Enter(Speaker.Yua, Portrait.Neutral);
 
@@ -402,10 +402,19 @@ namespace TheFrayedRedString.EditorTools
                 "今から。",
                 "از الآن.");
 
+            // NEVER A STAGE DIRECTION. This frame used to be the literal word
+            // "(laughs)" in all three languages, printed in the dialogue box, on
+            // a sprite that was already laughing. The picture says she is
+            // laughing. The box is for what she says while she does it.
             Say(Speaker.Yua, Portrait.Joyful,
-                "(laughs)",
-                "(笑う)",
-                "(می‌خندد)");
+                "You can't just become an expert in something at eight in the morning.",
+                "朝の八時に専門家になるのは無理でしょ。",
+                "آدم نمی‌تونه ساعتِ هشتِ صبح یهو کارشناسِ یه چیزی بشه.");
+
+            Say(Speaker.Haru, Portrait.Unchanged,
+                "Watch me.",
+                "見てて。",
+                "نگاه کن.");
 
             Hold(1.2f);
 
@@ -447,9 +456,9 @@ namespace TheFrayedRedString.EditorTools
                 "فرق کرده.");
 
             Say(Speaker.Haru, Portrait.Surprised,
-                "You haven't eaten it.",
-                "まだ食べてないでしょ。",
-                "که هنوز نخوردیش.");
+                "You haven't even eaten it yet.",
+                "まだ食べてもいないでしょ。",
+                "تو که هنوز نخوردیش.");
 
             Say(Speaker.Yua, Portrait.Unchanged,
                 "I can see it's different.",
@@ -459,7 +468,7 @@ namespace TheFrayedRedString.EditorTools
             Say(Speaker.Haru, Portrait.CalmSerious,
                 "The old man sold it in July. His daughter's got it now and she does the dough longer.",
                 "七月におじさんが店を譲ったんだ。今は娘さんがやってて、生地を長めに寝かせてる。",
-                "تیر ماه پیرمرده مغازه رو واگذار کرد. الآن دخترشه و خمیر رو بیشتر می‌خوابونه.");
+                "ژوئیه پیرمرده مغازه رو واگذار کرد. الآن دخترشه و خمیر رو بیشتر می‌خوابونه.");
 
             Say(Speaker.Yua, Portrait.Bored,
                 "You have opinions about dough.",
@@ -484,70 +493,140 @@ namespace TheFrayedRedString.EditorTools
             Hold(1.4f);
 
             Narrate(
-                "Two girls went past them up the path with their phones out, photographing the red end of it.",
-                "スマホを構えた二人組が坂を上っていって、赤いほうを撮っていた。",
-                "دو تا دختر با گوشی از کنارشون رد شدن و رفتن بالا، از سمتِ قرمزش عکس می‌گرفتن.");
+                "Two girls went past them up the path with their phones out, photographing the red maples at the top.",
+                "スマホを構えた二人組が坂を上っていって、上の赤い楓を撮っていた。",
+                "دو تا دختر با گوشی از کنارشون رد شدن و رفتن بالا، از افراهای قرمزِ بالای مسیر عکس می‌گرفتن.");
 
-            Say(Speaker.Yua, Portrait.Neutral,
-                "Morita-sensei's ours this term.",
-                "今学期、森田先生だって。",
-                "این ترم خانمِ موریتا مالِ ماست.");
-
-            Say(Speaker.Haru, Portrait.Unchanged,
-                "I heard.",
-                "聞いた。",
-                "شنیدم.");
+            // WHY THERE IS A NEW TEACHER IN THE SECOND TERM, said out loud,
+            // because the player cannot be expected to know that Japanese
+            // schools do this and the old draft simply assumed it. Yua is the
+            // one who knows, which is also true of everything else in this act.
+            Say(Speaker.Haru, Portrait.Neutral,
+                "First day of the second term and we've already got a new homeroom teacher. Morita-sensei.",
+                "二学期の初日から担任が新しい。森田先生。",
+                "روزِ اولِ ترمِ دومه و از همین الآن معلمِ کلاسمون عوض شده. خانمِ موریتا.");
 
             Say(Speaker.Yua, Portrait.Unchanged,
+                "Since Friday. Ishikawa-sensei's baby came six weeks early, so she's gone until March and they've moved somebody across from the third years.",
+                "金曜に決まった。石川先生の赤ちゃんが六週間早く生まれて、三月までお休み。三年生のほうから一人まわしてきたの。",
+                "از جمعه. بچه‌ی خانمِ ایشیکاوا شیش هفته زودتر به دنیا اومد، تا مارس نیست، و یکی رو از سومی‌ها آوردن این‌ور.");
+
+            Say(Speaker.Haru, Portrait.Surprised,
+                "How do you know that.",
+                "なんで知ってるの。",
+                "تو از کجا می‌دونی.");
+
+            Say(Speaker.Yua, Portrait.Smug,
+                "I listen.",
+                "聞いてるからね。",
+                "چون گوش می‌دم.");
+
+            Hold(1.0f);
+
+            // THE CORRECTION IS HERS. It was Haru's in the last draft, and that
+            // was backwards twice over: he does not correct her about anything,
+            // and editing how the other one speaks is the thing this game gives
+            // to Yua and to nobody else. It is the first frame of the whole
+            // pattern the last act is about.
+            Say(Speaker.Haru, Portrait.Unchanged,
                 "They say she's strict.",
                 "厳しいらしいよ。",
                 "می‌گن سختگیره.");
 
-            Say(Speaker.Haru, Portrait.Unchanged,
+            Say(Speaker.Yua, Portrait.Neutral,
                 "Who says?",
                 "誰が言ってるの?",
                 "کی می‌گه؟");
 
-            Say(Speaker.Yua, Portrait.Unchanged,
+            Say(Speaker.Haru, Portrait.Unchanged,
                 "...I don't know. Someone was saying.",
                 "……知らない。誰かが言ってた。",
                 "...نمی‌دونم. یکی می‌گفت.");
 
-            Say(Speaker.Haru, Portrait.CalmSerious,
+            Say(Speaker.Yua, Portrait.Smug,
                 "Then don't say \"they say\". Say \"someone was saying\".",
                 "じゃあ「らしい」じゃなくて「誰かが言ってた」でしょ。",
                 "پس نگو «می‌گن». بگو «یکی می‌گفت».");
 
-            Say(Speaker.Yua, Portrait.Pout,
+            Say(Speaker.Haru, Portrait.Surprised,
                 "Does it matter?",
                 "違うの?",
                 "فرقی داره؟");
 
-            Say(Speaker.Haru, Portrait.Unchanged,
+            Say(Speaker.Yua, Portrait.Unchanged,
                 "Enormously.",
-                "だいぶ。",
+                "だいぶね。",
                 "خیلی.");
 
-            Say(Speaker.Yua, Portrait.Bored,
+            Say(Speaker.Haru, Portrait.Sheepish,
                 "Fine. \"Someone was saying she's strict.\"",
                 "はいはい。「誰かが、厳しいって言ってた」。",
                 "باشه. «یکی می‌گفت سختگیره.»");
 
-            Say(Speaker.Haru, Portrait.Joyful,
+            Say(Speaker.Yua, Portrait.Joyful,
                 "Better.",
-                "うん。",
+                "うん、それでいい。",
                 "حالا شد.");
 
             Hold(1.2f);
 
+            // THIS CHOICE USED TO LIE. Pressing "eat it now" was followed, on
+            // the very next frame, by Yua saying they were saving them for the
+            // roof — so the player's first button in the game did nothing and
+            // said so to their face. Both roads are now hers, both are about
+            // her own roll, and the line they rejoin on is true either way.
             DecideIdly(
-                "Eat it now", "今食べる", "همین الآن بخورش",
-                "Keep it for the roof", "屋上まで取っておく", "واسه پشت‌بوم نگهش دار");
+                "Start yours now", "自分のを今かじる", "مالِ خودتو همین الآن شروع کن",
+                () =>
+                {
+                    Say(Speaker.Yua, Portrait.Joyful,
+                        "I'm starting mine.",
+                        "あたしのは今食べる。",
+                        "من مالِ خودمو شروع می‌کنم.");
+
+                    Say(Speaker.Haru, Portrait.Surprised,
+                        "We left the shop ninety seconds ago.",
+                        "店出て一分半だけど。",
+                        "یه دقیقه و نیم پیش از مغازه اومدیم بیرون.");
+
+                    Say(Speaker.Yua, Portrait.Unchanged,
+                        "And I have been awake for two hours. Two hours is a long time to be carrying a bread and not be eating it.",
+                        "で、あたしはもう二時間起きてる。パン持って食べないで二時間は長い。",
+                        "و من دو ساعته بیدارم. دو ساعت واسه اینکه نون دستت باشه و نخوریش خیلی زیاده.");
+
+                    Narrate(
+                        "She got through about a third of it on the way up and folded the bag over the rest without being asked to.",
+                        "坂の途中で三分の一くらい食べて、残りは言われる前に自分で袋を折った。",
+                        "تا بالای مسیر حدودِ یک‌سومش رو خورد و بقیه‌شو، بی‌اینکه کسی بگه، لای پاکت تا کرد.");
+                },
+                "Save yours for lunch", "自分のは昼まで取っておく", "مالِ خودتو واسه ناهار نگه دار",
+                () =>
+                {
+                    Say(Speaker.Yua, Portrait.Neutral,
+                        "I'm saving mine.",
+                        "あたしのは取っておく。",
+                        "من مالِ خودمو نگه می‌دارم.");
+
+                    Say(Speaker.Haru, Portrait.Unchanged,
+                        "Until when?",
+                        "いつまで?",
+                        "تا کِی؟");
+
+                    Say(Speaker.Yua, Portrait.Smug,
+                        "Until it's the best thing that has happened all day. On a Monday that's about half twelve.",
+                        "その日いちばんいいことになるまで。月曜なら十二時半くらい。",
+                        "تا وقتی بشه بهترین اتفاقِ اون روز. دوشنبه‌ها حدودِ دوازده و نیم می‌شه.");
+
+                    Narrate(
+                        "She folded the top of the bag over twice and put it flat in the bottom of her bag, where it would be flatter by lunch.",
+                        "袋の口を二回折って、鞄の底に平らに入れた。昼にはもっと平らになっているはずのところに。",
+                        "سرِ پاکت رو دو بار تا کرد و صافش گذاشت تهِ کیفش، جایی که تا ناهار صاف‌تر هم می‌شد.");
+                });
 
             Say(Speaker.Yua, Portrait.Neutral,
-                "We're eating these at lunch. On the roof.",
-                "これ、お昼に食べよ。屋上で。",
-                "اینارو ناهار می‌خوریم. رو پشت‌بوم.");
+                "Yours is for the roof, though. Lunch. Don't touch it.",
+                "でもハルぴのは屋上ね。お昼。触らないで。",
+                "ولی مالِ تو واسه پشت‌بومه. ناهار. دست بهش نزن.");
 
             Say(Speaker.Haru, Portrait.Unchanged,
                 "It's four floors.",
@@ -699,11 +778,37 @@ namespace TheFrayedRedString.EditorTools
                 "داره میاد.");
 
             Narrate(
-                "Morita-sensei came in, said her name once, and said it again because nobody had written it down.",
-                "森田先生が入ってきて、一度名前を言って、誰も書いていなかったのでもう一度言った。",
-                "خانمِ موریتا اومد تو، یه بار اسمشو گفت، و چون هیشکی ننوشته بودش دوباره گفت.");
+                "Morita-sensei wrote her name on the board, turned round, and found that not one person in the room had picked up a pen.",
+                "森田先生は黒板に名前を書いて、振り返って、この教室の誰ひとりペンを持っていないことを知った。",
+                "خانمِ موریتا اسمشو رو تخته نوشت، برگشت، و دید که تو کلاس حتی یه نفر هم خودکار دستش نگرفته.");
+
+            Hold(1.4f);
+
+            Narrate(
+                "So she wrote it again underneath, underlined it, and waited.",
+                "だからその下にもう一度書いて、線を引いて、待った。",
+                "پس دوباره زیرش نوشتش، زیرش خط کشید، و منتظر موند.");
+
+            Hold(1.2f);
+
+            Narrate(
+                "Thirty-one pens moved at the same time. She did not smile, which everybody agreed afterwards was the frightening part.",
+                "三十一本のペンが同時に動いた。先生は笑わなかった。あとでみんなが、そこが怖かったと言った。",
+                "سی‌ویک تا خودکار همزمان تکون خوردن. خانمِ موریتا لبخند نزد، که بعداً همه قبول داشتن ترسناک‌ترین قسمتش همین بود.");
 
             Hold(1.6f);
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "Someone was saying she's strict.",
+                "「誰かが、厳しいって言ってた」。",
+                "«یکی می‌گفت سختگیره.»");
+
+            Say(Speaker.Haru, Portrait.Sheepish,
+                "I did say that correctly, in the end.",
+                "最終的にはちゃんと言えたでしょ。",
+                "آخرش که درست گفتمش.");
+
+            Hold(1.4f);
 
             Narrate(
                 "She wrote three things on the board, and rubbed out the third one, and left the first two.",
@@ -769,7 +874,51 @@ namespace TheFrayedRedString.EditorTools
 
             DecideIdly(
                 "Write the date down", "日付を書いておく", "تاریخ رو یادداشت کن",
-                "Don't write it down", "書かない", "یادداشت نکن");
+                () =>
+                {
+                    Say(Speaker.Yua, Portrait.Neutral,
+                        "I'm writing it down.",
+                        "書いとく。",
+                        "می‌نویسمش.");
+
+                    Say(Speaker.Haru, Portrait.Surprised,
+                        "She rubbed it out.",
+                        "消したよ。",
+                        "پاکش که کرد.");
+
+                    Say(Speaker.Yua, Portrait.Smug,
+                        "She rubbed out the chalk. The date's still a date.",
+                        "消したのはチョーク。日付は日付のまま。",
+                        "گچ رو پاک کرد. تاریخ هنوز تاریخه.");
+
+                    Narrate(
+                        "She wrote it in the corner of the page, small, and drew a box round it.",
+                        "ページの隅に小さく書いて、まわりに四角を描いた。",
+                        "گوشه‌ی صفحه، ریز، نوشتش و دورش یه کادر کشید.");
+                },
+                "Leave it", "書かない", "ولش کن",
+                () =>
+                {
+                    Say(Speaker.Yua, Portrait.Bored,
+                        "I'm not writing down something she took back.",
+                        "取り消したことは書かない。",
+                        "چیزی رو که پس گرفته نمی‌نویسم.");
+
+                    Say(Speaker.Haru, Portrait.Unchanged,
+                        "You'll forget.",
+                        "忘れるよ。",
+                        "یادت می‌ره.");
+
+                    Say(Speaker.Yua, Portrait.Unchanged,
+                        "If it matters she'll say it again. Things that matter get said twice.",
+                        "大事ならもう一回言う。大事なことは二回言われる。",
+                        "اگه مهم باشه دوباره می‌گتش. چیزهای مهم دو بار گفته می‌شن.");
+
+                    Narrate(
+                        "She closed the notebook on a clean page and did not think about it again until Thursday.",
+                        "白いページのままノートを閉じて、木曜まで思い出さなかった。",
+                        "دفترش رو رو یه صفحه‌ی سفید بست و تا پنج‌شنبه دیگه بهش فکر نکرد.");
+                });
 
             Hold(1.4f);
 
@@ -975,7 +1124,51 @@ namespace TheFrayedRedString.EditorTools
 
             DecideIdly(
                 "Try your own hundred yen", "自分の百円も入れてみる", "صدینِ خودتم امتحان کن",
-                "Keep your hundred yen", "百円は取っておく", "صدینِ خودتو نگه دار");
+                () =>
+                {
+                    Narrate(
+                        "She put hers in. The machine thought about it for two seconds and dropped a peach drink into the tray like it had been waiting all afternoon to be asked properly.",
+                        "結愛が入れた。自販機は二秒ほど考えて、ずっとちゃんと頼まれるのを待っていたみたいに、桃のを一本落とした。",
+                        "یوآ مالِ خودشو انداخت. دستگاه دو ثانیه فکر کرد و یه نوشیدنیِ هلو انداخت تو سینی، انگار تمامِ بعدازظهر منتظر بود یکی درست‌حسابی ازش بخواد.");
+
+                    Say(Speaker.Yua, Portrait.Smug,
+                        "It likes me.",
+                        "あたしのことは好きなんだ。",
+                        "منو دوست داره.");
+
+                    Say(Speaker.Haru, Portrait.Bored,
+                        "It does not like you. It is a machine.",
+                        "好きじゃないよ。機械だし。",
+                        "دوستت نداره. یه دستگاهه.");
+
+                    Say(Speaker.Yua, Portrait.Unchanged,
+                        "It gave me a peach one and it kept yours. That's not nothing. That's a preference.",
+                        "あたしには桃をくれて、ハルぴのは取った。それはもう好みでしょ。",
+                        "به من هلو داد و مالِ تو رو خورد. این هیچی نیست؟ این یعنی سلیقه.");
+                },
+                "Keep your hundred yen", "百円は取っておく", "صدینِ خودتو نگه دار",
+                () =>
+                {
+                    Say(Speaker.Yua, Portrait.Neutral,
+                        "No.",
+                        "やめとく。",
+                        "نه.");
+
+                    Say(Speaker.Haru, Portrait.Surprised,
+                        "Why not?",
+                        "なんで?",
+                        "چرا که نه؟");
+
+                    Say(Speaker.Yua, Portrait.Unchanged,
+                        "Because if it takes mine as well it stops being funny and starts being a robbery.",
+                        "あたしのも取られたら、面白い話じゃなくて、ただの強盗。",
+                        "چون اگه مالِ منم بخوره، دیگه بامزه نیست و می‌شه دزدی.");
+
+                    Narrate(
+                        "She put the coin back in her pocket and patted the front of the machine twice, which achieved nothing and was not meant to.",
+                        "百円をポケットに戻して、自販機の前を二回叩いた。なにも起きなかったし、起こすつもりもなかった。",
+                        "سکه رو گذاشت تو جیبش و دو بار زد به جلوی دستگاه، که هیچ فایده‌ای نداشت و قرار هم نبود داشته باشه.");
+                });
 
             Hold(1.2f);
 
@@ -1234,9 +1427,9 @@ namespace TheFrayedRedString.EditorTools
             Hold(1.6f);
 
             Narrate(
-                "It had stopped at about ten past four and the cobbles were still dark.",
-                "四時十分ごろに止んで、石畳はまだ黒かった。",
-                "حدودِ چهار و ده دقیقه بند اومده بود و سنگ‌فرش هنوز تیره بود.");
+                "The rain had stopped at about ten past four and the cobbles were still dark with it.",
+                "雨は四時十分ごろにやんで、石畳はまだその色のままだった。",
+                "بارون حدودِ چهار و ده دقیقه بند اومده بود و سنگ‌فرش هنوز از خیسیش تیره بود.");
 
             Enter(Speaker.Yua, Portrait.Neutral);
             Enter(Speaker.Haru, Portrait.Neutral);
@@ -1338,9 +1531,9 @@ namespace TheFrayedRedString.EditorTools
             // scene, and says what is on it. Deniable a dozen ways, and nobody
             // in the scene reaches for any of them.
             Say(Speaker.Yua, Portrait.Neutral,
-                "It's four characters anyway. Anko's two. I did it a favour.",
+                "It's four syllables anyway. Anko's two. I did it a favour.",
                 "どうせ四文字だし。あんこは二文字。得させてあげた。",
-                "تازه چهار حرفیه. آنکو دو حرفیه. بهش لطف کردم.");
+                "تازه چهار بخشیه. آنکو دو بخشیه. بهش لطف کردم.");
 
             Hold(1.4f);
 
@@ -1357,7 +1550,7 @@ namespace TheFrayedRedString.EditorTools
             Say(Speaker.Haru, Portrait.Sheepish,
                 "The sign says so. It's been saying so since July.",
                 "貼り紙にそう書いてある。七月からずっと。",
-                "رو تابلوش نوشته. از تیر تا حالا همین‌جور نوشته.");
+                "رو تابلوش نوشته. از ژوئیه تا حالا همین‌جور نوشته.");
 
             Say(Speaker.Yua, Portrait.Pout,
                 "You've been buying it in the morning at full price.",
@@ -1378,7 +1571,51 @@ namespace TheFrayedRedString.EditorTools
 
             DecideIdly(
                 "Wait until five", "五時まで待つ", "تا پنج صبر کن",
-                "Go home now", "もう帰る", "همین الآن برو خونه");
+                () =>
+                {
+                    Say(Speaker.Yua, Portrait.Neutral,
+                        "We're waiting.",
+                        "待つよ。",
+                        "صبر می‌کنیم.");
+
+                    Say(Speaker.Haru, Portrait.Surprised,
+                        "It's eleven minutes.",
+                        "十一分あるけど。",
+                        "یازده دقیقه‌ست.");
+
+                    Say(Speaker.Yua, Portrait.Smug,
+                        "Eleven minutes for half price bread is the best paid eleven minutes of your entire life and you're about to argue with me about it.",
+                        "半額のパンのために十一分。人生でいちばん時給のいい十一分だよ。それに文句言おうとしてる。",
+                        "یازده دقیقه واسه نونِ نصفِ قیمت، پردرآمدترین یازده دقیقه‌ی کلِ عمرته، و تو داری باهام بحث می‌کنی.");
+
+                    Narrate(
+                        "They waited the eleven minutes on the bench with the cats. She bought two.",
+                        "猫のいるベンチで十一分待った。結愛は二つ買った。",
+                        "یازده دقیقه رو رو نیمکتِ کنارِ گربه‌ها صبر کردن. یوآ دو تا خرید.");
+                },
+                "Go home now", "もう帰る", "همین الآن برو خونه",
+                () =>
+                {
+                    Say(Speaker.Yua, Portrait.Bored,
+                        "I'm not standing outside a bakery for eleven minutes.",
+                        "パン屋の前で十一分は立たない。",
+                        "یازده دقیقه جلوی نونوایی واینمیستم.");
+
+                    Say(Speaker.Haru, Portrait.Unchanged,
+                        "It's half price.",
+                        "半額だよ。",
+                        "نصفِ قیمته.");
+
+                    Say(Speaker.Yua, Portrait.Unchanged,
+                        "I know exactly what it is. I am not a person who waits for bread.",
+                        "それはわかってる。あたし、パンを待つ人間じゃないの。",
+                        "دقیقاً می‌دونم چیه. من آدمی نیستم که واسه نون صبر کنه.");
+
+                    Narrate(
+                        "She thought about the bread the entire way home and mentioned it to nobody.",
+                        "帰り道のあいだじゅうパンのことを考えて、誰にも言わなかった。",
+                        "تمامِ راهِ خونه به اون نون فکر کرد و به هیچ‌کس نگفت.");
+                });
 
             Hold(1.2f);
 
@@ -1621,8 +1858,57 @@ namespace TheFrayedRedString.EditorTools
             Cel(Portrait.LunchThirdBite);
 
             DecideIdly(
-                "Volunteer for the sports day", "体育祭の係に立候補する", "واسه جشنِ ورزشی داوطلب شو",
-                "Absolutely not", "ぜったい嫌", "به هیچ وجه");
+                "Put your name down", "自分の名前を書く", "اسمتو بنویس",
+                () =>
+                {
+                    Say(Speaker.Yua, Portrait.Neutral,
+                        "Put my name down.",
+                        "あたしの名前、書いといて。",
+                        "اسمِ منو بنویس.");
+
+                    Say(Speaker.Haru, Portrait.Surprised,
+                        "You hate sports day.",
+                        "体育祭きらいでしょ。",
+                        "تو که از جشنِ ورزشی بدت میاد.");
+
+                    Say(Speaker.Yua, Portrait.Smug,
+                        "I hate doing sports day. Running sports day is a completely different activity.",
+                        "体育祭に出るのがきらいなだけ。体育祭をまわすのは別のこと。",
+                        "از شرکت کردن تو جشنِ ورزشی بدم میاد. گردوندنش یه کارِ کاملاً دیگه‌ست.");
+
+                    Say(Speaker.Haru, Portrait.Unchanged,
+                        "...That is true, and I wish it weren't.",
+                        "……それはそう。そうであってほしくないけど。",
+                        "...این درسته، و کاش نبود.");
+                },
+                "Absolutely not", "ぜったい嫌", "به هیچ وجه",
+                () =>
+                {
+                    Say(Speaker.Yua, Portrait.Bored,
+                        "Absolutely not.",
+                        "ぜったい嫌。",
+                        "به هیچ وجه.");
+
+                    Say(Speaker.Haru, Portrait.Unchanged,
+                        "You'd be good at it.",
+                        "向いてると思うけど。",
+                        "توش خوب می‌بودی.");
+
+                    Say(Speaker.Yua, Portrait.Unchanged,
+                        "I'd be excellent at it. That is not the point.",
+                        "すごく向いてる。それが問題じゃないの。",
+                        "عالی می‌بودم. مسئله این نیست.");
+
+                    Say(Speaker.Haru, Portrait.Surprised,
+                        "What's the point?",
+                        "じゃあ何が問題?",
+                        "پس مسئله چیه؟");
+
+                    Say(Speaker.Yua, Portrait.Neutral,
+                        "If I say yes to the first thing they ask me, they ask me everything for three years.",
+                        "最初のひとつに「はい」って言ったら、三年間ぜんぶ頼まれる。",
+                        "اگه به اولین چیزی که ازم می‌خوان بگم آره، سه سال همه‌چی رو ازم می‌خوان.");
+                });
 
             Cel(Portrait.LunchFinished);
 
@@ -1894,7 +2180,46 @@ namespace TheFrayedRedString.EditorTools
 
             DecideIdly(
                 "Ask what the second thing was", "二つめ、なにか聞く", "بپرس چیزِ دومی چی بود",
-                "Write down the date instead", "日付だけ書いておく", "به جاش تاریخ رو بنویس");
+                () =>
+                {
+                    Say(Speaker.Yua, Portrait.Neutral,
+                        "What was the second thing?",
+                        "二つめ、なんだった?",
+                        "چیزِ دومیه چی بود؟");
+
+                    Say(Speaker.Haru, Portrait.Unchanged,
+                        "She didn't say.",
+                        "言わなかった。",
+                        "نگفتش.");
+
+                    Say(Speaker.Yua, Portrait.Surprised,
+                        "She wrote it and didn't say it?",
+                        "書いたのに、言わなかったの?",
+                        "نوشتش و نگفتش؟");
+
+                    Say(Speaker.Haru, Portrait.Unchanged,
+                        "She wrote it, looked at it for a second, and carried on with the lesson.",
+                        "書いて、一秒それを見て、そのまま授業に戻った。",
+                        "نوشتش، یه ثانیه نگاش کرد، و درسش رو ادامه داد.");
+                },
+                "Write down the date instead", "日付だけ書いておく", "به جاش تاریخ رو بنویس",
+                () =>
+                {
+                    Narrate(
+                        "She copied the date into the corner of the page and drew a box round it without thinking about why.",
+                        "日付をページの隅に写して、なぜかも考えずに四角で囲んだ。",
+                        "تاریخ رو گوشه‌ی صفحه نوشت و بی‌اینکه به چراییش فکر کنه دورش کادر کشید.");
+
+                    Say(Speaker.Haru, Portrait.Joyful,
+                        "You're learning.",
+                        "学んでるね。",
+                        "داری یاد می‌گیری.");
+
+                    Say(Speaker.Yua, Portrait.Unchanged,
+                        "I'm copying you. That's different and it's worse.",
+                        "真似してるだけ。別だし、そっちのがひどい。",
+                        "دارم از تو کپی می‌کنم. فرق داره و بدترم هست.");
+                });
 
             Hold(1.2f);
         }
@@ -2145,9 +2470,9 @@ namespace TheFrayedRedString.EditorTools
             Hold(1.8f);
 
             Narrate(
-                "The lantern by the doorway was the only warm thing in the street and it was not trying very hard.",
-                "戸口の提灯だけがあたたかくて、それもあまり頑張ってはいなかった。",
-                "فانوسِ کنارِ در تنها چیزِ گرمِ کوچه بود و خیلی هم تلاش نمی‌کرد.");
+                "The lantern by the doorway was the only warm thing in the street, and it was not doing much about the rest of it.",
+                "戸口の提灯だけがあたたかくて、そのあたたかさは提灯の周りで終わっていた。",
+                "فانوسِ کنارِ در تنها چیزِ گرمِ کوچه بود، و گرمیش از دورِ خودش جلوتر نمی‌رفت.");
 
             Enter(Speaker.Yua, Portrait.Neutral);
             Enter(Speaker.Haru, Portrait.Neutral);
@@ -2160,7 +2485,7 @@ namespace TheFrayedRedString.EditorTools
             Say(Speaker.Haru, Portrait.Unchanged,
                 "They went over in July.",
                 "七月に終わったよ。",
-                "تیر تموم شدن.");
+                "ژوئیه تموم شدن.");
 
             Say(Speaker.Yua, Portrait.Pout,
                 "Then why are they still out here.",
@@ -2278,9 +2603,9 @@ namespace TheFrayedRedString.EditorTools
             Hold(1.8f);
 
             Narrate(
-                "There was a line of red along the gutter that had not been there on Monday.",
-                "月曜にはなかった赤い筋が、側溝に沿ってできていた。",
-                "کنارِ جوب یه خطِ قرمز افتاده بود که دوشنبه نبود.");
+                "Four days of fallen maple leaves had collected along the gutter in a red line the length of the path. On Monday there had been nothing there at all.",
+                "四日ぶんの落ち葉が側溝に沿ってたまって、坂と同じ長さの赤い筋になっていた。月曜には、なにもなかった。",
+                "برگ‌های افرای چهار روز کنارِ جوب جمع شده بودن و یه خطِ قرمز به درازای کلِ مسیر درست کرده بودن. دوشنبه اونجا اصلاً هیچی نبود.");
 
             Enter(Speaker.Yua, Portrait.Neutral);
             Enter(Speaker.Haru, Portrait.Neutral);
@@ -2371,7 +2696,46 @@ namespace TheFrayedRedString.EditorTools
 
             DecideIdly(
                 "Tell him which one the fourth is", "四つめがどれか教える", "بهش بگو چهارمی کدومه",
-                "Let him find out", "自分で知ればいい", "بذار خودش بفهمه");
+                () =>
+                {
+                    Say(Speaker.Yua, Portrait.Neutral,
+                        "It's the one on the end. The one that's been touching the paper.",
+                        "端のやつ。紙にくっついてるほう。",
+                        "همون که تهِ سیخه. همونی که به کاغذ چسبیده.");
+
+                    Say(Speaker.Haru, Portrait.Surprised,
+                        "Why is that one mine.",
+                        "なんでそれが僕の。",
+                        "چرا اون مالِ منه.");
+
+                    Say(Speaker.Yua, Portrait.Smug,
+                        "Because it's the one I don't want.",
+                        "あたしが要らないほうだから。",
+                        "چون همونیه که من نمی‌خوامش.");
+                },
+                "Let him find out", "自分で知ればいい", "بذار خودش بفهمه",
+                () =>
+                {
+                    Say(Speaker.Yua, Portrait.Smug,
+                        "Find out on Friday.",
+                        "金曜のお楽しみ。",
+                        "جمعه می‌فهمی.");
+
+                    Say(Speaker.Haru, Portrait.Unchanged,
+                        "You always give me the same one.",
+                        "いつも同じやつくれるよね。",
+                        "همیشه همون یکی رو می‌دی بهم.");
+
+                    Say(Speaker.Yua, Portrait.Neutral,
+                        "Do I.",
+                        "そう?",
+                        "جدی؟");
+
+                    Say(Speaker.Haru, Portrait.Joyful,
+                        "Every time.",
+                        "毎回。",
+                        "هر بار.");
+                });
 
             SayWithSound(Speaker.Yua, Portrait.Neutral, SfxId.SchoolBell, 0.7f,
                 "That's us.",
@@ -2530,9 +2894,9 @@ namespace TheFrayedRedString.EditorTools
             FaceSlips();
 
             Say(Speaker.Classmate, Portrait.Unchanged,
-                "Oh — you two are in 1-A.",
-                "あ、一年A組の二人だ。",
-                "اِ — شما دوتا اول-الفین.");
+                "Oh — you two are in 1-A as well, aren't you.",
+                "あ、二人も一年A組だよね。",
+                "اِ — شما دوتا هم توی کلاسِ اول-الفید، نه؟");
 
             Say(Speaker.Haru, Portrait.Neutral,
                 "We are.",
@@ -2586,10 +2950,12 @@ namespace TheFrayedRedString.EditorTools
             Hold(0.6f);
 
             // ◆ DREAD 7. A beat too fast, a degree too flat, and then gone.
+            // "It's ours" alone had no noun in it and read as though she were
+            // talking about the dango.
             Say(Speaker.Yua, Portrait.Neutral,
-                "It's ours.",
-                "うちらのだから。",
-                "مالِ خودمونه.");
+                "It's a name we have. It stays between us.",
+                "うちらだけの呼び方。うちらの中だけの。",
+                "یه اسمیه که بینِ خودمونه. بینِ خودمون می‌مونه.");
 
             Hold(1.6f);
 
@@ -2688,19 +3054,19 @@ namespace TheFrayedRedString.EditorTools
             Enter(Speaker.Haru, Portrait.Neutral);
 
             Say(Speaker.Yua, Portrait.Unchanged,
-                "It's got a hat.",
-                "帽子かぶってる。",
-                "کلاه گذاشته سرش.");
+                "The angel's wearing a hat.",
+                "あの天使、帽子かぶってる。",
+                "فرشته‌ی وسطِ فواره کلاه گذاشته سرش.");
 
             Say(Speaker.Haru, Portrait.Joyful,
-                "It's got a leaf.",
-                "葉っぱだよ。",
-                "برگه.");
+                "That's a leaf.",
+                "それ、葉っぱ。",
+                "اون برگه.");
 
             Say(Speaker.Yua, Portrait.Pout,
-                "It's got a hat.",
-                "帽子。",
-                "کلاهه.");
+                "It is wearing it like a hat, so it is a hat.",
+                "帽子みたいにかぶってるんだから、帽子。",
+                "جوری گذاشتتش که انگار کلاهه، پس کلاهه.");
 
             Say(Speaker.Haru, Portrait.CalmSerious,
                 "It's a leaf that has landed in the shape of a hat, which is a different thing and a better one.",
@@ -2734,46 +3100,60 @@ namespace TheFrayedRedString.EditorTools
                 "しないよ。",
                 "حلش نمی‌کنن.");
 
+            // SCENE LOCK. This used to be "She went over." — narrated while she
+            // stood exactly where she had been standing, front of frame, for
+            // the next twenty frames. The picture cannot walk her across the
+            // playground, so she does not walk across the playground. The
+            // smaller child comes to her instead, which children do to any
+            // adult who looks like they will listen, and which is a better line
+            // about Yua than the one it replaces.
             Narrate(
-                "She went over.",
-                "結愛が近づいていった。",
-                "رفت سمتشون.");
+                "The smaller of the two stopped arguing, looked round the playground for the nearest person who was not a child, and came over.",
+                "小さいほうが言い合いをやめて、公園じゅうを見まわして、いちばん近くにいる子どもじゃない人を見つけて、こっちへ来た。",
+                "کوچیک‌تره دعوا رو ول کرد، کلِ زمینِ بازی رو نگاه کرد دنبالِ نزدیک‌ترین کسی که بچه نبود، و اومد این‌ور.");
 
             Hold(1.4f);
 
-            // The hand goes up here with all five fingers open, and it stays
-            // up through the whole count. Nothing points at the number.
-            Say(Speaker.Yua, Portrait.Counting,
-                "Right. The one at the top goes first, because that is how a slide works. And the one at the bottom gets to count out loud. All right? Count for me.",
-                "はい。上にいる子が先。すべり台ってそういうものだから。下の子は、声に出して数える係。いい? 数えて。",
-                "خب. اونی که بالاست اول می‌ره، چون سرسره همین‌جوریه. اونی که پایینه هم بلندبلند می‌شمره. باشه؟ بشمر واسم.");
+            // Five drawings for five numbers. Until they existed the count ran
+            // one, two, three, four on a hand that was already showing five.
+            Say(Speaker.Yua, Portrait.Neutral,
+                "Right. The one at the top goes first, because that is how a slide works. And the one at the bottom gets to count out loud. All right? Count with me.",
+                "はい。上にいる子が先。すべり台ってそういうものだから。下の子は、声に出して数える係。いい? 一緒に数えて。",
+                "خب. اونی که بالاست اول می‌ره، چون سرسره همین‌جوریه. اونی که پایینه هم بلندبلند می‌شمره. باشه؟ با من بشمر.");
 
             Hold(1.0f);
 
-            Say(Speaker.Yua, Portrait.Unchanged,
+            Say(Speaker.Yua, Portrait.CountingOne,
                 "One.",
                 "いち。",
                 "یک.");
 
-            Say(Speaker.Yua, Portrait.Unchanged,
-                "Two. Three.",
-                "に。さん。",
-                "دو. سه.");
+            Say(Speaker.Yua, Portrait.CountingTwo,
+                "Two.",
+                "に。",
+                "دو.");
 
-            Say(Speaker.Yua, Portrait.Unchanged,
+            Say(Speaker.Yua, Portrait.CountingThree,
+                "Three.",
+                "さん。",
+                "سه.");
+
+            Say(Speaker.Yua, Portrait.CountingFour,
                 "Four.",
                 "し。",
                 "چهار.");
 
-            // ◆ DREAD 8. The hand comes down on this one and not on the one
-            // after it, and her face is ordinary, and then she is straight back
-            // to the children. Deniable: she had finished.
-            Say(Speaker.Yua, Portrait.Neutral,
+            Say(Speaker.Yua, Portrait.Counting,
                 "Five.",
                 "ご。",
                 "پنج.");
 
-            Hold(0.9f);
+            // ◆ DREAD 8. Not a face and not a word: the open hand stays up,
+            // all five fingers, for about a second and a half longer than a
+            // finished count needs. Then she is completely normal again.
+            // Deniable a dozen ways — she was making sure they were listening —
+            // and nothing in the scene reaches for any of them.
+            Hold(1.8f);
 
             Say(Speaker.Yua, Portrait.Joyful,
                 "There. Nobody shouted and everybody had a job.",
@@ -2784,6 +3164,16 @@ namespace TheFrayedRedString.EditorTools
                 "Both children went down the slide and immediately climbed back up to do it again in the wrong order.",
                 "二人ともすべって、すぐにまた上って、今度は順番を守らずにやり直した。",
                 "هردو بچه از سرسره اومدن پایین و بلافاصله رفتن بالا که دوباره، این بار به ترتیبِ غلط، انجامش بدن.");
+
+            Say(Speaker.Haru, Portrait.Surprised,
+                "What did you actually say to them?",
+                "で、あの子たちになんて言ったの?",
+                "آخرش بهشون چی گفتی؟");
+
+            Say(Speaker.Yua, Portrait.Unchanged,
+                "I gave them an order each. That's all anybody wants.",
+                "ひとりにひとつずつ、係をあげた。みんなそれがほしいだけ。",
+                "به هرکدومشون یه کار دادم. آدم‌ها همینو می‌خوان، همین.");
 
             Say(Speaker.Haru, Portrait.Joyful,
                 "You were good at that.",
@@ -2804,7 +3194,51 @@ namespace TheFrayedRedString.EditorTools
 
             DecideIdly(
                 "Have a go on the swings", "ブランコ乗る", "برو تاب سوار شو",
-                "Sit by the fountain", "噴水のとこに座る", "کنارِ فواره بشین");
+                () =>
+                {
+                    Narrate(
+                        "She got on a swing that had been built for somebody a foot shorter and sat there with her knees up round her elbows.",
+                        "自分より三十センチ小さい子のために作られたブランコに座って、膝が肘のあたりまで来ていた。",
+                        "رفت رو تابی که واسه یکی سی سانت کوتاه‌تر ساخته شده بود و نشست، با زانوهایی که تا آرنجش بالا اومده بودن.");
+
+                    Say(Speaker.Yua, Portrait.Bored,
+                        "This is undignified.",
+                        "これは、みっともない。",
+                        "این خیلی بی‌کلاسه.");
+
+                    Say(Speaker.Haru, Portrait.Joyful,
+                        "You're forty centimetres off the ground.",
+                        "地面から四十センチだけどね。",
+                        "چهل سانت از زمین فاصله داری.");
+
+                    Say(Speaker.Yua, Portrait.Unchanged,
+                        "Push.",
+                        "押して。",
+                        "هلم بده.");
+                },
+                "Sit by the fountain", "噴水のとこに座る", "کنارِ فواره بشین",
+                () =>
+                {
+                    Narrate(
+                        "They sat on the wide stone lip of the fountain. The angel dripped on her shoulder twice.",
+                        "噴水の広い石のふちに座った。天使が二回、結愛の肩に垂らした。",
+                        "رو لبه‌ی پهنِ سنگیِ فواره نشستن. فرشته دو بار چکید رو شونه‌ی یوآ.");
+
+                    Say(Speaker.Yua, Portrait.Pout,
+                        "It's doing that on purpose.",
+                        "わざとやってる。",
+                        "داره عمداً این کارو می‌کنه.");
+
+                    Say(Speaker.Haru, Portrait.Unchanged,
+                        "It's a statue.",
+                        "ただの像。",
+                        "یه مجسمه‌ست.");
+
+                    Say(Speaker.Yua, Portrait.Smug,
+                        "It's a statue in a hat.",
+                        "帽子かぶった像。",
+                        "یه مجسمه‌ی کلاه‌به‌سر.");
+                });
 
             Hold(1.4f);
 
@@ -3103,11 +3537,21 @@ namespace TheFrayedRedString.EditorTools
         // =====================================================================
         //
         //  SHAPE
-        //    6 days · 14 scenes · 385 written frames that show text · 9 white
-        //    choices, one of which branches and changes nothing. A single
-        //    playthrough reads 378 or 381 of the 385: the branch is seven
-        //    frames down one road and four down the other, and both roads are
-        //    counted above because both are written.
+        //    6 days · 14 scenes · 458 written frames that show text · 9 white
+        //    choices, EVERY ONE OF WHICH BRANCHES. A single playthrough reads
+        //    between 418 and 424 of the 458, because it only walks one road of
+        //    each pair and both roads are counted above.
+        //
+        //    Eight of the nine used to be a button that produced a Choice beat
+        //    and nothing else: the player pressed, the game moved on, and one
+        //    of them — "eat it now" — was followed on the next frame by Yua
+        //    saying they were saving the rolls for lunch. The first button in
+        //    the game did nothing and said so to the player's face.
+        //
+        //    Every road is Yua's. She is the protagonist; the white options are
+        //    her deciding something, they land on her lines, and not one of
+        //    them changes a word Haru would have said on his own.
+        //
         //    No blue or green anywhere. No player address. No aside. Nothing
         //    above ladder rung three.
         //

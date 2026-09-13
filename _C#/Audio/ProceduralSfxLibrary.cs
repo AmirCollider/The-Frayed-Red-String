@@ -461,8 +461,20 @@ namespace TheFrayedRedString.Audio
                         {
                             Note(47.0f, 0f, 4.00f, 0.60f, Timbre.Soft, decay: 0.42f, noise: 0.05f, pan: -0.15f),
                             Note(49.3f, 0f, 4.00f, 0.48f, Timbre.Soft, decay: 0.40f, pan: 0.18f),
-                            Note(94.6f, 0.05f, 3.70f, 0.22f, Timbre.Bell, decay: 0.55f, pan: 0.30f),
-                            Note(141.0f, 0.12f, 3.40f, 0.10f, Timbre.Bell, decay: 0.75f, pan: -0.34f),
+
+                            // The upper partials carry the whole sound on
+                            // anything that is not a subwoofer, and they used to
+                            // be far too quiet to do it. A player on laptop
+                            // speakers heard the narrator say that something
+                            // under the floor had come on, and heard silence —
+                            // which is the one sound this beat cannot make.
+                            // 47 Hz simply is not there on a small driver, so
+                            // the room is now audible an octave and a half up
+                            // and the 47 is what you feel rather than what you
+                            // hear.
+                            Note(94.6f, 0.05f, 3.70f, 0.46f, Timbre.Bell, decay: 0.55f, pan: 0.30f),
+                            Note(141.0f, 0.12f, 3.40f, 0.30f, Timbre.Bell, decay: 0.75f, pan: -0.34f),
+                            Note(188.4f, 0.18f, 3.10f, 0.17f, Timbre.Bell, decay: 0.90f, pan: 0.12f),
 
                             // A single knock somewhere in the dark, so the drone
                             // is a place rather than a texture.

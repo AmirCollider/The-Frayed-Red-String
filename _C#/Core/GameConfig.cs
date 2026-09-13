@@ -148,6 +148,20 @@ namespace TheFrayedRedString.Core
         /// <summary>How long a place name stays in the corner.</summary>
         public const float CaptionHoldDuration = 2.40f;
 
+        /// <summary>
+        /// How long a date stays in the corner.
+        /// </summary>
+        /// <remarks>
+        /// Longer than a place name, and for a reason that came out of somebody
+        /// playing the whole of acts one and two and not being able to say
+        /// afterwards which month any of it happened in. A place name is
+        /// confirming something the player can already see; a date is the only
+        /// source in the game for a thing the picture cannot show, and act two
+        /// is five days spread over eleven weeks. Two and a half seconds was
+        /// not enough time to read a date, understand it, and file it.
+        /// </remarks>
+        public const float DateCardHoldDuration = 4.20f;
+
         /// <summary>How long an act's title card holds at full opacity.</summary>
         public const float TitleCardHoldDuration = 2.60f;
 
